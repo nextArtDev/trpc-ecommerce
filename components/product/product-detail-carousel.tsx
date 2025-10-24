@@ -9,7 +9,7 @@ import {
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Autoplay from 'embla-carousel-autoplay'
-import { ImageZoom } from '@/app/(home)/products/components/ProductZoom'
+import { ImageZoom } from '@/app/[locale]/(home)/products/components/ProductZoom'
 
 type Props = {
   images: { url: string }[] | null
@@ -42,7 +42,7 @@ const ProductDetailCarousel = ({ images }: Props) => {
         orientation="vertical"
         className="relative max-w-xs my-14 mx-auto"
       >
-        <CarouselContent className="  -mt-1 h-[384px] aspect-square mx-auto ">
+        <CarouselContent className="  -mt-1 h-96 aspect-square mx-auto ">
           {images?.map((image) => (
             <CarouselItem
               key={image.url}

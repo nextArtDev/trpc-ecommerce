@@ -4,13 +4,17 @@ import { routing } from './i18n/routing'
 
 const intlMiddleware = createMiddleware(routing)
 export async function proxy(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/api')) {
+  const pathname = request.nextUrl.pathname
+
+  if (
+    request.nextUrl.pathname.startsWith('/api') ||
+    pathname.startsWith('/dashboard')
+  ) {
     return NextResponse.next()
   }
 
   const intlResponse = intlMiddleware(request)
 
-  const pathname = request.nextUrl.pathname
   const pathSegments = pathname.split('/')
   const locale = pathSegments[1] || routing.defaultLocale
 
@@ -21,12 +25,7 @@ export async function proxy(request: NextRequest) {
     : pathname
 
   // Define protected routes
-  const protectedRoutes = [
-    '/dashboard',
-    '/order',
-    '/shipping-address',
-    '/place-order',
-  ]
+  const protectedRoutes = ['/order', '/shipping-address', '/place-order']
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathWithoutLocale.startsWith(route)
@@ -64,5 +63,5 @@ export async function proxy(request: NextRequest) {
 //   ],
 // }
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/dashboard/:path*'],
 }

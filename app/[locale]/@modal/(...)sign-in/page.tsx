@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getCurrentUser } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
-import MultiStepFormAuth from '@/app/(auth)/sign-in/components/MultiSteFormAuth'
+import MultiStepFormAuth from '@/app/[locale]/(auth)/sign-in/components/MultiSteFormAuth'
 import ModalWrapper from '../components/ModalWrapper'
 
 export const dynamic = 'force-dynamic'

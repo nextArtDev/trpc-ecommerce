@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/(auth)/sign-in",
+    "app/[locale]/(auth)/sign-in",
     ".next\\dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts"
   ],

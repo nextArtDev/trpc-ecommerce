@@ -1,4 +1,4 @@
-import CartContainer from '@/app/(home)/cart/components/CartContainer'
+import CartContainer from '@/app/[locale]/(home)/cart/components/CartContainer'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetFooter } from '@/components/ui/sheet'
@@ -31,7 +31,7 @@ const CartSheet = ({ isOpen, onClose }: Props) => {
             </SheetFooter>
           </>
         ) : (
-          <div className="flex-grow flex flex-col items-center justify-center text-center p-6">
+          <div className="grow flex flex-col items-center justify-center text-center p-6">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="64"

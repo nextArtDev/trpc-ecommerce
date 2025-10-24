@@ -1,6 +1,6 @@
 'use client'
 
-import ProductGrid from '@/app/(home)/search/components/ProductGrid'
+import ProductGrid from '@/app/[locale]/(home)/search/components/ProductGrid'
 import { Button } from '@/components/ui/button'
 import { SearchProductsResult } from '@/lib/types/home'
 import { useRouter, useSearchParams } from 'next/navigation'

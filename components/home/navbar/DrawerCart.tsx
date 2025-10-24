@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/drawer'
 import { useCartStore } from '@/hooks/useCartStore'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import ShoppingList from '@/app/(home)/cart/components/ShoppingList'
+import ShoppingList from '@/app/[locale]/(home)/cart/components/ShoppingList'
 
 import { Badge } from '@/components/ui/badge'
 import { TransitionLink } from '../shared/TransitionLink'
@@ -51,7 +51,7 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
           {cartItemCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-0 -right-0 h-4 w-4 flex items-center justify-center p-0 text-xs bg-indigo-500 text-white"
+              className="absolute top-0 right-0 h-4 w-4 flex items-center justify-center p-0 text-xs bg-indigo-500 text-white"
             >
               {cartItemCount > 99 ? '99+' : cartItemCount}
             </Badge>
