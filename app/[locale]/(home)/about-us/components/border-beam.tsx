@@ -59,11 +59,11 @@ export const BorderBeam = ({
   initialOffset = 0,
 }: BorderBeamProps) => {
   return (
-    <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-transparent [mask-image:linear-gradient(transparent,transparent),linear-gradient(#000,#000)] [mask-composite:intersect] [mask-clip:padding-box,border-box]">
+    <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-transparent mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)] mask-intersect [mask-clip:padding-box,border-box]">
       <motion.div
         className={cn(
           'absolute aspect-square',
-          'bg-gradient-to-l from-[var(--color-from)] via-[var(--color-to)] to-transparent',
+          'bg-linear-to-l from-(--color-from) via-(--color-to) to-transparent',
           className
         )}
         style={

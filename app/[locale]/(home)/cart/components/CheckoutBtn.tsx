@@ -3,7 +3,7 @@ import { CartProductType } from '@/lib/types/home'
 import { Loader } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useTransition } from 'react'
+import { useTransition } from 'react'
 import { toast } from 'sonner'
 
 type Props = { cartItems: CartProductType[] }

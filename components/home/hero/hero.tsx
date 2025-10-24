@@ -1,7 +1,6 @@
-import React from 'react'
 import { Bounded } from '@/components/shared/Bounded'
 import Image from 'next/image'
-import heroImage from '../../../public/images/hero-image.webp'
+import heroImage from '@/public/images/hero-image.webp'
 // import heroImage from '../../../public/images/bg.jpg'
 
 import { FadeIn } from '@/components/shared/fade-in'
@@ -81,7 +80,7 @@ const Hero = ({
                   >
                     <TransitionLink
                       href={`/sub-categories/${sub.url}`}
-                      className="bg-gradient-to-b from-white/5 to-white/30 backdrop-blur-[2px] border rounded-none  px-2 py-1 text-center text-white border-white "
+                      className="bg-linear-to-b from-white/5 to-white/30 backdrop-blur-[2px] border rounded-none  px-2 py-1 text-center text-white border-white "
                     >
                       {sub.name}
                     </TransitionLink>

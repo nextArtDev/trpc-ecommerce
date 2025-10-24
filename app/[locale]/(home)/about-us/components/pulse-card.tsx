@@ -162,7 +162,7 @@ CardProps) {
         <span
           className={cn(
             'relative z-1 block transition-colors duration-300',
-            'text-black/60 group-hover:text-[var(--card-color)]',
+            'text-black/60 group-hover:text-(--card-color)',
             'dark:text-zinc-400',
             sizeConfig.iconSize
           )}
@@ -176,7 +176,7 @@ CardProps) {
         <h3
           className={cn(
             'font-medium transition-colors duration-300',
-            'text-black/80 group-hover:text-[var(--card-color)]',
+            'text-black/80 group-hover:text-(--card-color)',
             'dark:text-white/80',
             sizeConfig.titleSize
           )}

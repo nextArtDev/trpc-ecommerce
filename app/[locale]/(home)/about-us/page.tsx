@@ -110,7 +110,7 @@ export default function AboutUs1() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="mx-auto mb-16 max-w-md text-center"
         >
-          <h1 className="from-foreground/80 via-foreground to-foreground/80 bg-gradient-to-r bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl">
+          <h1 className="from-foreground/80 via-foreground to-foreground/80 bg-linear-to-r bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl">
             {aboutData.title}
           </h1>
           <p className="text-muted-foreground mt-6 text-xl">
@@ -130,7 +130,7 @@ export default function AboutUs1() {
           >
             <motion.div
               whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-              className="group border-border/40 relative block overflow-hidden rounded-md border bg-gradient-to-br p-10 backdrop-blur-3xl"
+              className="group border-border/40 relative block overflow-hidden rounded-md border bg-linear-to-br p-10 backdrop-blur-3xl"
             >
               <BorderBeam
                 duration={8}
@@ -138,12 +138,12 @@ export default function AboutUs1() {
                 className="via-primary/40 from-transparent to-transparent"
               />
 
-              <div className="from-primary/20 to-primary/5 mb-6 inline-flex aspect-square h-16 w-16 flex-1 items-center justify-center rounded-sm bg-gradient-to-br backdrop-blur-sm">
+              <div className="from-primary/20 to-primary/5 mb-6 inline-flex aspect-square h-16 w-16 flex-1 items-center justify-center rounded-sm bg-linear-to-br backdrop-blur-sm">
                 <Rocket className="text-primary h-8 w-8" />
               </div>
 
               <div className="space-y-4">
-                <h2 className="from-primary/90 to-primary/70 mb-4 bg-gradient-to-r bg-clip-text text-3xl font-bold text-transparent">
+                <h2 className="from-primary/90 to-primary/70 mb-4 bg-linear-to-r bg-clip-text text-3xl font-bold text-transparent">
                   هدف ما
                 </h2>
 
@@ -155,7 +155,7 @@ export default function AboutUs1() {
 
             <motion.div
               whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-              className="group border-border/40 relative block overflow-hidden rounded-md border bg-gradient-to-br p-10 backdrop-blur-3xl"
+              className="group border-border/40 relative block overflow-hidden rounded-md border bg-linear-to-br p-10 backdrop-blur-3xl"
             >
               <BorderBeam
                 duration={8}
@@ -163,11 +163,11 @@ export default function AboutUs1() {
                 className="from-transparent via-blue-500/40 to-transparent"
                 reverse
               />
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-sm bg-gradient-to-br from-blue-500/20 to-blue-500/5 backdrop-blur-sm">
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-sm bg-linear-to-br from-blue-500/20 to-blue-500/5 backdrop-blur-sm">
                 <Target className="h-8 w-8 text-blue-500" />
               </div>
 
-              <h2 className="mb-4 bg-gradient-to-r from-blue-500/90 to-blue-500/70 bg-clip-text text-3xl font-bold text-transparent">
+              <h2 className="mb-4 bg-linear-to-r from-blue-500/90 to-blue-500/70 bg-clip-text text-3xl font-bold text-transparent">
                 نگاه ما
               </h2>
 
@@ -187,7 +187,7 @@ export default function AboutUs1() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="mb-12 text-center"
           >
-            <h2 className="from-foreground/80 via-foreground to-foreground/80 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
+            <h2 className="from-foreground/80 via-foreground to-foreground/80 bg-linear-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
               ارزشهای اصیل کار ما
             </h2>
             <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg">

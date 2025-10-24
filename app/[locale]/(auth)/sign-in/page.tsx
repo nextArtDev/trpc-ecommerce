@@ -1,5 +1,3 @@
-import React from 'react'
-
 import MultiStepFormAuth from './components/MultiSteFormAuth'
 
 import { redirect } from 'next/navigation'
@@ -8,7 +6,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
-import heroImage from '../../../public/images/hero-image.webp'
+import heroImage from '@/public/images/hero-image.webp'
 
 export const dynamic = 'force-dynamic'
 

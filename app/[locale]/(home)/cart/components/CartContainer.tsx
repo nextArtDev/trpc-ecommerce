@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import ShoppingList from './ShoppingList'
-import OrderSummary from './OrderSummary'
-import CheckoutBtn from './CheckoutBtn'
-import { useCartStore } from '@/hooks/useCartStore'
-import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
+import { useCartStore } from '@/hooks/useCartStore'
+
+import { useEffect } from 'react'
+import CheckoutBtn from './CheckoutBtn'
+import OrderSummary from './OrderSummary'
+import ShoppingList from './ShoppingList'
+import { TransitionLink } from '@/components/home/shared/TransitionLink'
 
 function CartContainer() {
   // const totalPrice = useCartStore((state) => state.totalPrice)
@@ -72,9 +73,12 @@ function CartContainer() {
       ) : (
         <article className="w-full h-full flex flex-col items-center justify-center">
           سبد شما خالی است!
-          <Link href={'/'} className={buttonVariants({ variant: 'default' })}>
+          <TransitionLink
+            href={'/'}
+            className={buttonVariants({ variant: 'default' })}
+          >
             ادامه خرید
-          </Link>
+          </TransitionLink>
         </article>
       )}
     </div>

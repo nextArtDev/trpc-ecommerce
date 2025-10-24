@@ -1,10 +1,9 @@
+import { TransitionLink } from '@/components/home/shared/TransitionLink'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
 import { Badge } from '@/components/ui/badge'
 import { CartProductType } from '@/lib/types/home'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
 
 type Props = {
   cartItems: CartProductType[]
@@ -42,7 +41,7 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
           <div className="flex-1 space-y-3 sm:space-y-4">
             <div className="w-ful h-full flex flex-col items-center  justify-center sm:flex-row sm:justify-evenly sm:items-start gap-3">
               <div className="flex flex-col gap-2 sm:flex-row  sm:justify-evenly sm:items-center flex-1">
-                <Link
+                <TransitionLink
                   href={`/products/${item.slug}`}
                   className="font-medium line-clamp-1  hover:underline"
                 >
@@ -65,7 +64,7 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                       <p className="text-xs px-2 py-1">{item.color}</p>
                     </div>
                   )}
-                </Link>
+                </TransitionLink>
                 {/* <p className="mt-1 text-sm ">{product.color}</p> */}
                 {/* {item.size ? (
                     <p className="mt-1 text-sm ">{item.size}</p>

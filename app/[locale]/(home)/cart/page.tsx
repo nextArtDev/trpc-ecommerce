@@ -1,8 +1,6 @@
-import React from 'react'
-
-import CartContainer from './components/CartContainer'
-import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth-helpers'
+import { redirect } from 'next/navigation'
+import CartContainer from './components/CartContainer'
 
 export const dynamic = 'force-dynamic'
 

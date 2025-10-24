@@ -1,5 +1,4 @@
 import { CartProductType } from '@/lib/types/home'
-import React from 'react'
 
 type Props = {
   cartItems: CartProductType[]

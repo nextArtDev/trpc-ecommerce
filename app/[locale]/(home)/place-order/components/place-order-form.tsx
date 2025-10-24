@@ -36,7 +36,7 @@ const PlaceOrderForm = () => {
     return (
       <Button
         disabled={isPending}
-        className="w-full !cursor-pointer bg-indigo-600 hover:bg-indigo-500 text-white"
+        className="w-full cursor-pointer! bg-indigo-600 hover:bg-indigo-500 text-white"
       >
         {isPending ? (
           <Loader className="w-4 h-4 animate-spin" />
