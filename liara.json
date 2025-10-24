@@ -1,0 +1,14 @@
+{
+    "next":{
+        "modifyConfig":false
+    },
+    "disk":[
+        {
+            "name":"logs",
+            "mountTo":"logs"
+        }
+    ],
+ 
+    "account": "kharak"
+ 
+}

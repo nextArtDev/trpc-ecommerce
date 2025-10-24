@@ -1,0 +1,7 @@
+{
+  "ignorePatterns": ["/lib/generated/prisma/**"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended"
+  ]
+}

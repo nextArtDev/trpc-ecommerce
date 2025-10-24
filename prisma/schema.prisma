@@ -1,0 +1,745 @@
+//npx prisma migrate dev --name realMigrateName
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id                  String    @id
+  name                String    @db.Text
+  role                Role      @default(user)
+  email               String
+  emailVerified       Boolean
+  // image               String?   @db.Text
+  createdAt           DateTime
+  updatedAt           DateTime
+  phoneNumber         String?
+  phoneNumberVerified Boolean?
+  sessions            Session[]
+  accounts            Account[]
+
+  banned     Boolean? @default(false)
+  banReason  String?
+  banExpires String?
+
+  address           String?           @db.Text
+  reviews           Review[]          @relation("ReviewToUser")
+  cart              Cart?             @relation("UserCart")
+  shippingAddresses ShippingAddress[] @relation("UserShippingAddresses")
+  orders            Order[]           @relation("UserOrders")
+  wishlist          Wishlist[]        @relation("WishlistToUser")
+  payments          PaymentDetails[]  @relation("PaymentDetailsToUser")
+  coupons           Coupon[]          @relation("CouponToUser")
+  images            Image[]
+
+  image String? @db.Text
+
+  @@unique([email])
+  @@unique([phoneNumber])
+  @@map("user")
+}
+
+model OtpRateLimit {
+  id          String   @id @default(uuid())
+  phoneNumber String   @unique
+  lastSentAt  DateTime
+
+  @@index([phoneNumber])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?  @db.Text
+  userAgent String?  @db.Text
+
+  impersonatedBy String?
+  userId         String
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String    @db.Text
+  providerId            String    @db.Text
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?   @db.Text
+  password              String?   @db.Text
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String    @db.Text
+  value      String    @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Image {
+  id         String   @id @default(cuid())
+  url        String   @db.Text
+  key        String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Category      Category?    @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  SubCategory   SubCategory? @relation(fields: [subCategoryId], references: [id])
+  subCategoryId String?
+
+  variantImage   ProductVariant? @relation(fields: [variantImageId], references: [id])
+  variantImageId String?
+
+  product   Product? @relation("productImage", fields: [productId], references: [id])
+  productId String?
+
+  review   Review? @relation(fields: [reviewId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reviewId String?
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([subCategoryId])
+  @@index([categoryId])
+  @@index([productId])
+  @@index([reviewId])
+  @@index([variantImageId])
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  images      Image[]
+  url         String  @unique
+  featured    Boolean @default(false)
+
+  subCategories SubCategory[]
+  products      Product[]     @relation("CategoryToProduct")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SubCategory {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  images      Image[]
+  url         String  @unique
+  featured    Boolean @default(false)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  products Product[] @relation("SubCategoryToProduct")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+enum ShippingFeeMethod {
+  ITEM
+  WEIGHT
+  FIXED
+}
+
+model Product {
+  id                String            @id @default(uuid())
+  name              String
+  description       String
+  slug              String            @unique
+  brand             String?
+  rating            Float             @default(0)
+  sales             Int               @default(0)
+  numReviews        Int               @default(0)
+  shippingFeeMethod ShippingFeeMethod @default(ITEM)
+  views             Int               @default(0)
+  images            Image[]           @relation("productImage")
+  freeShipping      FreeShipping?     @relation("ProductFreeShipping")
+  isFeatured        Boolean           @default(false)
+  isSale            Boolean           @default(false)
+  saleEndDate       String?
+  sku               String?
+  keywords          String
+
+  variants  ProductVariant[]
+  wishlist  Wishlist[]       @relation("WishlistToProduct")
+  specs     Spec[]           @relation("ProductSpec")
+  questions Question[]       @relation("ProductQuestion")
+  reviews   Review[]         @relation("ReviewToProduct")
+
+  categoryId String
+  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  subCategoryId String
+  subCategory   SubCategory @relation("SubCategoryToProduct", fields: [subCategoryId], references: [id], onDelete: Cascade)
+
+  offerTagId String?
+  offerTag   OfferTag? @relation("OfferTagToProduct", fields: [offerTagId], references: [id])
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  CartItem  CartItem[]
+
+  @@index([categoryId])
+  @@index([subCategoryId])
+  @@index([offerTagId])
+}
+
+model ProductVariant {
+  id       String  @id @default(uuid())
+  sku      String? @unique
+  price    Float
+  quantity Int
+  discount Float   @default(0)
+  weight   Float
+  length   Int?
+  width    Int?
+  height   Int?
+
+  images Image[]
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sizeId String
+  size   Size   @relation(fields: [sizeId], references: [id])
+
+  colorId String
+  color   Color  @relation(fields: [colorId], references: [id])
+
+  cartItems  OrderItem[]
+  orderItems CartItem[]
+  wishList   Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([productId, sizeId, colorId])
+  @@index([productId])
+  @@index([sizeId])
+  @@index([colorId])
+}
+
+model Size {
+  id       String           @id @default(uuid())
+  name     String           @unique
+  variants ProductVariant[]
+}
+
+model Color {
+  id       String           @id @default(uuid())
+  name     String           @unique
+  hex      String           @unique
+  variants ProductVariant[]
+}
+
+model OfferTag {
+  id   String @id @default(uuid())
+  name String
+  url  String @unique
+
+  products Product[] @relation("OfferTagToProduct")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Spec {
+  id    String @id @default(uuid())
+  name  String
+  value String
+
+  productId String?
+  product   Product? @relation("ProductSpec", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([productId])
+}
+
+model Question {
+  id String @id @default(uuid())
+
+  question String
+  answer   String
+
+  productId String?
+  product   Product? @relation("ProductQuestion", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([productId])
+}
+
+model Country {
+  id   String @id @default(uuid())
+  name String @unique
+  code String @unique
+
+  shippingRates     ShippingRate[]    @relation("CountryShippingRates")
+  shippingAddresses ShippingAddress[] @relation("CountryToShippingAddress")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model ShippingRate {
+  id String @id @default(uuid())
+
+  shippingService              String
+  shippingFeePerItem           Float
+  shippingFeeForAdditionalItem Float
+  shippingFeePerKg             Float
+  shippingFeeFixed             Float
+  deliveryTimeMin              Int
+  deliveryTimeMax              Int
+  returnPolicy                 String
+
+  countryId String
+  country   Country @relation("CountryShippingRates", fields: [countryId], references: [id])
+
+  cityId Int
+  city   City @relation("CityShippingRates", fields: [cityId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([countryId])
+  @@index([cityId])
+}
+
+model FreeShipping {
+  id        String  @id @default(uuid())
+  productId String  @unique
+  product   Product @relation("ProductFreeShipping", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  eligibleCities FreeShippingCity[] @relation("FreeShippingCities")
+}
+
+model FreeShippingCity {
+  id String @id @default(uuid())
+
+  freeShippingId String
+  freeShipping   FreeShipping @relation("FreeShippingCities", fields: [freeShippingId], references: [id], onDelete: Cascade)
+
+  cityId Int
+  city   City @relation("FreeShippingToCity", fields: [cityId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([freeShippingId])
+  @@index([cityId])
+}
+
+model Review {
+  id String @id @default(uuid())
+
+  title              String
+  description        String
+  isVerifiedPurchase Boolean @default(true)
+
+  rating Float
+
+  isFeatured Boolean @default(false)
+  isPending  Boolean @default(true)
+  images     Image[]
+
+  // quantity String
+  likes  Int    @default(0)
+  user   User   @relation("ReviewToUser", fields: [userId], references: [id])
+  userId String
+
+  productId String
+  product   Product @relation("ReviewToProduct", fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model Cart {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation("UserCart", fields: [userId], references: [id], onDelete: Cascade)
+
+  couponId String?
+  coupon   Coupon? @relation("CouponToCart", fields: [couponId], references: [id])
+
+  cartItems    CartItem[] @relation("CartToCartItem")
+  shippingFees Float      @default(0)
+  subTotal     Float
+  total        Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([couponId])
+}
+
+model CartItem {
+  id String @id @default(uuid())
+
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  productSlug String
+  sku         String
+  name        String
+  image       String
+  size        String
+  color       String
+  weight      Float
+  price       Float
+  quantity    Int    @default(1)
+  shippingFee Float  @default(0)
+  totalPrice  Float
+
+  cartId String
+  cart   Cart   @relation("CartToCartItem", fields: [cartId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cartId])
+}
+
+model ShippingAddress {
+  id       String  @id @default(uuid())
+  name     String
+  phone    String
+  address1 String
+  address2 String?
+  // state     String
+  // city      String
+  zip_code String
+  default  Boolean @default(false)
+
+  orders Order[] @relation("ShippingAddressToOrder")
+
+  userId String
+  user   User   @relation("UserShippingAddresses", fields: [userId], references: [id])
+
+  countryId String?
+  country   Country? @relation("CountryToShippingAddress", fields: [countryId], references: [id])
+
+  provinceId Int
+  province   Province @relation("ProvinceToShippingAddress", fields: [provinceId], references: [id])
+
+  cityId Int
+  city   City @relation("CityToShippingAddress", fields: [cityId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([provinceId])
+  @@index([userId])
+  @@index([cityId])
+}
+
+enum OrderStatus {
+  Pending
+  Confirmed
+  Processing
+  Shipped
+  OutforDelivery
+  Delivered
+  Cancelled
+  Failed
+  Refunded
+  Returned
+  PartiallyShipped
+  OnHold
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Failed
+  Declined
+  Cancelled
+  Refunded
+  PartiallyRefunded
+  Chargeback
+}
+
+model Order {
+  id           String    @id @default(uuid())
+  shippingFees Float
+  subTotal     Float
+  total        Float
+  paidAt       DateTime? @db.Timestamp(6)
+  deliveredAt  DateTime? @db.Timestamp(6)
+  // groups OrderGroup[] @relation("OrderGroupToOrder")
+
+  orderStatus OrderStatus @default(Pending)
+
+  paymentStatus  PaymentStatus   @default(Pending)
+  authority      String?
+  paymentDetails PaymentDetails? @relation("PaymentDetailsToOrder")
+
+  shippingAddressId String
+  shippingAddress   ShippingAddress @relation("ShippingAddressToOrder", fields: [shippingAddressId], references: [id])
+
+  userId String
+  user   User        @relation("UserOrders", fields: [userId], references: [id])
+  items  OrderItem[] @relation("OrderToItem")
+
+  //  orderGroupId String
+  // orderGroup   OrderItem @relation("OrderItemToGroup", fields: [orderGroupId], references: [id], onDelete: Cascade)
+  couponId String?
+  coupon   Coupon? @relation("CouponToOrder", fields: [couponId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([shippingAddressId])
+  @@index([userId])
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  productSlug String
+  sku         String?
+  name        String
+  image       String
+  size        String
+  color       String
+  quantity    Int     @default(1)
+  shippingFee Float   @default(0)
+  price       Float
+  totalPrice  Float
+
+  status    ProductStatus @default(Pending)
+  orderId   String
+  order     Order         @relation("OrderToItem", fields: [orderId], references: [id])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model PaymentDetails {
+  id String @id @default(uuid())
+
+  // paymentInetntId String
+  // paymentMethod   String
+  status        String?
+  amount        Float?
+  Authority     String? @db.Text
+  // currency        String
+  transactionId String?
+  orderId       String  @unique
+  order         Order   @relation("PaymentDetailsToOrder", fields: [orderId], references: [id])
+
+  userId String
+  user   User   @relation("PaymentDetailsToUser", fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([userId])
+}
+
+enum ProductStatus {
+  /// Product has been added to the order but no action taken yet
+  Pending
+
+  /// Product is being prepared (picked, packed, or manufactured)
+  Processing
+
+  /// Product is packed and ready for shipment
+  ReadyForShipment
+
+  /// Product has been shipped
+  Shipped
+
+  /// Product has been delivered to the customer
+  Delivered
+
+  /// Product order has been canceled
+  Canceled
+
+  /// Product has been returned by the customer
+  Returned
+
+  /// Product cost has been refunded
+  Refunded
+
+  /// Delivery attempt failed, product may return to warehouse
+  FailedDelivery
+
+  /// Product is on hold (e.g., stock issues, verification required)
+  OnHold
+
+  /// Product is delayed due to stock unavailability
+  Backordered
+
+  /// Some units of the product were shipped, but the order is not yet complete
+  PartiallyShipped
+
+  /// Customer requested an exchange for the product
+  ExchangeRequested
+
+  /// Product is awaiting customer pickup (for pickup orders)
+  AwaitingPickup
+}
+
+model Wishlist {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation("WishlistToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation("WishlistToProduct", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([variantId])
+}
+
+model Coupon {
+  id        String @id @default(uuid())
+  code      String @unique
+  startDate String
+  endDate   String
+  discount  Int
+
+  orders Order[] @relation("CouponToOrder")
+  users  User[]  @relation("CouponToUser")
+
+  carts Cart[] @relation("CouponToCart")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Province {
+  id                Int               @id @default(autoincrement())
+  name              String            @unique
+  center            String
+  latitude          Float
+  longitude         Float
+  cities            City[]            @relation(name: "ProvinceCities")
+  shippingAddresses ShippingAddress[] @relation("ProvinceToShippingAddress")
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String
+  latitude   Float
+  longitude  Float
+  provinceId Int
+  province   Province @relation(name: "ProvinceCities", fields: [provinceId], references: [id], onDelete: Cascade)
+
+  shippingRates ShippingRate[] @relation("CityShippingRates")
+
+  freeShippingCountries FreeShippingCity[] @relation("FreeShippingToCity")
+
+  shippingAddresses ShippingAddress[] @relation("CityToShippingAddress")
+
+  @@index([provinceId])
+}
+
+model TopBar {
+  id String @id @default(uuid())
+
+  title String
+  color String
+
+  buttonTitle String?
+  buttonColor String?
+  buttonLink  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentLock {
+  id        String   @id @default(uuid())
+  orderId   String   @unique
+  authority String
+  lockedAt  DateTime @default(now())
+  expiresAt DateTime // Lock expires after 5 minutes
+
+  @@index([orderId])
+  @@index([expiresAt])
+}
+
+model PaymentAttempt {
+  id        String   @id @default(uuid())
+  orderId   String
+  authority String
+  status    String // 'PENDING', 'SUCCESS', 'FAILED', 'USED'
+  amount    Float
+  createdAt DateTime @default(now())
+
+  // Prevent duplicate authorities per order
+  @@unique([orderId, authority])
+  @@index([orderId])
+  @@index([authority])
+}
+
+// schema.prisma
+
+model PaymentRateLimit {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
