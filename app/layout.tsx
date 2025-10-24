@@ -4,6 +4,8 @@ import './globals.css'
 import { Toaster } from 'sonner'
 import QueryProviders from '@/providers/query-provider'
 import { ThemeProvider } from '@/providers/theme-providers'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 
 const myFont = localFont({
   src: '../public/fonts/Parastoo-VariableFont_wght.ttf',
@@ -22,29 +24,38 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: { locale },
   modal,
 }: Readonly<{
   children: React.ReactNode
+  params: { locale: string }
   modal: React.ReactNode
 }>) {
+  const messages = await getMessages()
   return (
-    <html lang="fa-IR" dir="rtl" suppressHydrationWarning>
-      <QueryProviders>
-        <body className={`  ${myFont.className}  adad  antialiased`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            {modal}
-          </ThemeProvider>
-          <Toaster richColors />
-        </body>
-      </QueryProviders>
+    <html
+      lang={locale}
+      dir={locale === 'fa' ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
+      <NextIntlClientProvider messages={messages}>
+        <QueryProviders>
+          <body className={`  ${myFont.className}  adad  antialiased`}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              {modal}
+            </ThemeProvider>
+            <Toaster richColors />
+          </body>
+        </QueryProviders>
+      </NextIntlClientProvider>
     </html>
   )
 }
