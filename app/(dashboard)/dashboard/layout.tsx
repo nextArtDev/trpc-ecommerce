@@ -14,9 +14,13 @@ import { Separator } from '@/components/ui/separator'
 //   BreadcrumbSeparator,
 // } from '@/components/ui/breadcrumb'
 // import AdminSearch from '@/components/dashboard/admin-search'
+import '../../globals.css'
 import localFont from 'next/font/local'
 import { currentUser } from '@/lib/auth'
 import { notFound } from 'next/navigation'
+import QueryProviders from '@/providers/query-provider'
+import { ThemeProvider } from '@/providers/theme-providers'
+import { Toaster } from '@/components/ui/sonner'
 const farsiFont = localFont({
   src: '../../../public/fonts/FarsiFont.woff2',
 })
@@ -37,22 +41,37 @@ export default async function Layout({
   // }
 
   return (
-    <section dir="rtl" className={`w-full h-full ${farsiFont.className}`}>
-      <SidebarProvider>
-        <AppSidebar user={user} />
-        <main className="w-full h-full">
-          <SidebarInset>
-            <header className="w-full px-2 flex h-16 shrink-0 items-center gap-2 border-b">
-              <SidebarTrigger />
-              {/* <p>LOGO</p> */}
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              {/* <AdminSearch /> */}
-            </header>
-          </SidebarInset>
-          {/* <SidebarTrigger /> */}
-          {children}
-        </main>
-      </SidebarProvider>
-    </section>
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <QueryProviders>
+        <body
+          dir="rtl"
+          className={`w-full h-full ${farsiFont.className}  adad  antialiased`}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider>
+              <AppSidebar user={user} />
+              <main className="w-full h-full">
+                <SidebarInset>
+                  <header className="w-full px-2 flex h-16 shrink-0 items-center gap-2 border-b">
+                    <SidebarTrigger />
+                    {/* <p>LOGO</p> */}
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                    {/* <AdminSearch /> */}
+                  </header>
+                </SidebarInset>
+                {/* <SidebarTrigger /> */}
+                {children}
+              </main>
+            </SidebarProvider>
+            <Toaster richColors />
+          </ThemeProvider>
+        </body>
+      </QueryProviders>
+    </html>
   )
 }

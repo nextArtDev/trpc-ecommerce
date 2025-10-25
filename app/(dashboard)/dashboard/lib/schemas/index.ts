@@ -151,14 +151,22 @@ export type ProductVariantSchema = z.infer<
   typeof ProductFormSchema
 >['variants'][number]
 
-export const CategoryFormSchema = z.object({
+const CategoryTranslationSchema = z.object({
   name: z
     .string()
-    .min(2, { message: 'نام دسته‌بندی حداقل باید سه حرف باشد.' })
-    .max(50, { message: 'نام دسته‌بندی نمی‌تواند بیش از 50 حرف باشد' })
-    .regex(/^[a-zA-Z0-9\s'&-‌\u0600-\u06FF]+$/, {
-      message: 'تنها استفاده از حروف، اعداد و اسپیس در نام دسته‌بندی مجاز است.',
-    }),
+    .min(2, { message: 'نام دسته‌بندی حداقل باید دو حرف باشد.' })
+    .max(50, { message: 'نام دسته‌بندی نمی‌تواند بیش از 50 حرف باشد' }),
+  description: z.string().optional(),
+})
+
+export const CategoryFormSchema = z.object({
+  translations: z.object({
+    fa: CategoryTranslationSchema,
+    en: CategoryTranslationSchema,
+    de: CategoryTranslationSchema,
+    fr: CategoryTranslationSchema,
+    it: CategoryTranslationSchema,
+  }),
 
   images: z
     .union([

@@ -136,13 +136,21 @@ model Image {
   @@index([variantImageId])
 }
 
+enum Language {
+  fa
+  en
+  de
+  fr
+  it
+}
+
 model Category {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-  images      Image[]
-  url         String  @unique
-  featured    Boolean @default(false)
+  id String @id @default(uuid())
+
+  translations CategoryTranslation[]
+  images       Image[]
+  url          String                @unique
+  featured     Boolean               @default(false)
 
   subCategories SubCategory[]
   products      Product[]     @relation("CategoryToProduct")
@@ -151,13 +159,28 @@ model Category {
   updatedAt DateTime @updatedAt
 }
 
-model SubCategory {
-  id          String  @id @default(uuid())
+model CategoryTranslation {
+  id          String   @id @default(uuid())
+  language    Language
   name        String
-  description String?
-  images      Image[]
-  url         String  @unique
-  featured    Boolean @default(false)
+  description String?  @db.Text
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([categoryId, language])
+  @@index([categoryId])
+}
+
+model SubCategory {
+  id           String                   @id @default(uuid())
+  translations SubCategoryTranslation[]
+  images       Image[]
+  url          String                   @unique
+  featured     Boolean                  @default(false)
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -168,6 +191,19 @@ model SubCategory {
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+}
+
+model SubCategoryTranslation {
+  id          String   @id @default(uuid())
+  language    Language
+  name        String
+  description String?  @db.Text
+
+  subCategoryId String
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([subCategoryId, language])
+  @@index([subCategoryId])
 }
 
 enum ShippingFeeMethod {
@@ -268,9 +304,9 @@ model Color {
 }
 
 model OfferTag {
-  id   String @id @default(uuid())
-  name String
-  url  String @unique
+  id           String                @id @default(uuid())
+  translations OfferTagTranslation[]
+  url          String                @unique
 
   products Product[] @relation("OfferTagToProduct")
 
@@ -278,10 +314,21 @@ model OfferTag {
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+model OfferTagTranslation {
+  id       String   @id @default(uuid())
+  language Language
+  name     String
+
+  offerTagId String
+  offerTag   OfferTag @relation(fields: [offerTagId], references: [id], onDelete: Cascade)
+
+  @@unique([offerTagId, language])
+  @@index([offerTagId])
+}
+
 model Spec {
-  id    String @id @default(uuid())
-  name  String
-  value String
+  id           String            @id @default(uuid())
+  translations SpecTranslation[]
 
   productId String?
   product   Product? @relation("ProductSpec", fields: [productId], references: [id], onDelete: Cascade)
@@ -292,11 +339,23 @@ model Spec {
   @@index([productId])
 }
 
+model SpecTranslation {
+  id       String   @id @default(uuid())
+  language Language
+  name     String
+  value    String
+
+  specId String
+  spec   Spec   @relation(fields: [specId], references: [id], onDelete: Cascade)
+
+  @@unique([specId, language])
+  @@index([specId])
+}
+
 model Question {
   id String @id @default(uuid())
 
-  question String
-  answer   String
+  translations QuestionTranslation[]
 
   productId String?
   product   Product? @relation("ProductQuestion", fields: [productId], references: [id], onDelete: Cascade)
@@ -305,6 +364,19 @@ model Question {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([productId])
+}
+
+model QuestionTranslation {
+  id       String   @id @default(uuid())
+  language Language
+  question String   @db.Text
+  answer   String   @db.Text
+
+  questionId String
+  Question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, language])
+  @@index([questionId])
 }
 
 model Country {

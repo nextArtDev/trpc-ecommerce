@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/lib/auth-helpers'
 import {
   Category,
+  CategoryTranslation,
   City,
   Color,
   Coupon,
@@ -32,7 +33,7 @@ export const getAllCategories = cache(
   }): Promise<{
     categories: (Category & { images: Image[] } & {
       subCategories: (SubCategory & { images: Image[] })[]
-    })[]
+    } & { translations: CategoryTranslation[] })[]
     isNext: boolean
   }> => {
     const skipAmount = (page - 1) * pageSize
@@ -47,6 +48,7 @@ export const getAllCategories = cache(
               images: true,
             },
           },
+          translations: true,
         },
 
         skip: skipAmount,
