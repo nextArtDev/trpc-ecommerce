@@ -6,13 +6,12 @@ import { deleteFileFromS3, uploadFileToS3 } from './s3Upload'
 import { CategoryFormSchema } from '../schemas'
 import { currentUser } from '@/lib/auth'
 import prisma from '@/lib/prisma'
-import { Category } from '@/lib/generated/prisma'
+import { Category, Language } from '@/lib/generated/prisma'
 
-//bunx @better-auth/cli generate
 interface CreateCategoryFormState {
   success?: string
   errors: {
-    name?: string[]
+    translations?: string[]
     url?: string[]
     featured?: string[]
     images?: string[]
@@ -46,9 +45,7 @@ export async function createCategory(
   }
   try {
     const isExisting = await prisma.category.findFirst({
-      where: {
-        OR: [{ name: result.data.name }, { url: result.data.url }],
-      },
+      where: { url: result.data.url },
     })
     if (isExisting) {
       return {
@@ -57,8 +54,25 @@ export async function createCategory(
         },
       }
     }
-    // console.log(isExisting)
-    // console.log(billboard)
+    const existingTranslations = await prisma.categoryTranslation.findFirst({
+      where: {
+        OR: [
+          { name: result.data.translations.fa.name, language: 'fa' },
+          { name: result.data.translations.en.name, language: 'en' },
+          { name: result.data.translations.de.name, language: 'de' },
+          { name: result.data.translations.fr.name, language: 'fr' },
+          { name: result.data.translations.it.name, language: 'it' },
+        ],
+      },
+    })
+
+    if (existingTranslations) {
+      return {
+        errors: {
+          _form: ['دسته‌بندی با این نام در یکی از زبان‌ها موجود است!'],
+        },
+      }
+    }
     let imageIds: string[] = []
     if (result.data.images) {
       const filesToUpload = result.data.images.filter(
@@ -76,13 +90,41 @@ export async function createCategory(
 
     await prisma.category.create({
       data: {
-        name: result.data.name,
         url: result.data.url,
         featured: result.data.featured,
         images: {
           connect: imageIds.map((id) => ({
             id: id,
           })),
+        },
+        translations: {
+          create: [
+            {
+              language: 'fa' as Language,
+              name: result.data.translations.fa.name,
+              description: result.data.translations.fa.description || null,
+            },
+            {
+              language: 'en' as Language,
+              name: result.data.translations.en.name,
+              description: result.data.translations.en.description || null,
+            },
+            {
+              language: 'de' as Language,
+              name: result.data.translations.de.name,
+              description: result.data.translations.de.description || null,
+            },
+            {
+              language: 'fr' as Language,
+              name: result.data.translations.fr.name,
+              description: result.data.translations.fr.description || null,
+            },
+            {
+              language: 'it' as Language,
+              name: result.data.translations.it.name,
+              description: result.data.translations.it.description || null,
+            },
+          ],
         },
       },
     })
@@ -96,8 +138,7 @@ export async function createCategory(
 }
 interface EditCategoryFormState {
   errors: {
-    name?: string[]
-    name_fa?: string[]
+    translations?: string[]
     description?: string[]
     featured?: string[]
 
@@ -148,6 +189,7 @@ export async function editCategory(
       where: { id: categoryId },
       include: {
         images: { select: { id: true, key: true } },
+        translations: true,
       },
     })
     if (!isExisting) {
@@ -158,28 +200,42 @@ export async function editCategory(
       }
     }
 
-    const isNameExisting = await prisma.category.findFirst({
+    const isUrlExisting = await prisma.category.findFirst({
       where: {
-        AND: [
-          {
-            OR: [{ name: result.data.name }, { url: result.data.url }],
-          },
-          {
-            NOT: {
-              id: categoryId,
-            },
-          },
-        ],
+        url: result.data.url,
+        NOT: { id: categoryId },
       },
     })
 
-    if (isNameExisting) {
+    if (isUrlExisting) {
       return {
         errors: {
-          _form: ['دسته‌بندی با این نام موجود است!'],
+          _form: ['دسته‌بندی با این URL موجود است!'],
         },
       }
     }
+    // const isNameExisting = await prisma.category.findFirst({
+    //   where: {
+    //     AND: [
+    //       {
+    //         OR: [{ name: result.data.name }, { url: result.data.url }],
+    //       },
+    //       {
+    //         NOT: {
+    //           id: categoryId,
+    //         },
+    //       },
+    //     ],
+    //   },
+    // })
+
+    // if (isNameExisting) {
+    //   return {
+    //     errors: {
+    //       _form: ['دسته‌بندی با این نام موجود است!'],
+    //     },
+    //   }
+    // }
 
     // console.log(isExisting)
     // console.log(billboard)
@@ -192,17 +248,7 @@ export async function editCategory(
         // console.log('Deleting old keys from S3:', oldImageKeys)
         await Promise.all(oldImageKeys.map((key) => deleteFileFromS3(key)))
       }
-      //   const imageIds: string[] = []
-      //   for (const img of result.data.images) {
-      //     if (img instanceof File) {
-      //       const buffer = Buffer.from(await img.arrayBuffer())
-      //       const res = await uploadFileToS3(buffer, img.name)
 
-      //       if (res?.imageId && typeof res.imageId === 'string') {
-      //         imageIds.push(res.imageId)
-      //       }
-      //     }
-      //   }
       const filesToUpload = result.data.images.filter(
         (img): img is File => img instanceof File
       )
@@ -232,13 +278,101 @@ export async function editCategory(
           id: categoryId,
         },
         data: {
-          name: result.data.name,
           url: result.data.url,
           featured: result.data.featured,
           images: {
             connect: imageIds.map((id) => ({
               id: id,
             })),
+          },
+          translations: {
+            upsert: [
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'fa' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.fa.name,
+                  description: result.data.translations.fa.description || null,
+                },
+                create: {
+                  language: 'fa' as Language,
+                  name: result.data.translations.fa.name,
+                  description: result.data.translations.fa.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'en' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.en.name,
+                  description: result.data.translations.en.description || null,
+                },
+                create: {
+                  language: 'en' as Language,
+                  name: result.data.translations.en.name,
+                  description: result.data.translations.en.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'de' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.de.name,
+                  description: result.data.translations.de.description || null,
+                },
+                create: {
+                  language: 'de' as Language,
+                  name: result.data.translations.de.name,
+                  description: result.data.translations.de.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'fr' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.fr.name,
+                  description: result.data.translations.fr.description || null,
+                },
+                create: {
+                  language: 'fr' as Language,
+                  name: result.data.translations.fr.name,
+                  description: result.data.translations.fr.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'it' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.it.name,
+                  description: result.data.translations.it.description || null,
+                },
+                create: {
+                  language: 'it' as Language,
+                  name: result.data.translations.it.name,
+                  description: result.data.translations.it.description || null,
+                },
+              },
+            ],
           },
         },
       })
@@ -248,9 +382,97 @@ export async function editCategory(
           id: categoryId,
         },
         data: {
-          name: result.data.name,
           url: result.data.url,
           featured: result.data.featured,
+          translations: {
+            upsert: [
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'fa' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.fa.name,
+                  description: result.data.translations.fa.description || null,
+                },
+                create: {
+                  language: 'fa' as Language,
+                  name: result.data.translations.fa.name,
+                  description: result.data.translations.fa.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'en' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.en.name,
+                  description: result.data.translations.en.description || null,
+                },
+                create: {
+                  language: 'en' as Language,
+                  name: result.data.translations.en.name,
+                  description: result.data.translations.en.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'de' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.de.name,
+                  description: result.data.translations.de.description || null,
+                },
+                create: {
+                  language: 'de' as Language,
+                  name: result.data.translations.de.name,
+                  description: result.data.translations.de.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'fr' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.fr.name,
+                  description: result.data.translations.fr.description || null,
+                },
+                create: {
+                  language: 'fr' as Language,
+                  name: result.data.translations.fr.name,
+                  description: result.data.translations.fr.description || null,
+                },
+              },
+              {
+                where: {
+                  categoryId_language: {
+                    categoryId: categoryId,
+                    language: 'it' as Language,
+                  },
+                },
+                update: {
+                  name: result.data.translations.it.name,
+                  description: result.data.translations.it.description || null,
+                },
+                create: {
+                  language: 'it' as Language,
+                  name: result.data.translations.it.name,
+                  description: result.data.translations.it.description || null,
+                },
+              },
+            ],
+          },
         },
       })
     }
@@ -354,12 +576,3 @@ export async function deleteCategory(
   revalidatePath(path)
   redirect(`/dashboard/categories`)
 }
-
-// export const getSubCategoryByCategoryId = async (categoryId: string) => {
-//   try {
-//     const subCategories = await getAllCategoriesForCategory(categoryId)
-//     return subCategories
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
