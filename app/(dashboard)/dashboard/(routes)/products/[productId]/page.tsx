@@ -33,6 +33,7 @@ export default async function SellerNewProductPage({
           translations: { select: { name: true } },
         },
       },
+      translations: true,
       variants: {
         include: { color: true, size: true, images: true },
       },

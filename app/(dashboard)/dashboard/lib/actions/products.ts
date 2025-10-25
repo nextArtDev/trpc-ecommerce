@@ -42,6 +42,12 @@ export async function createProduct(
       errors: result.error.flatten().fieldErrors,
     }
   }
+  // console.log('Data size:', JSON.stringify(data).length, 'bytes')
+  // console.log(
+  //   'Data size in MB:',
+  //   (JSON.stringify(data).length / 1024 / 1024).toFixed(2),
+  //   'MB'
+  // )
 
   const user = await currentUser()
   if (!user || user.role !== 'admin') {

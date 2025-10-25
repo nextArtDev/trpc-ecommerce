@@ -321,7 +321,8 @@ import ReactCrop, {
   type ReactCropProps,
 } from 'react-image-crop'
 import { cn } from '@/lib/utils'
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-expect-error
 import 'react-image-crop/dist/ReactCrop.css'
 
 const centerAspectCrop = (

@@ -125,6 +125,7 @@ const ProductDetails: FC<ProductFormProps> = ({
   categories,
   offerTags,
 }) => {
+  // console.log({ data })
   const path = usePathname()
 
   const [isPending, startTransition] = useTransition()
@@ -832,7 +833,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                         </Button>
                       </div>
 
-                      <Tabs defaultValue="fa" className="w-full">
+                      <Tabs dir="rtl" defaultValue="fa" className="w-full">
                         <TabsList className="grid w-full grid-cols-5">
                           {LANGUAGES.map((lang) => (
                             <TabsTrigger key={lang.code} value={lang.code}>
@@ -925,7 +926,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                         </Button>
                       </div>
 
-                      <Tabs defaultValue="fa" className="w-full">
+                      <Tabs dir="rtl" defaultValue="fa" className="w-full">
                         <TabsList className="grid w-full grid-cols-5">
                           {LANGUAGES.map((lang) => (
                             <TabsTrigger key={lang.code} value={lang.code}>
