@@ -12,6 +12,7 @@ import SearchBar from './SearchBar'
 import Logo from './Logo'
 import TopBanner from './TopBanner'
 import { TransitionLink } from '../shared/TransitionLink'
+import LanguageSwitcher from '@/components/shared/language-switcher'
 
 export const ListItem = React.forwardRef<
   HTMLAnchorElement,
@@ -88,6 +89,7 @@ export default function MainNav({
 
                     <UserSession session={session} />
                     <DrawerCart />
+                    <LanguageSwitcher />
                   </div>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center">
