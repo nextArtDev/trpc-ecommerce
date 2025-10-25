@@ -60,7 +60,7 @@ export default async function ProductsPage({
   if (!products) return <h1 className="text-2xl">هیچ محصولی اضافه نشده!</h1>
   const formattedProduct: ProductColumn[] = products?.products?.map((item) => ({
     id: item.id,
-    name: item.name,
+    name: item.translations.find((tr) => tr.language === 'fa')?.name as string,
     slug: item.slug,
     subCategory: item.subCategory,
     offerTag: item?.offerTag,

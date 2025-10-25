@@ -9,12 +9,12 @@ import { ProductFormSchema } from '../schemas'
 import { currentUser } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { generateUniqueSlug } from '../server-utils'
+import { Language } from '@/lib/generated/prisma'
 
 interface CreateProductFormState {
   success?: string
   errors: {
-    name?: string[]
-    description?: string[]
+    translations?: string[]
     isFeatured?: string[]
     images?: string[]
     categoryId?: string[]
@@ -60,12 +60,14 @@ export async function createProduct(
       specs,
       questions,
       brand,
+      translations,
       ...productData
     } = result.data
 
-    const isExistingProduct = await prisma.product.findFirst({
+    const isExistingProduct = await prisma.productTranslation.findFirst({
       where: {
-        name: result.data.name,
+        name: translations.fa.name,
+        language: 'fa',
       },
     })
 
@@ -78,7 +80,7 @@ export async function createProduct(
     }
 
     const productSlug = await generateUniqueSlug(
-      slugify(result.data.name, {
+      slugify(translations.en.name, {
         replacement: '-',
         lower: true,
         trim: true,
@@ -128,6 +130,35 @@ export async function createProduct(
           keywords: productData.keywords?.join(',') ?? '',
           saleEndDate: String(productData.saleEndDate),
           images: { connect: imageIds.map((id) => ({ id })) },
+          translations: {
+            create: [
+              {
+                language: 'fa' as Language,
+                name: translations.fa.name,
+                description: translations.fa.description,
+              },
+              {
+                language: 'en' as Language,
+                name: translations.en.name,
+                description: translations.en.description,
+              },
+              {
+                language: 'de' as Language,
+                name: translations.de.name,
+                description: translations.de.description,
+              },
+              {
+                language: 'fr' as Language,
+                name: translations.fr.name,
+                description: translations.fr.description,
+              },
+              {
+                language: 'it' as Language,
+                name: translations.it.name,
+                description: translations.it.description,
+              },
+            ],
+          },
         },
       })
 
@@ -169,20 +200,88 @@ export async function createProduct(
 
       // Create Specs if they exist
       if (specs && specs.length > 0) {
-        await tx.spec.createMany({
-          data: specs
-            .filter((s) => s.name && s.name.trim() !== '')
-            .map((spec) => ({ ...spec, productId: product.id })),
-        })
+        for (const specData of specs) {
+          // Only create if at least one language has content
+          if (specData.fa.name.trim() !== '') {
+            await tx.spec.create({
+              data: {
+                productId: product.id,
+                translations: {
+                  create: [
+                    {
+                      language: 'fa' as Language,
+                      name: specData.fa.name,
+                      value: specData.fa.value,
+                    },
+                    {
+                      language: 'en' as Language,
+                      name: specData.en.name,
+                      value: specData.en.value,
+                    },
+                    {
+                      language: 'de' as Language,
+                      name: specData.de.name,
+                      value: specData.de.value,
+                    },
+                    {
+                      language: 'fr' as Language,
+                      name: specData.fr.name,
+                      value: specData.fr.value,
+                    },
+                    {
+                      language: 'it' as Language,
+                      name: specData.it.name,
+                      value: specData.it.value,
+                    },
+                  ],
+                },
+              },
+            })
+          }
+        }
       }
 
-      // Create Questions if they exist
+      // NEW: Create Questions with translations
       if (questions && questions.length > 0) {
-        await tx.question.createMany({
-          data: questions
-            .filter((q) => q.question && q.question.trim() !== '')
-            .map((q) => ({ ...q, productId: product.id })),
-        })
+        for (const questionData of questions) {
+          // Only create if at least one language has content
+          if (questionData.fa.question.trim() !== '') {
+            await tx.question.create({
+              data: {
+                productId: product.id,
+                translations: {
+                  create: [
+                    {
+                      language: 'fa' as Language,
+                      question: questionData.fa.question,
+                      answer: questionData.fa.answer,
+                    },
+                    {
+                      language: 'en' as Language,
+                      question: questionData.en.question,
+                      answer: questionData.en.answer,
+                    },
+                    {
+                      language: 'de' as Language,
+                      question: questionData.de.question,
+                      answer: questionData.de.answer,
+                    },
+                    {
+                      language: 'fr' as Language,
+                      question: questionData.fr.question,
+                      answer: questionData.fr.answer,
+                    },
+                    {
+                      language: 'it' as Language,
+                      question: questionData.it.question,
+                      answer: questionData.it.answer,
+                    },
+                  ],
+                },
+              },
+            })
+          }
+        }
       }
     })
   } catch (err: unknown) {
@@ -231,6 +330,7 @@ export async function editProduct(
       where: { id: productId },
       include: {
         images: { select: { id: true, key: true } },
+        translations: true,
         variants: {
           include: {
             images: { select: { id: true, key: true } },
@@ -249,9 +349,13 @@ export async function editProduct(
       }
     }
 
-    const isNameExisting = await prisma.product.findFirst({
+    const isNameExisting = await prisma.productTranslation.findFirst({
       where: {
-        AND: [{ name: result.data.name }, { NOT: { id: productId } }],
+        name: result.data.translations.fa.name,
+        language: 'fa',
+        NOT: {
+          productId: productId,
+        },
       },
     })
 
@@ -349,8 +453,7 @@ export async function editProduct(
         data: {
           categoryId: result.data.categoryId,
           subCategoryId: result.data.subCategoryId,
-          name: result.data.name,
-          description: result.data.description,
+
           brand: result.data?.brand || '',
           shippingFeeMethod: result.data.shippingFeeMethod,
           isFeatured: result.data?.isFeatured,
@@ -362,6 +465,34 @@ export async function editProduct(
           saleEndDate: String(result.data.saleEndDate),
         },
       })
+      const languages: Array<'fa' | 'en' | 'de' | 'fr' | 'it'> = [
+        'fa',
+        'en',
+        'de',
+        'fr',
+        'it',
+      ]
+
+      for (const lang of languages) {
+        await tx.productTranslation.upsert({
+          where: {
+            productId_language: {
+              productId: productId,
+              language: lang as Language,
+            },
+          },
+          update: {
+            name: result.data.translations[lang].name,
+            description: result.data.translations[lang].description,
+          },
+          create: {
+            productId: productId,
+            language: lang as Language,
+            name: result.data.translations[lang].name,
+            description: result.data.translations[lang].description,
+          },
+        })
+      }
 
       // Handle specs - delete and recreate
       await tx.spec.deleteMany({
@@ -369,42 +500,91 @@ export async function editProduct(
       })
 
       if (result.data.specs && result.data.specs.length > 0) {
-        const newSpecs = result.data.specs
-          .filter((spec) => spec.name.trim() !== '' && spec.value.trim() !== '')
-          .map((spec) => ({
-            name: spec.name,
-            value: spec.value,
-            productId: productId,
-          }))
-
-        if (newSpecs.length > 0) {
-          await tx.spec.createMany({
-            data: newSpecs,
-          })
+        for (const specData of result.data.specs) {
+          if (specData.fa.name.trim() !== '') {
+            await tx.spec.create({
+              data: {
+                productId: productId,
+                translations: {
+                  create: [
+                    {
+                      language: 'fa' as Language,
+                      name: specData.fa.name,
+                      value: specData.fa.value,
+                    },
+                    {
+                      language: 'en' as Language,
+                      name: specData.en.name,
+                      value: specData.en.value,
+                    },
+                    {
+                      language: 'de' as Language,
+                      name: specData.de.name,
+                      value: specData.de.value,
+                    },
+                    {
+                      language: 'fr' as Language,
+                      name: specData.fr.name,
+                      value: specData.fr.value,
+                    },
+                    {
+                      language: 'it' as Language,
+                      name: specData.it.name,
+                      value: specData.it.value,
+                    },
+                  ],
+                },
+              },
+            })
+          }
         }
       }
 
-      // Handle questions - delete and recreate
+      // NEW: Handle questions with translations - delete and recreate
       await tx.question.deleteMany({
         where: { productId: productId },
       })
 
       if (result.data.questions && result.data.questions.length > 0) {
-        const newQuestions = result.data.questions
-          .filter((qa) => qa.question.trim() !== '' && qa.answer.trim() !== '')
-          .map((question) => ({
-            question: question.question,
-            answer: question.answer,
-            productId: productId,
-          }))
-
-        if (newQuestions.length > 0) {
-          await tx.question.createMany({
-            data: newQuestions,
-          })
+        for (const questionData of result.data.questions) {
+          if (questionData.fa.question.trim() !== '') {
+            await tx.question.create({
+              data: {
+                productId: productId,
+                translations: {
+                  create: [
+                    {
+                      language: 'fa' as Language,
+                      question: questionData.fa.question,
+                      answer: questionData.fa.answer,
+                    },
+                    {
+                      language: 'en' as Language,
+                      question: questionData.en.question,
+                      answer: questionData.en.answer,
+                    },
+                    {
+                      language: 'de' as Language,
+                      question: questionData.de.question,
+                      answer: questionData.de.answer,
+                    },
+                    {
+                      language: 'fr' as Language,
+                      question: questionData.fr.question,
+                      answer: questionData.fr.answer,
+                    },
+                    {
+                      language: 'it' as Language,
+                      question: questionData.it.question,
+                      answer: questionData.it.answer,
+                    },
+                  ],
+                },
+              },
+            })
+          }
         }
       }
-
       // Handle variants - SMART UPDATE to preserve cart items
       if (result.data.variants) {
         const existingVariants = await tx.productVariant.findMany({

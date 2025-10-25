@@ -37,16 +37,22 @@ import {
 import { Switch } from '@/components/ui/switch'
 import {
   Category,
+  CategoryTranslation,
   Color,
   Image,
   OfferTag,
+  OfferTagTranslation,
   Product,
+  ProductTranslation,
   ProductVariant,
   Province,
   Question,
+  QuestionTranslation,
   ShippingFeeMethod,
   Size,
   Spec,
+  SpecTranslation,
+  SubCategoryTranslation,
 } from '@/lib/generated/prisma'
 import { useQuery } from '@tanstack/react-query'
 // import { NumberInput } from '@tremor/react'
@@ -64,6 +70,9 @@ import { createProduct, editProduct } from '../../../lib/actions/products'
 import { getSubCategoryByCategoryId } from '../../../lib/queries/server-queries'
 import { ProductFormSchema } from '../../../lib/schemas'
 import { handleServerErrors } from '../../../lib/server-utils'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { LANGUAGES } from '../../../components/constants'
+import { Textarea } from '@/components/ui/textarea'
 
 const shippingFeeMethods = [
   {
@@ -86,9 +95,15 @@ const shippingFeeMethods = [
 interface ProductFormProps {
   data?: Partial<
     Product & { images: Partial<Image>[] | null } & {
-      specs: Partial<Spec>[] | null
+      translations: ProductTranslation[]
     } & {
-      questions: Partial<Question>[] | null
+      specs:
+        | Partial<Spec & { translations: Partial<SpecTranslation>[] }>[]
+        | null
+    } & {
+      questions:
+        | Partial<Question & { translations: Partial<QuestionTranslation>[] }>[]
+        | null
     } & {
       variants:
         | (Partial<ProductVariant> & {
@@ -99,8 +114,8 @@ interface ProductFormProps {
         | null
     }
   >
-  categories: Partial<Category>[]
-  offerTags: OfferTag[]
+  categories: Partial<Category & { translations: CategoryTranslation[] }>[]
+  offerTags: (OfferTag & { translations: OfferTagTranslation[] })[]
   provinces?: Province[]
   // subCategories?: SubCategory[]
 }
@@ -117,8 +132,6 @@ const ProductDetails: FC<ProductFormProps> = ({
   const form = useForm<z.infer<typeof ProductFormSchema>>({
     resolver: zodResolver(ProductFormSchema),
     defaultValues: {
-      name: data?.name,
-      description: data?.description,
       images: data?.images || [],
       // variantImages: data?.variantImages || [],
       categoryId: data?.categoryId,
@@ -127,14 +140,7 @@ const ProductDetails: FC<ProductFormProps> = ({
       offerTagId: data?.offerTagId || undefined,
       subCategoryId: data?.subCategoryId,
       brand: data?.brand || '',
-      specs: data?.specs?.map((spec) => ({
-        name: spec.name,
-        value: spec.value,
-      })) ?? [{ name: '', value: '' }],
-      questions: data?.questions?.map((question) => ({
-        question: question.question,
-        answer: question.answer,
-      })) ?? [{ question: '', answer: '' }],
+
       shippingFeeMethod: data?.shippingFeeMethod,
 
       sku: data?.sku ?? '',
@@ -173,6 +179,138 @@ const ProductDetails: FC<ProductFormProps> = ({
         ? new Date(data.saleEndDate)
         : new Date(new Date().setHours(23, 59, 59, 0)),
       keywords: data?.keywords ? data.keywords.split(',') : [],
+      translations: {
+        fa: {
+          name:
+            data?.translations?.find((t: any) => t.language === 'fa')?.name ??
+            '',
+          description:
+            data?.translations?.find((t: any) => t.language === 'fa')
+              ?.description ?? '',
+        },
+        en: {
+          name:
+            data?.translations?.find((t: any) => t.language === 'en')?.name ??
+            '',
+          description:
+            data?.translations?.find((t: any) => t.language === 'en')
+              ?.description ?? '',
+        },
+        de: {
+          name:
+            data?.translations?.find((t: any) => t.language === 'de')?.name ??
+            '',
+          description:
+            data?.translations?.find((t: any) => t.language === 'de')
+              ?.description ?? '',
+        },
+        fr: {
+          name:
+            data?.translations?.find((t: any) => t.language === 'fr')?.name ??
+            '',
+          description:
+            data?.translations?.find((t: any) => t.language === 'fr')
+              ?.description ?? '',
+        },
+        it: {
+          name:
+            data?.translations?.find((t: any) => t.language === 'it')?.name ??
+            '',
+          description:
+            data?.translations?.find((t: any) => t.language === 'it')
+              ?.description ?? '',
+        },
+      },
+
+      // NEW: Specs with translations
+      specs:
+        data?.specs?.map((spec: any) => ({
+          fa: {
+            name:
+              spec.translations?.find((t: any) => t.language === 'fa')?.name ??
+              '',
+            value:
+              spec.translations?.find((t: any) => t.language === 'fa')?.value ??
+              '',
+          },
+          en: {
+            name:
+              spec.translations?.find((t: any) => t.language === 'en')?.name ??
+              '',
+            value:
+              spec.translations?.find((t: any) => t.language === 'en')?.value ??
+              '',
+          },
+          de: {
+            name:
+              spec.translations?.find((t: any) => t.language === 'de')?.name ??
+              '',
+            value:
+              spec.translations?.find((t: any) => t.language === 'de')?.value ??
+              '',
+          },
+          fr: {
+            name:
+              spec.translations?.find((t: any) => t.language === 'fr')?.name ??
+              '',
+            value:
+              spec.translations?.find((t: any) => t.language === 'fr')?.value ??
+              '',
+          },
+          it: {
+            name:
+              spec.translations?.find((t: any) => t.language === 'it')?.name ??
+              '',
+            value:
+              spec.translations?.find((t: any) => t.language === 'it')?.value ??
+              '',
+          },
+        })) ?? [],
+
+      // NEW: Questions with translations
+      questions:
+        data?.questions?.map((q: any) => ({
+          fa: {
+            question:
+              q.translations?.find((t: any) => t.language === 'fa')?.question ??
+              '',
+            answer:
+              q.translations?.find((t: any) => t.language === 'fa')?.answer ??
+              '',
+          },
+          en: {
+            question:
+              q.translations?.find((t: any) => t.language === 'en')?.question ??
+              '',
+            answer:
+              q.translations?.find((t: any) => t.language === 'en')?.answer ??
+              '',
+          },
+          de: {
+            question:
+              q.translations?.find((t: any) => t.language === 'de')?.question ??
+              '',
+            answer:
+              q.translations?.find((t: any) => t.language === 'de')?.answer ??
+              '',
+          },
+          fr: {
+            question:
+              q.translations?.find((t: any) => t.language === 'fr')?.question ??
+              '',
+            answer:
+              q.translations?.find((t: any) => t.language === 'fr')?.answer ??
+              '',
+          },
+          it: {
+            question:
+              q.translations?.find((t: any) => t.language === 'it')?.question ??
+              '',
+            answer:
+              q.translations?.find((t: any) => t.language === 'it')?.answer ??
+              '',
+          },
+        })) ?? [],
     },
   })
 
@@ -193,23 +331,6 @@ const ProductDetails: FC<ProductFormProps> = ({
     name: 'questions',
   })
 
-  // const {
-  //   fields: colorFields,
-  //   append: appendColor,
-  //   remove: removeColor,
-  // } = useFieldArray({
-  //   control: form.control,
-  //   name: 'colors',
-  // })
-
-  // const {
-  //   fields: sizeFields,
-  //   append: appendSize,
-  //   remove: removeSize,
-  // } = useFieldArray({
-  //   control: form.control,
-  //   name: 'sizes',
-  // })
   const {
     fields: variantFields,
     append: appendVariant,
@@ -223,16 +344,10 @@ const ProductDetails: FC<ProductFormProps> = ({
     queryKey: ['subCateByCat', form.watch().categoryId],
     queryFn: () => getSubCategoryByCategoryId(form.watch().categoryId),
   })
-  // const { data: citiesForFreeShipping } = useQuery({
-  //   queryKey: ['province-for-shipping', provinceNameForShopping],
-  //   queryFn: () => getCityByProvinceId(provinceNameForShopping),
-  //   enabled: !!provinceNameForShopping,
-  // })
-  // console.log({ citiesForFreeShipping })
+
   const errors = form.formState.errors
-  // console.log(errors)
+
   const handleSubmit = async (values: z.infer<typeof ProductFormSchema>) => {
-    // console.log({ values })
     startTransition(async () => {
       try {
         if (data) {
@@ -289,11 +404,6 @@ const ProductDetails: FC<ProductFormProps> = ({
     )
   }
 
-  // const handleDeleteCityFreeShipping = (index: number) => {
-  //   const currentValues = form.getValues().freeShippingCityIds
-  //   const updatedValues = currentValues?.filter((_, i) => i !== index)
-  //   form.setValue('freeShippingCityIds', updatedValues)
-  // }
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -301,7 +411,9 @@ const ProductDetails: FC<ProductFormProps> = ({
           <CardTitle>اطلاعات محصولات</CardTitle>
           <CardDescription>
             {data?.id
-              ? `آپدیت محصول ${data?.name}`
+              ? `آپدیت محصول ${
+                  data?.translations?.find((tr) => tr.language === 'fa')?.name
+                }`
               : ' محصول جدید ایجاد کنید. شما می‌توانید بعدا از جدول محصولات آنرا ویرایش کنید.'}
           </CardDescription>
         </CardHeader>
@@ -330,7 +442,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                 />
               </div>
 
-              {/* Name   */}
+              {/*     
               <InputFieldset label="نام" isMandatory>
                 <div className="flex flex-col lg:flex-row gap-4">
                   <FormField
@@ -347,8 +459,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                     )}
                   />
                 </div>
-              </InputFieldset>
-              {/* Product and variant description editors (tabs) */}
+              </InputFieldset> 
               <InputFieldset
                 isMandatory
                 label="توضحیات"
@@ -375,6 +486,73 @@ const ProductDetails: FC<ProductFormProps> = ({
                     </FormItem>
                   )}
                 />
+              </InputFieldset> */}
+              <InputFieldset label="نام و توضیحات محصول" isMandatory>
+                <Tabs dir="rtl" defaultValue="fa" className="w-full space-y-6">
+                  <TabsList className="grid w-full grid-cols-5">
+                    {LANGUAGES.map((lang) => (
+                      <TabsTrigger key={lang.code} value={lang.code}>
+                        {lang.flag} {lang.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {LANGUAGES.map((lang) => (
+                    <TabsContent
+                      key={lang.code}
+                      value={lang.code}
+                      className="space-y-4"
+                    >
+                      {/* Name */}
+                      <FormField
+                        disabled={isPending}
+                        control={form.control}
+                        name={`translations.${lang.code}.name`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              نام محصول ({lang.label}){' '}
+                              <span className="text-rose-500">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder={`نام محصول به ${lang.label}`}
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Description */}
+                      <FormField
+                        disabled={isPending}
+                        control={form.control}
+                        name={`translations.${lang.code}.description`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              توضیحات ({lang.label}){' '}
+                              <span className="text-rose-500">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <RichTextEditor
+                                content={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              توضیحات اصلی محصول در صفحه محصول است و باید کامل
+                              باشد.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </TabsContent>
+                  ))}
+                </Tabs>
               </InputFieldset>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ImageInput
@@ -385,28 +563,6 @@ const ProductDetails: FC<ProductFormProps> = ({
                   )}
                   createVariantFromColor={createVariantFromColor}
                 />
-                {/* <div className="space-y-4">
-                  <ClickToAddInputsRHF
-                    fields={variantFields}
-                    name="variants"
-                    control={form.control}
-                    register={form.register}
-                    setValue={form.setValue}
-                    getValues={form.getValues}
-                    onAppend={() => appendColor({ color: '' })}
-                    onRemove={removeColor}
-                    initialDetailSchema={{ color: '' }}
-                    header="رنگها"
-                    colorPicker
-                    isMandatory
-                  />
-                  {form.formState.errors.colors && (
-                    <span className="text-sm font-medium text-destructive">
-                      {form.formState.errors.colors.message ||
-                        (form.formState.errors.colors as any)?.root?.message}
-                    </span>
-                  )}
-                </div> */}
               </div>
 
               <InputFieldset label="انواع محصول (وریانت‌ها)" isMandatory>
@@ -472,7 +628,6 @@ const ProductDetails: FC<ProductFormProps> = ({
                 <div className="flex gap-4">
                   <FormField
                     disabled={isPending}
-                    // control={form.control}
                     name="categoryId"
                     render={({ field }) => (
                       <FormItem className="flex-1">
@@ -500,7 +655,11 @@ const ProductDetails: FC<ProductFormProps> = ({
                                 key={category.id}
                                 value={category.id!}
                               >
-                                {category.name}
+                                {
+                                  category.translations?.find(
+                                    (tr) => tr.language === 'fa'
+                                  )?.name
+                                }
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -535,9 +694,14 @@ const ProductDetails: FC<ProductFormProps> = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {SubCategories?.map((sub) => (
+                            {SubCategories?.map((sub: any) => (
                               <SelectItem key={sub.id} value={sub.id}>
-                                {sub.name}
+                                {
+                                  sub.translations?.find(
+                                    (tr: SubCategoryTranslation) =>
+                                      tr.language === 'fa'
+                                  )?.name
+                                }
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -546,7 +710,6 @@ const ProductDetails: FC<ProductFormProps> = ({
                       </FormItem>
                     )}
                   />
-                  {/* Offer Tag */}
                   <FormField
                     disabled={isPending}
                     control={form.control}
@@ -571,7 +734,11 @@ const ProductDetails: FC<ProductFormProps> = ({
                             {offerTags &&
                               offerTags.map((offer) => (
                                 <SelectItem key={offer.id} value={offer.id}>
-                                  {offer.name}
+                                  {
+                                    offer.translations?.find(
+                                      (tr) => tr.language === 'fa'
+                                    )?.name
+                                  }
                                 </SelectItem>
                               ))}
                           </SelectContent>
@@ -649,25 +816,90 @@ const ProductDetails: FC<ProductFormProps> = ({
                 </div>
               </InputFieldset>
 
-              <InputFieldset label="خصوصیات محصول" description={''}>
-                <div className="w-full flex flex-col gap-y-3">
-                  <ClickToAddInputsRHF
-                    fields={specFields}
-                    name="specs"
-                    control={form.control}
-                    register={form.register}
-                    setValue={form.setValue}
-                    getValues={form.getValues}
-                    onAppend={() => appendSpec({ name: '', value: '' })}
-                    onRemove={removeSpec}
-                    initialDetailSchema={{ name: '', value: '' }}
-                    containerClassName="flex-1"
-                    inputClassName="w-full"
-                    labels={{
-                      name: 'عنوان',
-                      value: 'مقدار',
-                    }}
-                  />
+              <InputFieldset label="خصوصیات محصول">
+                <div className="w-full space-y-4">
+                  {specFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="font-medium">خصوصیت {index + 1}</h4>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => removeSpec(index)}
+                        >
+                          حذف
+                        </Button>
+                      </div>
+
+                      <Tabs defaultValue="fa" className="w-full">
+                        <TabsList className="grid w-full grid-cols-5">
+                          {LANGUAGES.map((lang) => (
+                            <TabsTrigger key={lang.code} value={lang.code}>
+                              {lang.flag} {lang.label}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+
+                        {LANGUAGES.map((lang) => (
+                          <TabsContent
+                            key={lang.code}
+                            value={lang.code}
+                            className="space-y-4"
+                          >
+                            <FormField
+                              control={form.control}
+                              name={`specs.${index}.${lang.code}.name`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>عنوان ({lang.label})</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder={`عنوان به ${lang.label}`}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`specs.${index}.${lang.code}.value`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>مقدار ({lang.label})</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder={`مقدار به ${lang.label}`}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </TabsContent>
+                        ))}
+                      </Tabs>
+                    </Card>
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendSpec({
+                        fa: { name: '', value: '' },
+                        en: { name: '', value: '' },
+                        de: { name: '', value: '' },
+                        fr: { name: '', value: '' },
+                        it: { name: '', value: '' },
+                      })
+                    }
+                  >
+                    افزودن خصوصیت
+                  </Button>
                   {errors.specs && (
                     <span className="text-sm font-medium text-destructive">
                       {errors.specs.message}
@@ -678,32 +910,89 @@ const ProductDetails: FC<ProductFormProps> = ({
               {/* Questions*/}
 
               <InputFieldset label="سوال و جوابهای راجع به محصول">
-                <div className="w-full flex flex-col gap-y-3">
-                  <ClickToAddInputsRHF
-                    fields={questionFields}
-                    name="questions"
-                    control={form.control}
-                    register={form.register}
-                    setValue={form.setValue}
-                    getValues={form.getValues}
-                    onAppend={() =>
-                      appendQuestion({ question: '', answer: '' })
+                <div className="w-full space-y-4">
+                  {questionFields.map((field, index) => (
+                    <Card key={field.id} className="p-4">
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="font-medium">سوال {index + 1}</h4>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => removeQuestion(index)}
+                        >
+                          حذف
+                        </Button>
+                      </div>
+
+                      <Tabs defaultValue="fa" className="w-full">
+                        <TabsList className="grid w-full grid-cols-5">
+                          {LANGUAGES.map((lang) => (
+                            <TabsTrigger key={lang.code} value={lang.code}>
+                              {lang.flag} {lang.label}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+
+                        {LANGUAGES.map((lang) => (
+                          <TabsContent
+                            key={lang.code}
+                            value={lang.code}
+                            className="space-y-4"
+                          >
+                            <FormField
+                              control={form.control}
+                              name={`questions.${index}.${lang.code}.question`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>سوال ({lang.label})</FormLabel>
+                                  <FormControl>
+                                    <Textarea
+                                      placeholder={`سوال به ${lang.label}`}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`questions.${index}.${lang.code}.answer`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>جواب ({lang.label})</FormLabel>
+                                  <FormControl>
+                                    <Textarea
+                                      placeholder={`جواب به ${lang.label}`}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </TabsContent>
+                        ))}
+                      </Tabs>
+                    </Card>
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      appendQuestion({
+                        fa: { question: '', answer: '' },
+                        en: { question: '', answer: '' },
+                        de: { question: '', answer: '' },
+                        fr: { question: '', answer: '' },
+                        it: { question: '', answer: '' },
+                      })
                     }
-                    onRemove={removeQuestion}
-                    initialDetailSchema={{ question: '', answer: '' }}
-                    // details={questions}
-                    // setDetails={setQuestions}
-                    // initialDetail={{
-                    //   question: '',
-                    //   answer: '',
-                    // }}
-                    labels={{
-                      question: 'سوال',
-                      answer: 'جواب',
-                    }}
-                    containerClassName="flex-1"
-                    inputClassName="w-full"
-                  />
+                  >
+                    افزودن سوال
+                  </Button>
                   {errors.questions && (
                     <span className="text-sm font-medium text-destructive">
                       {errors.questions.message}

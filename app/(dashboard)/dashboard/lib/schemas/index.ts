@@ -66,12 +66,32 @@ export const SubCategoryFormSchema = z.object({
   featured: z.union([z.boolean().default(false)]).optional(),
   categoryId: z.string(),
 })
-export const ProductFormSchema = z.object({
+
+const ProductTranslationSchema = z.object({
   name: z.string().min(1, 'نام محصول الزامی است.'),
   description: z.string().min(1, 'توضیحات محصول الزامی است.'),
+})
+
+const SpecTranslationSchema = z.object({
+  name: z.string().min(1, 'نام خصوصیت الزامی است.'),
+  value: z.string().min(1, 'مقدار خصوصیت الزامی است.'),
+})
+
+const QuestionTranslationSchema = z.object({
+  question: z.string().min(1, 'سوال الزامی است.'),
+  answer: z.string().min(1, 'جواب الزامی است.'),
+})
+
+export const ProductFormSchema = z.object({
+  // name: z.string().min(1, 'نام محصول الزامی است.'),
+  // description: z.string().min(1, 'توضیحات محصول الزامی است.'),
   categoryId: z.string().min(1, 'دسته‌بندی محصول الزامی است.'),
   subCategoryId: z.string().min(1, 'زیر دسته‌بندی الزامی است.'),
   // shippingFeeMethod: z.enum(['ITEM', 'WEIGHT', 'FIXED']).default('ITEM'),
+  keywords: z
+    .array(z.string())
+    .nonempty('لطفا حداقل یک کلمه کلیدی درباره محصول اضافه کنید.')
+    .max(10, { message: 'حداکثر کلمات کلیدی 10 تاست.' }),
   shippingFeeMethod: z.nativeEnum(ShippingFeeMethod),
   images: z
     .union([
@@ -85,22 +105,7 @@ export const ProductFormSchema = z.object({
   offerTagId: z.string().optional(),
   isFeatured: z.union([z.boolean().default(false)]).optional(),
   brand: z.string().optional(),
-  specs: z
-    .array(
-      z.object({
-        name: z.string(),
-        value: z.string(),
-      })
-    )
-    .optional(),
-  questions: z
-    .array(
-      z.object({
-        question: z.string(),
-        answer: z.string(),
-      })
-    )
-    .optional(),
+
   freeShippingCityIds: z
     .array(
       z.object({
@@ -110,15 +115,7 @@ export const ProductFormSchema = z.object({
     )
     .optional(),
 
-  sku: z
-    .string()
-    // .min(6, {
-    //   message: 'SKU باید حداقل 6 کاراکتر باشد.',
-    // })
-    // .max(50, {
-    //   message: 'SKU حداکثر می‌تواند 50 کاراکتر باشد',
-    // })
-    .optional(),
+  sku: z.string().optional(),
 
   variants: z
     .array(
@@ -147,16 +144,41 @@ export const ProductFormSchema = z.object({
     .optional(),
 
   isSale: z.boolean().default(false).optional(),
-  // saleEndDate: z.string().optional(),
-  keywords: z
-    .array(z.string())
-    .nonempty('لطفا حداقل یک کلمه کلیدی درباره محصول اضافه کنید.')
-    .max(10, {
-      message: 'حداکثر کلمات کلیدی 10 تاست.',
-    })
-    .optional(),
 
   saleEndDate: z.union([z.date(), z.string()]).optional(),
+  translations: z.object({
+    fa: ProductTranslationSchema,
+    en: ProductTranslationSchema,
+    de: ProductTranslationSchema,
+    fr: ProductTranslationSchema,
+    it: ProductTranslationSchema,
+  }),
+
+  // Specs with translations
+  specs: z
+    .array(
+      z.object({
+        fa: SpecTranslationSchema,
+        en: SpecTranslationSchema,
+        de: SpecTranslationSchema,
+        fr: SpecTranslationSchema,
+        it: SpecTranslationSchema,
+      })
+    )
+    .optional(),
+
+  // Questions with translations
+  questions: z
+    .array(
+      z.object({
+        fa: QuestionTranslationSchema,
+        en: QuestionTranslationSchema,
+        de: QuestionTranslationSchema,
+        fr: QuestionTranslationSchema,
+        it: QuestionTranslationSchema,
+      })
+    )
+    .optional(),
 })
 
 export type ProductVariantSchema = z.infer<

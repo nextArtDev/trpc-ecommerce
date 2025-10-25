@@ -155,7 +155,11 @@ export const getSubCategoryById = async (
 }
 
 export const getCategoryList = cache(async (): Promise<Category[] | []> => {
-  const categoryList = await prisma.category.findMany({})
+  const categoryList = await prisma.category.findMany({
+    include: {
+      translations: true,
+    },
+  })
   if (!categoryList.length) return []
   return categoryList
 })
@@ -196,12 +200,33 @@ export const getAllProductsList = cache(
       const products = await prisma.product.findMany({
         where: {},
         include: {
-          category: true,
-          subCategory: true,
-          offerTag: true,
+          category: {
+            include: {
+              translations: true,
+            },
+          },
+          subCategory: {
+            include: {
+              translations: true,
+            },
+          },
+          offerTag: {
+            include: {
+              translations: true,
+            },
+          },
           images: { orderBy: { created_at: 'desc' } },
-          questions: true,
-          specs: true,
+          questions: {
+            include: {
+              translations: true,
+            },
+          },
+          specs: {
+            include: {
+              translations: true,
+            },
+          },
+          translations: true,
           // variantImages: true,
           // colors: true,
           // sizes: true,
@@ -237,6 +262,7 @@ export const getAllOfferTags = cache(async () => {
           id: true,
         },
       },
+      translations: true,
     },
     orderBy: {
       products: {

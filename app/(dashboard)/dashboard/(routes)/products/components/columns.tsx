@@ -22,12 +22,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 import {
   Category,
+  CategoryTranslation,
   Color,
   Image,
   OfferTag,
+  OfferTagTranslation,
   ProductVariant,
   Size,
   SubCategory,
+  SubCategoryTranslation,
 } from '@/lib/generated/prisma'
 import { useModal } from '@/providers/modal-provider'
 import { ColumnDef } from '@tanstack/react-table'
@@ -50,8 +53,8 @@ export type ProductColumn = {
   id: string
   name: string
   slug: string
-  subCategory: SubCategory
-  offerTag?: OfferTag | null
+  subCategory: SubCategory & { translations: SubCategoryTranslation[] }
+  offerTag?: (OfferTag & { translations: OfferTagTranslation[] }) | null
   featured: boolean
   images: Image[]
   variants: (ProductVariant & { images: Image[] | null } & {
@@ -59,7 +62,7 @@ export type ProductColumn = {
   } & { color: Color | null })[]
   // colors: Color[]
   // sizes: Size[]
-  category: Category
+  category: Category & { translations: CategoryTranslation[] }
   createdAt: string
 }
 
@@ -127,14 +130,30 @@ export const columns: ColumnDef<ProductColumn>[] =
       accessorKey: 'category',
       header: 'دسته‌بندی',
       cell: ({ row }) => {
-        return <span>{row.original.category.name}</span>
+        return (
+          <span>
+            {
+              row.original.category.translations.find(
+                (tr) => tr.language === 'fa'
+              )?.name
+            }
+          </span>
+        )
       },
     },
     {
       accessorKey: 'subCategory',
       header: 'زیردسته‌بندی',
       cell: ({ row }) => {
-        return <span>{row.original.subCategory.name}</span>
+        return (
+          <span>
+            {
+              row.original.subCategory.translations.find(
+                (tr) => tr.language === 'fa'
+              )?.name
+            }
+          </span>
+        )
       },
     },
     {

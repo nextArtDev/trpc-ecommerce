@@ -18,9 +18,21 @@ export default async function SellerNewProductPage({
     },
     include: {
       images: { select: { url: true } },
-      specs: { select: { name: true, value: true, id: true } },
-      questions: { select: { question: true, answer: true, id: true } },
-      category: { select: { name: true, id: true } },
+      specs: {
+        include: {
+          translations: { select: { name: true, value: true, id: true } },
+        },
+      },
+      questions: {
+        include: {
+          translations: { select: { question: true, answer: true, id: true } },
+        },
+      },
+      category: {
+        include: {
+          translations: { select: { name: true } },
+        },
+      },
       variants: {
         include: { color: true, size: true, images: true },
       },

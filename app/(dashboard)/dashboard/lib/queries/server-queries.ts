@@ -10,6 +10,9 @@ export const getSubCategoryByCategoryId = cache(async (categoryId: string) => {
       where: {
         categoryId,
       },
+      include: {
+        translations: true,
+      },
       orderBy: {
         updatedAt: 'desc',
       },

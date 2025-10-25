@@ -213,29 +213,29 @@ enum ShippingFeeMethod {
 }
 
 model Product {
-  id                String            @id @default(uuid())
-  name              String
-  description       String
-  slug              String            @unique
+  id                String               @id @default(uuid())
+  // name              String
+  // description       String
+  slug              String               @unique
   brand             String?
-  rating            Float             @default(0)
-  sales             Int               @default(0)
-  numReviews        Int               @default(0)
-  shippingFeeMethod ShippingFeeMethod @default(ITEM)
-  views             Int               @default(0)
-  images            Image[]           @relation("productImage")
-  freeShipping      FreeShipping?     @relation("ProductFreeShipping")
-  isFeatured        Boolean           @default(false)
-  isSale            Boolean           @default(false)
+  rating            Float                @default(0)
+  sales             Int                  @default(0)
+  numReviews        Int                  @default(0)
+  shippingFeeMethod ShippingFeeMethod    @default(ITEM)
+  views             Int                  @default(0)
+  images            Image[]              @relation("productImage")
+  freeShipping      FreeShipping?        @relation("ProductFreeShipping")
+  isFeatured        Boolean              @default(false)
+  isSale            Boolean              @default(false)
   saleEndDate       String?
   sku               String?
   keywords          String
-
-  variants  ProductVariant[]
-  wishlist  Wishlist[]       @relation("WishlistToProduct")
-  specs     Spec[]           @relation("ProductSpec")
-  questions Question[]       @relation("ProductQuestion")
-  reviews   Review[]         @relation("ReviewToProduct")
+  translations      ProductTranslation[]
+  variants          ProductVariant[]
+  wishlist          Wishlist[]           @relation("WishlistToProduct")
+  specs             Spec[]               @relation("ProductSpec")
+  questions         Question[]           @relation("ProductQuestion")
+  reviews           Review[]             @relation("ReviewToProduct")
 
   categoryId String
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id], onDelete: Cascade)
@@ -253,6 +253,24 @@ model Product {
   @@index([categoryId])
   @@index([subCategoryId])
   @@index([offerTagId])
+}
+
+model ProductTranslation {
+  id          String   @id @default(uuid())
+  language    Language
+  name        String
+  description String   @db.Text
+  // Comma-separated or JSON
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, language])
+  @@index([productId])
+  @@index([language])
 }
 
 model ProductVariant {
