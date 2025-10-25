@@ -16,6 +16,9 @@ import { Globe, Check, Loader2 } from 'lucide-react'
 const languages = [
   { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
   { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
 ]
 
 export default function LanguageSwitcherAdvanced() {

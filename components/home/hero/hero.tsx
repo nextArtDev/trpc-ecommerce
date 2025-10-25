@@ -7,12 +7,14 @@ import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
+import { getTranslations } from 'next-intl/server'
 
-const Hero = ({
+const Hero = async ({
   subCategories,
 }: {
   subCategories: SubCategoryForHomePage[]
 }) => {
+  const t = await getTranslations('Hero')
   return (
     <Bounded
       className={`relative w-full h-full  overflow-hidden bg-foreground dark:bg-background backdrop-blur-lg text-background  text-center`}
@@ -34,9 +36,9 @@ const Hero = ({
       <div className="relative flex h-screen flex-col justify-center items-center">
         <RevealText
           // text="Effortless Elegance"
-          text="کارگاه چرم سارینا"
+          text={t('title')}
           id="hero-heading"
-          className="font-display max-w-xl text-6xl leading-none text-neutral-50 md:text-7xl lg:text-8xl"
+          className="font-display max-w-xl text-4xl leading-none text-neutral-50 md:text-5xl lg:text-6xl"
           staggerAmount={0.2}
           duration={1.7}
         />
@@ -45,14 +47,7 @@ const Hero = ({
           className="mt-6 max-w-md translate-y-8  text-lg text-neutral-100"
           vars={{ delay: 1, duration: 1.3 }}
         >
-          <p className=" ">
-            {/* An expression of quiet luxury, Côte Royale is designed for the
-            womans who commands attention without seeking it. A reflection of
-            nature’s raw beauty. */}
-            محصولات ما برای زنانی طراحی شده‌اند که به دنبال بیان اصیل شخصیت خود
-            است، نه نشان دادن آن. هر کیف، تجلی زیبایی خام و طبیعی و هنر دستی است
-            که با عشق ساخته شده است.
-          </p>
+          <p className=" ">{t('description')}</p>
         </FadeIn>
 
         <FadeIn
@@ -63,7 +58,7 @@ const Hero = ({
             href={'/products'}
             className=" w-fit inline-flex items-center justify-center px-12 py-4 text-center font-extrabold tracking-wider uppercase transition-colors duration-300  border border-white text-white hover:bg-white/20"
           >
-            محصولات
+            {t('linkTitle')}
           </TransitionLink>
         </FadeIn>
         <FadeIn

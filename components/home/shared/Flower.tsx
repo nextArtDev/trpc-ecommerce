@@ -6,6 +6,7 @@ import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
+import { useTranslations } from 'next-intl'
 
 gsap.registerPlugin(ScrollTrigger)
 // --- Animation Component Definition ---
@@ -1729,6 +1730,7 @@ const FlowerAnimation = () => {
 export default FlowerAnimation
 
 export const StyledFlower = () => {
+  const t = useTranslations('StoreStatements')
   return (
     <>
       <style jsx global>{`
@@ -1823,7 +1825,7 @@ export const StyledFlower = () => {
         <div className="sticky inset-0  flex flex-col items-center justify-center  gap-4 ">
           <RevealText
             // text="Effortless Elegance"
-            text="آغاز داستان ما"
+            text={t('title')}
             id="store-statements"
             className="text-xl md:text-3xl font-bold pt-6"
             staggerAmount={0.2}
@@ -1834,14 +1836,7 @@ export const StyledFlower = () => {
             vars={{ delay: 0.6, duration: 0.6 }}
           >
             <p className="text-center text-pretty md:text-lg">
-              {/* Since 1898, we have been dreaming up, designing and crafting premium and
-            essential bags and accessories that have stood the test of the years,
-            with their truly timeless design. */}
-              کارگاه کوچک ما، جایی است که رویاهای چرمی به واقعیت می‌پیوندند. ما
-              با اشتیاقی وافر و چشمداشت به فردایی درخشان، کار خود را با طراحی و
-              ساخت کیف‌ها و اکسسوری‌ها آغاز کرده‌ایم. بر این باوریم که طراحی
-              بی‌زمان و کیفیت استثنایی، هسته اصلی خلق محصولاتی هستند که قرار است
-              برای سال‌ها همراه همیشگی شما باشند.
+              {t('description')}
             </p>
           </FadeIn>
         </div>

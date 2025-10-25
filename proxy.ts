@@ -19,7 +19,9 @@ export async function proxy(request: NextRequest) {
   const locale = pathSegments[1] || routing.defaultLocale
 
   // Check if this is a locale-prefixed path
-  const isValidLocale = routing.locales.includes(locale as 'fa' | 'en')
+  const isValidLocale = routing.locales.includes(
+    locale as 'fa' | 'en' | 'de' | 'fr' | 'it'
+  )
   const pathWithoutLocale = isValidLocale
     ? '/' + pathSegments.slice(2).join('/')
     : pathname

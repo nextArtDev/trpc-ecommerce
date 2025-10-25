@@ -1,5 +1,44 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
+  "Hero": {
+    "title": "Sarina Leather Workshop",
+    "description": "Our products are designed for women seeking to express their authentic personality, not just show it off. Each bag is a manifestation of raw, natural beauty and handcrafted art, made with love.",
+    "linkTitle": "Products"
+  },
+  "StoreStatements": {
+    "title": "The Beginning of Our Story",
+    "description": "Our small workshop is where leather dreams become reality. We began our journey with immense passion and a vision for a bright future, designing and crafting bags and accessories. We believe that timeless design and exceptional quality are the core of creating products destined to be your lifelong companions."
+  },
+  "bestSellers": {
+    "title": "Bestsellers"
+  },
+  "newestSellers": {
+    "title": "New Arrivals"
+  },
+  "workVideo": {
+    "title": "The Art of Craftsmanship: Authenticity in Every Stitch",
+    "description": "We specialize in crafting leather goods that demand exquisite finesse, with a special focus on our material selection. All our collections are made exclusively from full-grain leather—the most authentic and premium type of natural leather."
+  },
+  "commitments": {
+    "title": "Our Commitments",
+    "description": [
+      {
+        "id": "1",
+        "title": "Love for Authentic Leather",
+        "description": "We use only the finest full-grain natural leathers. With meticulous and artistic stitching, these leathers become durable, unique products that grow more beautiful and authentic with time. We guarantee that none of our products are made from artificial (plastic) leather.",
+        "url": "/images/commit1.webp"
+      },
+      {
+        "id": "2", 
+        "title": "Ethics and Responsibilities",
+        "description": "Production takes place in our own workshop under fair and respectful conditions. We respect the environment and human rights, using recycled and low-water-consumption raw materials whenever possible and avoiding pollutants in our production process. Our small steps towards a greener future.",
+        "url": "/images/commit2.webp"
+      },
+      {
+        "id": "3",
+        "title": "Meticulous Attention to Detail",
+        "description": "We settle for nothing less than perfection. From selecting a piece of leather to the final stitch and installing a clasp, every step is carried out with meticulous precision and artistic love. Each bag is not just an item, but a work of art that carries your name.",
+        "url": "/images/commit3.jpg"
+      }
+    ]
   }
 }

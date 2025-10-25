@@ -1,0 +1,44 @@
+{
+  "Hero": {
+    "title": "Laboratorio Pelle Sarina",
+    "description": "I nostri prodotti sono pensati per donne che cercano di esprimere la loro personalità autentica, non di mostrarla. Ogni borsa è la manifestazione di una bellezza grezza e naturale e dell'artigianato artistico, fatto con amore.",
+    "linkTitle": "Prodotti"
+  },
+  "StoreStatements": {
+    "title": "L'Inizio della Nostra Storia",
+    "description": "Il nostro piccolo laboratorio è il luogo dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con un'enorme passione e una visione di un futuro luminoso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il cuore della creazione di prodotti destinati a essere tuoi compagni per tutta la vita."
+  },
+  "bestSellers": {
+    "title": "I più venduti"
+  },
+  "newestSellers": {
+    "title": "Novità"
+  },
+  "workVideo": {
+    "title": "L'Arte dell'Artigianato: Autenticità in Ogni Punto",
+    "description": "Siamo specializzati nella creazione di articoli in pelle che richiedono una finezza squisita, con un'attenzione particolare alla nostra selezione di materiali. Tutte le nostre collezioni sono realizzate esclusivamente in pelle full-grain—il tipo più autentico e pregiato di pelle naturale."
+  },
+  "commitments": {
+    "title": "I Nostri Impegni",
+    "description": [
+      {
+        "id": "1",
+        "title": "Amore per la Pelle Autentica",
+        "description": "Utilizziamo solo le più pregiate pelli naturali full-grain. Con cuciture meticolose e artistiche, queste pelli diventano prodotti durevoli e unici che diventeranno più belli e autentici con il tempo. Garantiamo che nessuno dei nostri prodotti è in pelle artificiale (plastica).",
+        "url": "/images/commit1.webp"
+      },
+      {
+        "id": "2",
+        "title": "Artigianato Etico e Responsabile",
+        "description": "La produzione avviene nel nostro laboratorio in condizioni eque e rispettose. Rispettiamo l'ambiente e i diritti umani, utilizzando materie prime riciclate ea basso consumo idrico ove possibile ed evitando gli inquinanti nel nostro processo di produzione. I nostri piccoli passi verso un futuro più verde.",
+        "url": "/images/commit2.webp"
+      },
+      {
+        "id": "3",
+        "title": "Attenzione Meticolosa ai Dettagli",
+        "description": "Non ci accontentiamo di nulla di meno che della perfezione. Dalla scelta di un pezzo di pelle all'ultima cucitura e all'installazione di una chiusura, ogni passaggio viene eseguito con precisione meticolosa e amore artistico. Ogni borsa non è un articolo, ma un'opera d'arte che porta il tuo nome.",
+        "url": "/images/commit3.jpg"
+      }
+    ]
+  }
+}

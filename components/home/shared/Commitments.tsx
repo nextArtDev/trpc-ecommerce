@@ -1,4 +1,7 @@
-'use client' // Added if not present in parent; required for client components
+// components/Commitments.tsx
+'use client'
+
+import { useTranslations, useLocale } from 'next-intl' // 1. IMPORT HOOKS
 import { FadeIn } from '@/components/shared/fade-in'
 import {
   Carousel,
@@ -8,105 +11,109 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import Image from 'next/image'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { useInView } from 'framer-motion'
 import Autoplay from 'embla-carousel-autoplay'
 import { RevealText } from '@/components/shared/reveal-text'
+import { cn } from '@/lib/utils'
 
-const items = [
-  {
-    id: '1',
-    title: 'عشق به چرم اصیل',
-    description:
-      'ما تنها از مرغوب‌ترین چرم‌های طبیعی تمام‌دانه (Full-grain) استفاده می‌کنیم. این چرم‌ها با دوخت دقیق و هنرمندانه، به محصولاتی ماندگار و منحصربه‌فرد تبدیل می‌شوند که با گذر زمان، زیباتر و اصیل‌تر خواهند شد. تضمین می‌کنیم که هیچ‌یک از محصولات ما از چرم مصنوعی (پلاستیکی) نیست.',
-    url: '/images/commit1.webp', // تصویر از یک رول چرم زیبا یا هنرمند در حال کار
-  },
-  {
-    id: '2',
-    title: 'ساختِ اخلاق‌مدار و مسئولانه',
-    description:
-      'تولید در کارگاه خودمان تحت شرایطی عادلانه و محترمانه انجام می‌شود. ما به محیط زیست و حقوق انسان‌ها احترام می‌گذاریم و در فرآیند تولید، تا حد امکان از مواد اولیه بازیافتی و کم‌آب‌بر استفاده کرده و از آلاینده‌ها دوری می‌کنیم. قدم‌های کوچک ما برای آینده‌ای سبزتر.',
-    url: '/images/commit2.webp', // تصویر از کارگاه روشن و مرتب یا هنرمندان در حال کار
-  },
-  {
-    id: '3',
-    title: 'توجه وسواس‌گونه به جزئیات',
-    description:
-      'به هیچ چیز جز کمال راضی نیستیم. از انتخاب یک قطعه چرم تا آخرین کوک و نصب یک قفل، تمامی مراحل با دقتی وسواس‌گونه و عشقی هنرمندانه انجام می‌گیرد. هر کیف نه یک کالا، که یک اثر هنری است که نام شما را بر خود دارد.',
-    url: '/images/commit3.jpg', // تصویر ماکرو از دوخت ظریف یک دسته یا جزئیات یک قفل
-  },
-]
+// 2. REMOVE THE HARDCODED 'items' ARRAY
+// We will now get this data from our translation files.
+
 export default function Commitments() {
-  const carouselRef = useRef(null)
+  // 3. GET THE TRANSLATION FUNCTION AND CURRENT LOCALE
+  const t = useTranslations('commitments')
+  const locale = useLocale()
 
+  // 4. GET THE ITEMS FROM TRANSLATIONS USING .raw()
+  // .raw() is used to get the entire array of objects as-is.
+  const items = t.raw('description') as Array<{
+    id: string
+    title: string
+    description: string
+    url: string
+  }>
+
+  const carouselRef = useRef(null)
   const isInView = useInView(carouselRef, { once: true, amount: 0.3 })
+
+  // 5. DETERMINE DIRECTION BASED ON LOCALE
+  const isRtl = locale === 'fa'
+
   return (
-    <Carousel
-      opts={{
-        align: 'start',
-        direction: 'rtl',
-        // loop: true, // Added for infinite looping; remove if not wanted
-      }}
-      plugins={
-        isInView
-          ? [
-              Autoplay({
-                delay: 3000,
-              }),
-            ]
-          : []
-      }
-      ref={carouselRef}
-      dir="rtl"
-      className="w-full "
-    >
-      <CarouselContent className=" ">
-        {/* Responsive negative margin to offset item padding */}
-        {items.map((item, i) => (
-          <CarouselItem
-            key={item.id}
-            className=" mx-auto basis-1/2   md:basis-1/3 lg:basis-1/4   xl:basis-1/5"
-            /* Adjusted basis for better fit (e.g., 2 on mobile, 3 on md, 4 on lg, 5 on xl); made padding responsive */
-          >
-            <FadeIn
-              className="translate-y-5"
-              vars={{ delay: 0.2 * i, duration: 0.3, ease: 'sine.inOut' }}
+    <section className="flex flex-col items-center gap-6">
+      {/* 6. USE THE TRANSLATED TITLE */}
+      <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
+        {t('title')}
+      </h2>
+      <Carousel
+        opts={{
+          align: 'start',
+          // 7. SET DIRECTION DYNAMICALLY
+          direction: isRtl ? 'rtl' : 'ltr',
+        }}
+        plugins={
+          isInView
+            ? [
+                Autoplay({
+                  delay: 3000,
+                }),
+              ]
+            : []
+        }
+        ref={carouselRef}
+        // 8. SET DIR ATTRIBUTE DYNAMICALLY
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="w-full"
+      >
+        <CarouselContent className="">
+          {items.map((item, i) => (
+            <CarouselItem
+              key={item.id}
+              className="mx-auto basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
             >
-              <div className="flex flex-col border-none rounded-none gap-2 md:gap-4">
-                {/* Moved gap-4 here to space image and text */}
-                <figure className="relative w-full aspect-square bg-[#eceae8] border-none rounded-none">
-                  {/* Changed to figure for semantic; simplified, removed min-h to let aspect-square handle */}
-                  <Image
-                    unoptimized
-                    src={item.url || '/images/fallback-image.webp'}
-                    fill
-                    alt={item.title}
-                    className="object-cover mix-blend-darken" // Uncommented; remove if not needed
-                  />
-                </figure>
-                <article className="flex flex-col gap-3 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base  text-right">
-                  <RevealText
-                    text={item.title}
-                    id={item.title}
-                    className="font-bold text-lg"
-                    staggerAmount={0.2}
-                    duration={0.8}
-                  />
-                  {/* <p className="font-bold text-lg">{item.title}</p> */}
-                  <FadeIn
-                    className=" translate-y-4 "
-                    vars={{ delay: 0.6, duration: 0.6 }}
-                  >
-                    <p className="text-sm text-justify">{item.description}</p>
-                  </FadeIn>
-                </article>
-              </div>
-            </FadeIn>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious className="hidden lg:flex items-center justify-center cursor-pointer size-12 bg-background/30 backdrop-blur-sm border-none top-1/2 -translate-y-1/2 left-2" />
-      <CarouselNext className="hidden lg:flex items-center justify-center cursor-pointer size-12 bg-background/30 backdrop-blur-sm border-none top-1/2 -translate-y-1/2 right-4" />
-    </Carousel>
+              <FadeIn
+                className="translate-y-5"
+                vars={{ delay: 0.2 * i, duration: 0.3, ease: 'sine.inOut' }}
+              >
+                <div className="flex flex-col border-none rounded-none gap-2 md:gap-4">
+                  <figure className="relative w-full aspect-square bg-[#eceae8] border-none rounded-none">
+                    <Image
+                      unoptimized
+                      src={item.url || '/images/fallback-image.webp'}
+                      fill
+                      alt={item.title} // The alt text is now automatically translated
+                      className="object-cover mix-blend-darken"
+                    />
+                  </figure>
+                  <article className="flex flex-col gap-3 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base text-right">
+                    <RevealText
+                      text={item.title} // The title is now automatically translated
+                      id={item.title}
+                      className={cn(
+                        'font-bold ',
+                        isRtl ? 'text-lg' : 'text-base'
+                      )}
+                      staggerAmount={0.2}
+                      duration={0.8}
+                    />
+                    <FadeIn
+                      className="translate-y-4"
+                      vars={{ delay: 0.6, duration: 0.6 }}
+                    >
+                      <p className="text-sm text-justify">{item.description}</p>{' '}
+                      {/* Description is now translated */}
+                    </FadeIn>
+                  </article>
+                </div>
+              </FadeIn>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        {/* Carousel navigation buttons remain the same */}
+        <CarouselPrevious className="hidden lg:flex items-center justify-center cursor-pointer size-12 bg-background/30 backdrop-blur-sm border-none top-1/2 -translate-y-1/2 left-2" />
+        <CarouselNext className="hidden lg:flex items-center justify-center cursor-pointer size-12 bg-background/30 backdrop-blur-sm border-none top-1/2 -translate-y-1/2 right-4" />
+      </Carousel>
+    </section>
   )
 }

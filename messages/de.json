@@ -1,0 +1,44 @@
+{
+  "Hero": {
+    "title": "Sarina Lederwerkstatt",
+    "description": "Unsere Produkte sind für Frauen konzipiert, die ihren authentischen Charakter ausdrücken möchten, nicht ihn zur Schau stellen. Jede Tasche ist ein Manifest roher, natürlicher Schönheit und handwerklicher Kunst, die mit Liebe gemacht wurde.",
+    "linkTitle": "Produkte"
+  },
+  "StoreStatements": {
+    "title": "Der Anfang unserer Geschichte",
+    "description": "Unsere kleine Werkstatt ist der Ort, an dem Lederträume wahr werden. Wir begannen unsere Reise mit riesiger Leidenschaft und einer Vision für eine strahlende Zukunft, in der wir Taschen und Accessoires entwerfen und fertigen. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern für die Schaffung von Produkten sind, die Ihr lebenslanger Begleiter sein sollen."
+  },
+  "bestSellers": {
+    "title": "Bestseller"
+  },
+  "newestSellers": {
+    "title": "Neuankömmlinge"
+  },
+  "workVideo": {
+    "title": "Die Kunst des Handwerks: Authentizität in jedem Stich",
+    "description": "Wir sind auf die Herstellung von Lederwaren spezialisiert, die exquisite Finesse erfordern, mit besonderem Augenmerk auf unsere Materialauswahl. Alle unsere Kollektionen werden ausschließlich aus Full-Grain-Leder hergestellt – der authentischsten und hochwertigsten Art von Naturleder."
+  },
+  "commitments": {
+    "title": "Unsere Verpflichtungen",
+    "description": [
+      {
+        "id": "1",
+        "title": "Liebe zu authentischem Leder",
+        "description": "Wir verwenden nur die feinsten Full-Grain-Naturleder. Mit sorgfältiger und künstlerischer Naht werden diese Leder zu langlebigen, einzigartigen Produkten, die mit der Zeit schöner und authentischer werden. Wir garantieren, dass keines unserer Produkte aus Kunstleder (Kunststoff) besteht.",
+        "url": "/images/commit1.webp"
+      },
+      {
+        "id": "2",
+        "title": "Ethisches und verantwortungsvolles Handwerk",
+        "description": "Die Produktion findet in unserer eigenen Werkstatt unter fairen und respektvollen Bedingungen statt. Wir respektieren die Umwelt und die Menschenrechte und verwenden nach Möglichkeit recycelte und wassersparende Rohstoffe und vermeiden Schadstoffe in unserem Produktionsprozess. Unsere kleinen Schritte für eine grünere Zukunft.",
+        "url": "/images/commit2.webp"
+      },
+      {
+        "id": "3",
+        "title": "Meticulöse Aufmerksamkeit für Details",
+        "description": "Wir geben uns mit nichts weniger als Perfektion zufrieden. Von der Auswahl eines Lederstücks bis zum letzten Stich und der Installation eines Verschlusses wird jeder Schritt mit metikulöser Präzision und künstlerischer Liebe ausgeführt. Jede Tasche ist nicht nur ein Artikel, sondern ein Kunstwerk, das Ihren Namen trägt.",
+        "url": "/images/commit3.jpg"
+      }
+    ]
+  }
+}

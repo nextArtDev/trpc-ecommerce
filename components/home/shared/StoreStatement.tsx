@@ -1,6 +1,3 @@
-// import { FadeIn } from '@/components/shared/fade-in'
-// import { RevealText } from '@/components/shared/reveal-text'
-import React from 'react'
 import { StyledFlower } from './Flower'
 
 const StoreStatement = () => {

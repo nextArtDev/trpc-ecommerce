@@ -4,7 +4,8 @@ import Commitments from '@/components/home/shared/Commitments'
 import StoreStatement from '@/components/home/shared/StoreStatement'
 import WorkVideo from '@/components/home/shared/WorkVideo'
 import TestimonialCarousel from '@/components/home/testemonial/Testemonial'
-import MainPageCarousel from '@/components/product/main-page-carousel'
+import BestSellers from '@/components/product/best-sellers'
+import Newest from '@/components/product/newest'
 
 import {
   getBestSellers,
@@ -346,27 +347,12 @@ export default async function Home() {
       <div className="py-16">
         <StoreStatement />
       </div>
-      {!!bestSellers && (
-        <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
-          <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
-            پرفروش‌ترینها
-          </h2>
-          <MainPageCarousel items={bestSellers} />
-        </section>
-      )}
-      <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
-          جدیدترینها
-        </h2>
-        <MainPageCarousel items={products} />
-      </section>
+      {!!bestSellers && <BestSellers items={bestSellers} />}
+      {!!products && <Newest items={products} />}
       <section className="py-12">
         <WorkVideo />
       </section>
-      <section className="flex flex-col items-center gap-6 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center  py-8">
-          تعهدات ما
-        </h2>
+      <section className=" ">
         <Commitments />
       </section>
       <section className="flex flex-col w-full h-full gap-6  text-center py-12 ">
