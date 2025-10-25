@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import SubCategoryDetails from '../components/sub-category-details'
-import prisma from '@/lib/prisma'
+import { getCategoryNames, getSubCategoryById } from '../../../lib/queries'
 
 export default async function EditSubCategoryPage({
   params,
@@ -9,16 +9,8 @@ export default async function EditSubCategoryPage({
 }) {
   const subcategoryId = (await params).subCategoryId
 
-  const subcategory = await prisma.subCategory.findFirst({
-    where: {
-      id: subcategoryId,
-    },
-    include: {
-      images: true,
-      category: true,
-    },
-  })
-  const categories = await prisma.category.findMany({})
+  const subcategory = await getSubCategoryById(subcategoryId)
+  const categories = await getCategoryNames()
 
   if (!subcategory) return notFound()
   return (

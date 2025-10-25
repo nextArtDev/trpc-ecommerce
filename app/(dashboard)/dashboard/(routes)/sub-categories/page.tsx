@@ -61,7 +61,8 @@ export default async function AdminSubCategoriesPage({
   const formattedSubCategory: SubCategoryColumn[] =
     subCategoriesResponse.subCategories?.map((item) => ({
       id: item.id,
-      name: item.name,
+      name: item.translations.find((tr) => tr.language === 'fa')
+        ?.name as string,
       url: item.url,
       featured: item.featured,
       images: item.images,

@@ -5,7 +5,7 @@ import { BadgeCheck, BadgeMinus } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { CellActions } from './cell-actions'
-import { Category, Image } from '@/lib/generated/prisma'
+import { Category, CategoryTranslation, Image } from '@/lib/generated/prisma'
 
 export type SubCategoryColumn = {
   id: string
@@ -13,7 +13,7 @@ export type SubCategoryColumn = {
   url: string
   featured: boolean
   images: Image[]
-  category: Category
+  category: Category & { translations: CategoryTranslation[] }
   createdAt: string
 }
 
@@ -49,7 +49,15 @@ export const columns: ColumnDef<SubCategoryColumn>[] = [
     accessorKey: 'category',
     header: 'دسته‌بندی',
     cell: ({ row }) => {
-      return <span>{row.original.category.name}</span>
+      return (
+        <span>
+          {
+            row.original.category.translations.find(
+              (tr) => tr.language === 'fa'
+            )?.name as string
+          }
+        </span>
+      )
     },
   },
   {

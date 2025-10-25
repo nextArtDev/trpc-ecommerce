@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useEffect, useState, useTransition } from 'react'
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -27,7 +27,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import { Category, Image, SubCategory } from '@/lib/generated/prisma'
+import {
+  Category,
+  Image,
+  SubCategory,
+  SubCategoryTranslation,
+} from '@/lib/generated/prisma'
 import { usePathname } from 'next/navigation'
 import {
   Select,
@@ -45,10 +50,14 @@ import {
 import { handleServerErrors } from '../../../lib/server-utils'
 import slugify from 'slugify'
 import { Loader2 } from 'lucide-react'
+import { LANGUAGES } from '../../../components/constants'
+import { Textarea } from '@/components/ui/textarea'
 
 interface SubCategoryDetailsProps {
-  initialData?: SubCategory & { images: Partial<Image>[] }
-  categories: Category[]
+  initialData?: SubCategory & { images: Partial<Image>[] } & {
+    translations: SubCategoryTranslation[]
+  }
+  categories: (Category & { translations: { name: string } })[]
 }
 
 const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
@@ -66,7 +75,49 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
     mode: 'onChange',
     resolver: zodResolver(SubCategoryFormSchema),
     defaultValues: {
-      name: initialData?.name,
+      translations: {
+        fa: {
+          name:
+            initialData?.translations?.find((t) => t.language === 'fa')?.name ??
+            '',
+          description:
+            initialData?.translations?.find((t) => t.language === 'fa')
+              ?.description ?? '',
+        },
+        en: {
+          name:
+            initialData?.translations?.find((t) => t.language === 'en')?.name ??
+            '',
+          description:
+            initialData?.translations?.find((t) => t.language === 'en')
+              ?.description ?? '',
+        },
+        de: {
+          name:
+            initialData?.translations?.find((t) => t.language === 'de')?.name ??
+            '',
+          description:
+            initialData?.translations?.find((t) => t.language === 'de')
+              ?.description ?? '',
+        },
+        fr: {
+          name:
+            initialData?.translations?.find((t) => t.language === 'fr')?.name ??
+            '',
+          description:
+            initialData?.translations?.find((t) => t.language === 'fr')
+              ?.description ?? '',
+        },
+        it: {
+          name:
+            initialData?.translations?.find((t) => t.language === 'it')?.name ??
+            '',
+          description:
+            initialData?.translations?.find((t) => t.language === 'it')
+              ?.description ?? '',
+        },
+      },
+
       images: initialData?.images
         ? initialData.images.map((image) => ({ url: image.url }))
         : [],
@@ -102,7 +153,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
     !!initialData?.url
   )
 
-  const categoryName = form.watch('name')
+  const categoryName = form.watch('translations.en.name')
 
   useEffect(() => {
     if (!isUrlManuallyEdited && categoryName) {
@@ -116,7 +167,10 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
           <CardTitle>اطلاعات زیردسته‌بندی</CardTitle>
           <CardDescription>
             {initialData?.id
-              ? `آپدیت زیردسته‌بندی ${initialData?.name}`
+              ? `آپدیت زیردسته‌بندی ${
+                  initialData?.translations.find((t) => t.language === 'fa')
+                    ?.name
+                }`
               : ' زیردسته‌بندی جدید ایجاد کنید. شما می‌توانید بعدا از جدول زیردسته‌بندیها آنرا ویرایش کنید.'}
           </CardDescription>
         </CardHeader>
@@ -134,23 +188,70 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
                     label="عکس"
                   />
                 </div>
-                <FormField
-                  disabled={isPending}
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>
-                        نام زیردسته‌بندی{' '}
-                        <span className="text-rose-500">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="نام زیردسته‌بندی" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="md:col-span-2">
+                  <Tabs
+                    dir="rtl"
+                    defaultValue="fa"
+                    className="w-full space-y-6"
+                  >
+                    <TabsList className="grid w-full grid-cols-5">
+                      {LANGUAGES.map((lang) => (
+                        <TabsTrigger key={lang.code} value={lang.code}>
+                          {lang.flag} {lang.label}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+
+                    {LANGUAGES.map((lang) => (
+                      <TabsContent
+                        key={lang.code}
+                        value={lang.code}
+                        className="space-y-4"
+                      >
+                        {/* Name Field */}
+                        <FormField
+                          disabled={isPending}
+                          control={form.control}
+                          name={`translations.${lang.code}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                نام زیردسته‌ ({lang.label}){' '}
+                                <span className="text-rose-500">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={`نام به ${lang.label}`}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Description Field (Optional) */}
+                        <FormField
+                          disabled={isPending}
+                          control={form.control}
+                          name={`translations.${lang.code}.description`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>توضیحات ({lang.label})</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder={`توضیحات به ${lang.label}`}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                </div>
 
                 <FormField
                   disabled={isPending}
@@ -210,7 +311,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
                                 key={category.id}
                                 value={category.id!}
                               >
-                                {category.name}
+                                {category.translations.name}
                               </SelectItem>
                             ))}
                           </SelectContent>

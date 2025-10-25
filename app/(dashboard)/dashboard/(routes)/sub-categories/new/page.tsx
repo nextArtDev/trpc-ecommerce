@@ -3,12 +3,11 @@
 
 import { notFound } from 'next/navigation'
 import SubCategoryDetails from '../components/sub-category-details'
-import prisma from '@/lib/prisma'
+
+import { getCategoryNames } from '../../../lib/queries'
 
 export default async function AdminNewSubCategoryPage() {
-  const categories = await prisma.category.findMany({
-    where: {},
-  })
+  const categories = await getCategoryNames()
   if (!categories) return notFound()
   return (
     <div className="w-full">

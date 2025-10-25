@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import CategoryDetails from '../components/category-details'
+import { getCategoryById } from '../../../lib/queries'
 
 export default async function EditCategoryPage({
   params,
@@ -9,14 +9,7 @@ export default async function EditCategoryPage({
 }) {
   const categoryId = (await params).categoryId
 
-  const category = await prisma.category.findFirst({
-    where: {
-      id: categoryId,
-    },
-    include: {
-      images: true,
-    },
-  })
+  const category = await getCategoryById(categoryId)
   if (!category) return notFound()
   return (
     <div>

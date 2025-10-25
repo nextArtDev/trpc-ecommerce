@@ -36,9 +36,21 @@ const imageSchema = z
   ])
   .optional()
 
+const SubCategoryTranslationSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: 'نام زیردسته‌بندی حداقل باید دو حرف باشد.' })
+    .max(50, { message: 'نام زیردسته‌بندی نمی‌تواند بیش از 50 حرف باشد' }),
+  description: z.string().optional(),
+})
+
 export const SubCategoryFormSchema = z.object({
-  name: z.string().min(2, {
-    message: 'نام زیردسته‌ نمی‌تواند کمتر از 2 حرف باشد.',
+  translations: z.object({
+    fa: SubCategoryTranslationSchema,
+    en: SubCategoryTranslationSchema,
+    de: SubCategoryTranslationSchema,
+    fr: SubCategoryTranslationSchema,
+    it: SubCategoryTranslationSchema,
   }),
   images: imageSchema,
 

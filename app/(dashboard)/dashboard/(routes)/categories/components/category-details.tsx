@@ -196,7 +196,11 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                   )}
                 /> */}
                 <div className="md:col-span-2">
-                  <Tabs dir="rtl" defaultValue="fa" className="w-full">
+                  <Tabs
+                    dir="rtl"
+                    defaultValue="fa"
+                    className="w-full space-y-6"
+                  >
                     <TabsList className="grid w-full grid-cols-5">
                       {LANGUAGES.map((lang) => (
                         <TabsTrigger key={lang.code} value={lang.code}>

@@ -18,6 +18,7 @@ import {
   Size,
   Spec,
   SubCategory,
+  SubCategoryTranslation,
   User,
 } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
@@ -66,13 +67,19 @@ export const getAllCategories = cache(
 )
 
 export const getCategoryById = cache(
-  async (id: string): Promise<(Category & { images: Image[] }) | null> => {
+  async (
+    id: string
+  ): Promise<
+    | (Category & { images: Image[] } & { translations: CategoryTranslation[] })
+    | null
+  > => {
     const category = await prisma.category.findFirst({
       where: {
         id,
       },
       include: {
         images: true,
+        translations: true,
       },
     })
 
@@ -88,7 +95,11 @@ export const getAllSubCategories = cache(
     page?: number
     pageSize?: number
   }): Promise<{
-    subCategories: (SubCategory & { category: Category } & {
+    subCategories: (SubCategory & {
+      category: Category & { translations: CategoryTranslation[] }
+    } & {
+      translations: SubCategoryTranslation[]
+    } & {
       images: Image[]
     })[]
     isNext: boolean
@@ -98,7 +109,12 @@ export const getAllSubCategories = cache(
       prisma.subCategory.findMany({
         include: {
           images: true,
-          category: true,
+          category: {
+            include: {
+              translations: true,
+            },
+          },
+          translations: true,
         },
 
         orderBy: {
@@ -119,7 +135,10 @@ export const getAllSubCategories = cache(
 export const getSubCategoryById = async (
   id: string
 ): Promise<
-  (SubCategory & { category: Category } & { images: Image[] }) | null
+  | (SubCategory & { category: Category } & { images: Image[] } & {
+      translations: SubCategoryTranslation[]
+    })
+  | null
 > => {
   const subCategory = await prisma.subCategory.findFirst({
     where: {
@@ -128,6 +147,7 @@ export const getSubCategoryById = async (
     include: {
       images: true,
       category: true,
+      translations: true,
     },
   })
 
@@ -139,6 +159,27 @@ export const getCategoryList = cache(async (): Promise<Category[] | []> => {
   if (!categoryList.length) return []
   return categoryList
 })
+export const getCategoryNames = cache(
+  async (): Promise<(Category & { translations: { name: string } })[] | []> => {
+    const categoryNames = await prisma.category.findMany({
+      where: {},
+      include: {
+        translations: {
+          where: { language: 'fa' },
+          select: {
+            name: true,
+          },
+          take: 1,
+        },
+      },
+    })
+    if (!categoryNames.length) return []
+    return categoryNames.map((category) => ({
+      ...category,
+      translations: category.translations[0] || { name: '' },
+    }))
+  }
+)
 
 export const getAllProductsList = cache(
   async ({
