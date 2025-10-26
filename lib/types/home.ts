@@ -277,32 +277,36 @@ export type FreeShipping = {
 
 export type ProductDetails = {
   id: string
+  name: string
+  description: string
   slug: string
   brand: string | null
+  sku: string | null
+  keywords: string
+  images: ProductImage[]
+  variants: VariantsWithSizeAndColor[]
+  specs: ProductSpec[]
+  questions: ProductQuestion[]
+  shippingFeeMethod: 'ITEM' | 'WEIGHT' | 'FIXED'
+  isSale: boolean
+  saleEndDate: string | null
+  views: number
+  subCategory: SubCategoryInfo
+  offerTag: OfferTag | null
+  freeShipping: FreeShipping | null
+
   rating: number
   sales: number
   numReviews: number
-  shippingFeeMethod: 'ITEM' | 'WEIGHT' | 'FIXED'
-  views: number
   isFeatured: boolean
-  isSale: boolean
-  saleEndDate: string | null
-  sku: string | null
   categoryId: string
   subCategoryId: string
   offerTagId: string | null
   createdAt: Date
   updatedAt: Date
   translations: ProductTranslation[]
-  images: ProductImage[]
-  variants: VariantsWithSizeAndColor[]
-  specs: ProductSpec[]
-  questions: ProductQuestion[]
   reviews: ProductReview[]
   category: CategoryInfo
-  subCategory: SubCategoryInfo
-  offerTag: OfferTag | null
-  freeShipping: FreeShipping | null
 } | null
 // 7. Related Products Type
 export type RelatedProduct = {

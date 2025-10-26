@@ -23,6 +23,7 @@ import ProductBreadcrumb from './ProductBreadcrumb'
 import { Check } from 'lucide-react'
 import ProductDescription from './ProductDescription'
 import { ShareButton } from './share-button'
+import { useTranslations } from 'next-intl'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -47,6 +48,8 @@ const ProductPage: FC<ProductPageProp> = ({
   selectedSizeId,
   isInWishList,
 }) => {
+  const t = useTranslations('product')
+
   const {
     description,
     sku,
@@ -107,7 +110,7 @@ const ProductPage: FC<ProductPageProp> = ({
     <section className="pb-24 w-full h-full">
       <ProductBreadcrumb
         links={[
-          { id: '1', label: 'سارینا', href: '/' },
+          { id: '1', label: t('breadcrumb.home'), href: '/' },
           {
             id: '2',
             label: subCategory.name,
@@ -130,9 +133,9 @@ const ProductPage: FC<ProductPageProp> = ({
               <div className="flex gap-2">
                 <SingleStarRating rating={productAverageRating.rating} />
                 {productAverageRating.rating}
-                <p>{' از'}</p>
+                <p>{t('rating.from')}</p>
                 {productAverageRating.count}
-                <p>{' نفر'}</p>
+                <p>{t('rating.people')}</p>
               </div>
             )}
 
@@ -151,7 +154,7 @@ const ProductPage: FC<ProductPageProp> = ({
             {/* === COLOR SELECTION === */}
             <div className=" flex-1 flex flex-col  gap-4 items-start">
               <p className="text-base font-semibold flex items-center gap-x-1 ">
-                سایز انتخابی:
+                {t('size.selected')}:
                 <Badge className="text-indigo-500 bg-indigo-500/35 inline text-base font-semibold py-0.5 px-1">
                   {currentVariant?.size.name}
                 </Badge>
@@ -190,7 +193,7 @@ const ProductPage: FC<ProductPageProp> = ({
             <Separator orientation="vertical" />
             <div className="pr-2 flex-1 flex flex-col gap-4 items-start">
               <p className="text-base font-semibold flex  items-center gap-x-1">
-                رنگ انتخابی:{' '}
+                {t('color.selected')}:{' '}
                 <Badge className="text-indigo-500 bg-indigo-500/35 inline text-base font-semibold py-0.5 px-1">
                   {currentVariant?.color.name}
                 </Badge>
@@ -251,11 +254,11 @@ const ProductPage: FC<ProductPageProp> = ({
             )}
           ></span>
           {currentVariant && currentVariant.quantity > 0
-            ? 'موجود'
-            : 'اتمام موجودی'}
+            ? t('stock.available')
+            : t('stock.outOfStock')}
           {currentVariant && currentVariant.quantity > 0 && (
             <span className="text-xs text-gray-500">
-              ({currentVariant.quantity} عدد باقی مانده)
+              ({currentVariant.quantity} {t('stock.remaining')})
             </span>
           )}
         </span>
@@ -282,10 +285,10 @@ const ProductPage: FC<ProductPageProp> = ({
           ) : (
             <div className="bg-orange-100 border border-orange-200 rounded-md p-4 text-center">
               <p className="text-orange-700 font-medium">
-                این ترکیب رنگ و سایز موجود نیست!
+                {t('variant.unavailable')}
               </p>
               <p className="text-sm text-orange-600 mt-1">
-                لطفا ترکیب دیگری از سایز و رنگ را انتخاب کنید.
+                {t('variant.selectAnother')}
               </p>
             </div>
           )}
@@ -298,7 +301,7 @@ const ProductPage: FC<ProductPageProp> = ({
           )}
           href={'/cart'}
         >
-          سبد خرید
+          {t('cart.viewCart')}
         </Link>
         <Separator />
         <article className="flex flex-col gap-6 items-start py-12">
@@ -313,7 +316,7 @@ const ProductPage: FC<ProductPageProp> = ({
 
             {!!keywords && (
               <div className="flex gap-3">
-                <h1 className="font-semibold ">کلمات کلیدی:</h1>
+                <h1 className="font-semibold ">{t('keywords')}:</h1>
                 {keywords.split(',').map((k, i) => (
                   <Badge key={i} variant={'outline'}>
                     #{k}
@@ -324,7 +327,7 @@ const ProductPage: FC<ProductPageProp> = ({
           </div>
           <Separator />
           <div className="w-full h-full flex  flex-col gap-4  ">
-            <h1 className="font-semibold">ویژگی‌ها و ابعاد:</h1>
+            <h1 className="font-semibold">{t('specifications')}:</h1>
 
             {currentVariant && currentVariant.size && (
               <ProductProperties
@@ -371,7 +374,7 @@ const ProductPage: FC<ProductPageProp> = ({
       <Separator />
       {!!relatedProducts?.length && (
         <section className="  flex gap-6 flex-col justify-center items-center py-8">
-          <h2 className="font-bold text-2xl ">محصولات مرتبط</h2>
+          <h2 className="font-bold text-2xl ">{t('relatedProducts')}</h2>
           <RelatedProductCarousel items={relatedProducts} />
         </section>
       )}

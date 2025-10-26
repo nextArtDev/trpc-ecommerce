@@ -6,13 +6,14 @@ import {
 } from '@/components/ui/carousel'
 import Image from 'next/image'
 import React, { useRef } from 'react'
-// import { CategoryWithStats } from '@/lib/types/home'
 import Autoplay from 'embla-carousel-autoplay'
-// import { SubCategory } from '@/lib/generated/prisma'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { FadeIn } from '@/components/shared/fade-in'
 import { useInView } from 'framer-motion'
 import { TransitionLink } from '../shared/TransitionLink'
+import { useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
+import { createTranslationHelpers } from '@/lib/translation-utils'
 
 export default function DiscoverMoreCarousel({
   subCategories,
@@ -20,15 +21,19 @@ export default function DiscoverMoreCarousel({
   subCategories: SubCategoryForHomePage[]
 }) {
   const carouselRef = useRef(null)
+  const locale = useLocale()
+  const t = useTranslations('discoverMore')
+  const { getTranslationField } = createTranslationHelpers(locale)
 
   const isInView = useInView(carouselRef, { once: true, amount: 0.3 })
+
   return (
     <section className="w-full h-full">
       <Carousel
         opts={{
           align: 'start',
-          direction: 'rtl',
-          loop: true, // Added for infinite looping; remove if not wanted
+          direction: locale === 'fa' ? 'rtl' : 'ltr', // Adjust direction based on locale
+          loop: true,
         }}
         plugins={
           isInView
@@ -40,45 +45,47 @@ export default function DiscoverMoreCarousel({
             : []
         }
         ref={carouselRef}
-        dir="rtl"
+        dir={locale === 'fa' ? 'rtl' : 'ltr'}
         className="w-full"
       >
-        <CarouselContent className=" ">
-          {subCategories.map((item, i) => (
-            <CarouselItem
-              key={item.id}
-              className="pr-1 basis-1/2 md:basis-1/3 xl:basis-1/4 w-full mx-auto" // Removed mx-auto to avoid centering issues
-            >
-              <FadeIn
-                vars={{ delay: 0.2 * i, duration: 0.5, ease: 'sine.inOut' }}
+        <CarouselContent className="">
+          {subCategories.map((item, i) => {
+            const categoryName = getTranslationField(item.translations, 'name')
+            const imageUrl =
+              item.images?.[0]?.url || '/images/fallback-image.webp'
+
+            return (
+              <CarouselItem
+                key={item.id}
+                className="pr-1 basis-1/2 md:basis-1/3 xl:basis-1/4 w-full mx-auto"
               >
-                <div className="w-full aspect-square bg-transparent">
-                  {/* Enforces square shape */}
-                  <figure className="relative w-full h-full bg-[#eceae8] border-none rounded-none">
-                    <Image
-                      unoptimized
-                      src={
-                        item.images.map((img) => img.url)[0] ||
-                        '/images/fallback-image.webp'
-                      }
-                      fill
-                      alt={item.name}
-                      className="object-cover " // Uncommented; remove if not needed
-                    />
-                    <article className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-secondary/5 to-secondary/20 px-2 py-3 text-center text-2xl font-semibold text-background">
-                      {item.name}
-                      <TransitionLink
-                        href={`/sub-categories/${item.url}`}
-                        className="bg-gradient-to-b from-secondary/5 to-secondary/30 border rounded-none px-1.5 py-1 text-center text-base  backdrop-blur-[2px]"
-                      >
-                        دیدن {item.name}
-                      </TransitionLink>
-                    </article>
-                  </figure>
-                </div>
-              </FadeIn>
-            </CarouselItem>
-          ))}
+                <FadeIn
+                  vars={{ delay: 0.2 * i, duration: 0.5, ease: 'sine.inOut' }}
+                >
+                  <div className="w-full aspect-square bg-transparent">
+                    <figure className="relative w-full h-full bg-[#eceae8] border-none rounded-none">
+                      <Image
+                        unoptimized
+                        src={imageUrl}
+                        fill
+                        alt={categoryName}
+                        className="object-cover"
+                      />
+                      <article className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-linear-to-b from-secondary/5 to-secondary/20 px-2 py-3 text-center text-2xl font-semibold text-background">
+                        {categoryName}
+                        <TransitionLink
+                          href={`/${locale}/sub-categories/${item.url}`}
+                          className="bg-linear-to-b from-secondary/5 to-secondary/30 border rounded-none px-1.5 py-1 text-center text-base backdrop-blur-[2px]"
+                        >
+                          {t('viewCategory', { name: categoryName })}
+                        </TransitionLink>
+                      </article>
+                    </figure>
+                  </div>
+                </FadeIn>
+              </CarouselItem>
+            )
+          })}
         </CarouselContent>
       </Carousel>
     </section>
