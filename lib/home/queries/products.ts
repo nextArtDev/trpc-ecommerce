@@ -1,5 +1,5 @@
 import { currentUser } from '@/lib/auth'
-import { Prisma, Review } from '@/lib/generated/prisma'
+import { Language, Prisma, Review } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
 import {
   CategoryWithStats,
@@ -9,21 +9,40 @@ import {
 } from '@/lib/types/home'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
+import { getLocale } from 'next-intl/server'
+
+const getTranslationSelect = (locale: Language) => ({
+  where: { language: locale },
+  select: {
+    name: true,
+    description: true,
+  },
+})
 
 // Homepage Products (with basic info + first image)
 export async function getHomepageProducts(limit: number = 12) {
+  const locale = (await getLocale()) as Language
   return await prisma.product.findMany({
     take: limit,
     select: {
       id: true,
-      name: true,
-      description: true,
+      // name: true,
+      // description: true,
       slug: true,
       rating: true,
       isFeatured: true,
       isSale: true,
       saleEndDate: true,
       updatedAt: true,
+      // Get translations for current locale
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+        },
+        take: 1,
+      },
       // Get only the first image for performance
       images: {
         take: 1,
@@ -54,15 +73,23 @@ export async function getHomepageProducts(limit: number = 12) {
       category: {
         select: {
           id: true,
-          name: true,
           url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
         },
       },
       subCategory: {
         select: {
           id: true,
-          name: true,
           url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
         },
       },
     },
@@ -82,18 +109,26 @@ export async function getHomepageProducts(limit: number = 12) {
 }
 
 // 2. BEST SELLERS SECTION
-export async function getBestSellers(limit: number = 8) {
+
+export async function getNewProducts(limit: number = 8) {
+  const locale = (await getLocale()) as Language
+
   return await prisma.product.findMany({
     take: limit,
     select: {
       id: true,
-      name: true,
       slug: true,
       rating: true,
       sales: true,
-      description: true,
       brand: true,
-
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+        },
+        take: 1,
+      },
       images: {
         take: 1,
         select: {
@@ -103,15 +138,23 @@ export async function getBestSellers(limit: number = 8) {
       category: {
         select: {
           id: true,
-          name: true,
           url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
         },
       },
       subCategory: {
         select: {
           id: true,
-          name: true,
           url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
         },
       },
       variants: {
@@ -125,11 +168,85 @@ export async function getBestSellers(limit: number = 8) {
             gt: 0,
           },
         },
-        orderBy: [
-          { quantity: 'desc' }, // Prioritize higher stock
-          { price: 'asc' }, // Then lowest price
-        ],
+        orderBy: [{ quantity: 'desc' }, { price: 'asc' }],
+        take: 1,
+      },
+    },
+    where: {
+      variants: {
+        some: {
+          quantity: {
+            gt: 0,
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
 
+// 4. CATEGORIES FOR NAVIGATION/HOMEPAGE
+export async function getBestSellers(limit: number = 8) {
+  const locale = (await getLocale()) as Language
+
+  return await prisma.product.findMany({
+    take: limit,
+    select: {
+      id: true,
+      slug: true,
+      rating: true,
+      sales: true,
+      brand: true,
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+        },
+        take: 1,
+      },
+      images: {
+        take: 1,
+        select: {
+          url: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
+        },
+      },
+      subCategory: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: { name: true },
+            take: 1,
+          },
+        },
+      },
+      variants: {
+        select: {
+          price: true,
+          discount: true,
+          quantity: true,
+        },
+        where: {
+          quantity: {
+            gt: 0,
+          },
+        },
+        orderBy: [{ quantity: 'desc' }, { price: 'asc' }],
         take: 1,
       },
     },
@@ -148,13 +265,284 @@ export async function getBestSellers(limit: number = 8) {
   })
 }
 
-// 3. NEW PRODUCTS SECTION
-export async function getNewProducts(limit: number = 8) {
-  return await prisma.product.findMany({
-    take: limit,
+// SubCategories with translations
+export async function getSubCategories() {
+  const locale = (await getLocale()) as Language
+
+  return await prisma.subCategory.findMany({
+    where: { featured: true },
     select: {
       id: true,
-      name: true,
+      url: true,
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+        },
+        take: 1,
+      },
+      images: {
+        select: {
+          url: true,
+        },
+        take: 1,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
+
+// Categories with translations
+export async function getCategoriesWithStats() {
+  const locale = (await getLocale()) as Language
+
+  return await prisma.category.findMany({
+    select: {
+      id: true,
+      url: true,
+      updatedAt: true,
+      featured: true,
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+        },
+        take: 1,
+      },
+      images: {
+        take: 1,
+        select: {
+          url: true,
+        },
+      },
+      _count: {
+        select: {
+          products: true,
+        },
+      },
+      subCategories: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+            },
+            take: 1,
+          },
+          images: {
+            select: { url: true },
+            take: 1,
+          },
+          _count: {
+            select: {
+              products: true,
+            },
+          },
+        },
+        take: 5,
+      },
+    },
+    orderBy: {
+      featured: 'desc',
+    },
+  })
+}
+
+// 5. SEARCH/FILTER PAGE - More comprehensive
+
+// 6. SINGLE PRODUCT PAGE - Full details
+export const getProductDetails = cache(async (slug: string) => {
+  const locale = (await getLocale()) as Language
+
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: {
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+          // keywords: true,
+        },
+        take: 1,
+      },
+      images: {
+        select: {
+          url: true,
+        },
+      },
+
+      variants: {
+        select: {
+          id: true,
+          price: true,
+          quantity: true,
+          discount: true,
+          weight: true,
+          length: true,
+          width: true,
+          height: true,
+          images: {
+            select: {
+              url: true,
+            },
+          },
+          color: {
+            select: {
+              id: true,
+              name: true,
+              hex: true,
+            },
+          },
+          size: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [{ price: 'asc' }, { quantity: 'desc' }],
+      },
+      specs: {
+        select: {
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+              value: true,
+            },
+            take: 1,
+          },
+        },
+      },
+      questions: {
+        select: {
+          translations: {
+            where: { language: locale },
+            select: {
+              question: true,
+              answer: true,
+            },
+            take: 1,
+          },
+        },
+      },
+      reviews: {
+        where: {
+          isPending: false,
+        },
+        select: {
+          id: true,
+          isFeatured: true,
+          isPending: true,
+          isVerifiedPurchase: true,
+          rating: true,
+          title: true,
+          description: true,
+          likes: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          images: {
+            select: {
+              url: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: 10,
+      },
+      category: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+            },
+            take: 1,
+          },
+        },
+      },
+      subCategory: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+            },
+            take: 1,
+          },
+        },
+      },
+      offerTag: {
+        select: {
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+            },
+            take: 1,
+          },
+        },
+      },
+      freeShipping: {
+        include: {
+          eligibleCities: {
+            include: {
+              city: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (product) {
+    prisma.product
+      .update({
+        where: { id: product.id },
+        data: { views: { increment: 1 } },
+      })
+      .catch(console.error)
+  }
+
+  return product
+})
+
+// 7. RELATED PRODUCTS
+export async function getRelatedProducts(
+  productId: string,
+  subCategoryId: string,
+  limit: number = 6
+) {
+  return await prisma.product.findMany({
+    where: {
+      subCategoryId,
+      id: { not: productId },
+    },
+    select: {
+      id: true,
+      // name: true,
+      translations: {
+        select: {
+          name: true,
+        },
+      },
       slug: true,
       rating: true,
       images: {
@@ -174,88 +562,14 @@ export async function getNewProducts(limit: number = 8) {
         take: 1,
       },
     },
+    take: limit,
+
     orderBy: {
-      createdAt: 'desc',
+      rating: 'desc',
     },
   })
 }
 
-// 4. CATEGORIES FOR NAVIGATION/HOMEPAGE
-export async function getSubCategories(): Promise<SubCategoryForHomePage[]> {
-  return await prisma.subCategory.findMany({
-    where: { featured: true },
-    // select: {
-    //   id: true,
-    //   name: true,
-    //   url: true,
-
-    // },
-    include: {
-      images: {
-        select: {
-          url: true,
-        },
-        take: 1,
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-}
-export async function getCategoriesWithStats(): Promise<CategoryWithStats[]> {
-  return await prisma.category.findMany({
-    select: {
-      id: true,
-      name: true,
-      url: true,
-      updatedAt: true,
-      featured: true,
-      images: {
-        take: 1,
-        select: {
-          url: true,
-        },
-      },
-      // Get product count for each category
-      _count: {
-        select: {
-          products: true,
-        },
-      },
-      subCategories: {
-        select: {
-          id: true,
-          name: true,
-          url: true,
-          images: {
-            select: { url: true },
-            take: 1,
-          },
-          _count: {
-            select: {
-              products: true,
-            },
-          },
-        },
-        take: 5,
-        // orderBy:{
-
-        // }
-        // orderBy: {Prisma.sql`RANDOM()`}
-      },
-    },
-    orderBy: {
-      featured: 'desc',
-    },
-  })
-  // for (const category of categories) {
-  //   category.subCategories = shuffleArray(category.subCategories).slice(0, 5) // Get up to 5 random subcategories
-  // }
-  //return categories;
-}
-
-// 5. SEARCH/FILTER PAGE - More comprehensive
 export async function searchProducts({
   search,
   categoryId,
@@ -281,31 +595,38 @@ export async function searchProducts({
   sizes?: string[]
   brands?: string[]
 }) {
+  const locale = (await getLocale()) as Language
   const skip = (page - 1) * limit
 
-  // Build where clause
   const where: Prisma.ProductWhereInput = { AND: [] }
   const pushToAnd = (condition: Prisma.ProductWhereInput) =>
     (where.AND as Prisma.ProductWhereInput[]).push(condition)
 
+  // Search in translations
   if (search) {
     ;(where.AND as Prisma.ProductWhereInput[]).push({
       OR: [
-        { name: { contains: search } },
-        { description: { contains: search } },
-        { brand: { contains: search } },
+        {
+          translations: {
+            some: {
+              language: locale,
+              OR: [
+                { name: { contains: search } },
+                { description: { contains: search } },
+              ],
+            },
+          },
+        },
         { keywords: { contains: search } },
+        { brand: { contains: search } },
       ],
     })
   }
 
-  if (categoryId) (where.AND as Prisma.ProductWhereInput[]).push({ categoryId })
-  if (subCategoryId)
-    (where.AND as Prisma.ProductWhereInput[]).push({ subCategoryId })
-  if (brands && brands.length > 0)
-    (where.AND as Prisma.ProductWhereInput[]).push({ brand: { in: brands } })
+  if (categoryId) pushToAnd({ categoryId })
+  if (subCategoryId) pushToAnd({ subCategoryId })
+  if (brands && brands.length > 0) pushToAnd({ brand: { in: brands } })
 
-  // Build conditions array for complex filtering
   const variantWhere: Prisma.ProductVariantWhereInput = { AND: [] }
   const pushToVariantAnd = (condition: Prisma.ProductVariantWhereInput) =>
     (variantWhere.AND as Prisma.ProductVariantWhereInput[]).push(condition)
@@ -344,13 +665,21 @@ export async function searchProducts({
         break
     }
   }
+
   try {
     const [allProducts, total] = await prisma.$transaction([
       prisma.product.findMany({
         where,
         include: {
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+              description: true,
+            },
+            take: 1,
+          },
           images: { take: 1, orderBy: { created_at: 'asc' } },
-
           variants: {
             select: {
               price: true,
@@ -364,10 +693,7 @@ export async function searchProducts({
               size: true,
               color: true,
             },
-            orderBy: [
-              { quantity: 'desc' }, // Prioritize higher stock
-              { price: 'asc' }, // Then lowest price
-            ], // Always show the cheapest variant first
+            orderBy: [{ quantity: 'desc' }, { price: 'asc' }],
           },
         },
         orderBy,
@@ -376,13 +702,13 @@ export async function searchProducts({
       }),
       prisma.product.count({ where }),
     ])
+
     let products = allProducts
 
     if (isPriceSort) {
       products.sort((a, b) => {
         const getMinPrice = (p: typeof a) => {
           if (!p.variants || p.variants.length === 0) return Infinity
-          // Calculate final price after discount for an accurate sort
           return Math.min(
             ...p.variants.map((v) => v.price - v.price * (v.discount / 100))
           )
@@ -393,9 +719,9 @@ export async function searchProducts({
         return sortBy === 'price_asc' ? priceA - priceB : priceB - priceA
       })
 
-      // Apply pagination *after* the sort is complete
       products = products.slice(skip, skip + limit)
     }
+
     return {
       products,
       pagination: {
@@ -439,185 +765,6 @@ export async function updateSearchFilters(filters: Partial<SearchFilters>) {
 
   redirect(`/search?${params.toString()}`)
 }
-// 6. SINGLE PRODUCT PAGE - Full details
-export const getProductDetails = cache(
-  async (slug: string): Promise<ProductDetails> => {
-    const product = await prisma.product.findUnique({
-      where: { slug },
-      include: {
-        images: {
-          select: {
-            // id: true,
-            url: true,
-            // key: true,
-          },
-        },
-        variants: {
-          select: {
-            id: true,
-            price: true,
-            quantity: true,
-            discount: true,
-            weight: true,
-            length: true,
-            width: true,
-            height: true,
-
-            images: {
-              select: {
-                url: true,
-              },
-            },
-            color: {
-              select: {
-                id: true,
-                name: true,
-                hex: true,
-              },
-            },
-            size: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-          },
-          orderBy: [
-            { price: 'asc' }, // Then lowest price
-            { quantity: 'desc' }, // Prioritize higher stock
-          ],
-        },
-        specs: {
-          select: {
-            name: true,
-            value: true,
-          },
-        },
-        questions: {
-          select: {
-            question: true,
-            answer: true,
-          },
-        },
-        reviews: {
-          where: {
-            isPending: false,
-          },
-          select: {
-            id: true,
-            isFeatured: true,
-            isPending: true,
-            isVerifiedPurchase: true,
-            rating: true,
-            title: true,
-            description: true,
-
-            likes: true,
-            createdAt: true,
-            user: {
-              select: {
-                name: true,
-                //   avatar: true,
-              },
-            },
-            images: {
-              select: {
-                url: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          take: 10,
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            url: true,
-          },
-        },
-        subCategory: {
-          select: {
-            id: true,
-            name: true,
-            url: true,
-          },
-        },
-        offerTag: {
-          select: {
-            name: true,
-            url: true,
-          },
-        },
-        freeShipping: {
-          include: {
-            eligibleCities: {
-              include: {
-                city: true,
-              },
-            },
-          },
-        },
-      },
-    })
-
-    // Increment view count (do this async without blocking)
-    if (product) {
-      prisma.product
-        .update({
-          where: { id: product.id },
-          data: { views: { increment: 1 } },
-        })
-        .catch(console.error)
-    }
-
-    return product
-  }
-)
-
-// 7. RELATED PRODUCTS
-export async function getRelatedProducts(
-  productId: string,
-  subCategoryId: string,
-  limit: number = 6
-) {
-  return await prisma.product.findMany({
-    where: {
-      subCategoryId,
-      id: { not: productId },
-    },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      rating: true,
-      images: {
-        take: 1,
-        select: {
-          url: true,
-        },
-      },
-      variants: {
-        select: {
-          price: true,
-          discount: true,
-        },
-        orderBy: {
-          price: 'asc',
-        },
-        take: 1,
-      },
-    },
-    take: limit,
-
-    orderBy: {
-      rating: 'desc',
-    },
-  })
-}
-
 // 8. FILTERS DATA FOR SEARCH PAGE
 export async function getFiltersData(
   categoryId?: string,
@@ -681,115 +828,16 @@ export async function getFiltersData(
   }
 }
 
-// export async function getAllProducts({
-//   query,
-//   limit = 10,
-//   page,
-//   category,
-//   price,
-//   rating,
-//   sort,
-// }: {
-//   query: string
-//   limit?: number
-//   page: number
-//   category?: string
-//   price?: string
-//   rating?: string
-//   sort?: string
-// }) {
-//   // Query filter
-//   const queryFilter: Prisma.ProductWhereInput =
-//     query && query !== 'all'
-//       ? {
-//           name: {
-//             contains: query,
-//             // mode: 'insensitive',
-//           } as Prisma.StringFilter,
-//         }
-//       : {}
-
-//   // Category filter
-//   const categoryFilter: Prisma.CategoryWhereInput =
-//     category && category !== 'all'
-//       ? {
-//           category: {
-//             contains: query,
-//             // mode: 'insensitive',
-//           } ,
-//         }
-//       : {}
-
-//   // Price filter
-//   const priceFilter: Prisma.SizeWhereInput =
-//     price && price !== 'all'
-//       ? {
-//           price: {
-//             gte: Number(price.split('-')[0]),
-//             lte: Number(price.split('-')[1]),
-//           },
-//         }
-//       : {}
-
-//   // Rating filter
-//   const ratingFilter =
-//     rating && rating !== 'all'
-//       ? {
-//           rating: {
-//             gte: Number(rating),
-//           },
-//         }
-//       : {}
-
-//   const data = await prisma.product.findMany({
-//     where: {
-//       ...queryFilter,
-//       ...ratingFilter,
-//     },
-//     include: {
-//       images: {
-//         select: { url: true },
-//       },
-//       category: {
-//         where: {
-//           ...categoryFilter,
-//         },
-//       },
-//       sizes: {
-//         where: {
-//           ...priceFilter,
-//         },
-//          orderBy:
-//       sort === 'lowest'
-//         ? { price: 'asc' }
-//         :  { price: 'desc' }
-//       },
-
-//     },
-//     orderBy:
-//       // sort === 'lowest'
-//       //   ? { price: 'asc' }
-//       //   : sort === 'highest'
-//       //   ? { price: 'desc' }:
-//          sort === 'rating'
-//         ? { rating: 'desc' }
-//         : { createdAt: 'desc' },
-//     skip: (page - 1) * limit,
-//     take: limit,
-//   })
-
-//   const dataCount = await prisma.product.count()
-
-//   return {
-//     data,
-//     totalPages: Math.ceil(dataCount / limit),
-//   }
-// }
 export async function getAllCategories({}) {
   const categories = await prisma.category.findMany({
     select: {
       id: true,
-      name: true,
+      // name: true,
+      translations: {
+        select: {
+          name: true,
+        },
+      },
       url: true,
       featured: true,
     },
@@ -815,7 +863,10 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
       products: {
         select: {
           id: true, // You'll likely need this
-          name: true,
+          // name: true,
+          translations: {
+            select: { name: true },
+          },
           slug: true,
           brand: true,
           rating: true,
@@ -867,7 +918,11 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
       category: {
         select: {
           id: true,
-          name: true,
+          translations: {
+            select: {
+              name: true,
+            },
+          },
           url: true,
         },
       },
@@ -975,88 +1030,3 @@ export async function userBookmarkedProducts({
     }
   }
 }
-
-// export async function getBestSellers(limit: number = 8) {
-//   const bestSellersByQuantity = await prisma.orderItem.groupBy({
-//     by: ['productId'],
-//     _sum: {
-//       quantity: true,
-//     },
-//     where: {
-//       // IMPORTANT: Only count items from successful orders
-//       order: {
-//         paymentStatus: 'Paid',
-//         orderStatus: {
-//           notIn: ['Cancelled', 'Refunded', 'Failed'],
-//         },
-//       },
-//     },
-//     orderBy: {
-//       _sum: {
-//         quantity: 'desc',
-//       },
-//     },
-//     take: limit,
-//   })
-//   if (bestSellersByQuantity.length === 0) {
-//     return [] // No best sellers found
-//   }
-
-//   // Extract just the product IDs in the correct order
-//   const bestSellerProductIds = bestSellersByQuantity.map(
-//     (item) => item.productId
-//   )
-
-//   const products = await prisma.product.findMany({
-//     where: {
-//       id: {
-//         in: bestSellerProductIds,
-//       },
-//     },
-//     take: limit,
-//     select: {
-//       id: true,
-//       name: true,
-//       slug: true,
-//       rating: true,
-//       sales: true,
-//       images: {
-//         take: 1,
-//         select: {
-//           url: true,
-//         },
-//       },
-//       category: {
-//         select: {
-//           id: true,
-//           name: true,
-//           url: true,
-//         },
-//       },
-//       subCategory: {
-//         select: {
-//           id: true,
-//           name: true,
-//           url: true,
-//         },
-//       },
-//       sizes: {
-//         select: {
-//           price: true,
-//           discount: true,
-//         },
-//         orderBy: {
-//           price: 'asc',
-//         },
-//         take: 1,
-//       },
-//     },
-//     orderBy: {
-//       createdAt: 'asc',
-//     },
-//   })
-//   const orderedProducts = bestSellerProductIds.map((id) =>
-//     products.find((p) => p.id === id)
-//   )
-//   return orderedProducts.filter(Boolean)
-// }

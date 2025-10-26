@@ -40,5 +40,62 @@
         "url": "/images/commit3.jpg"
       }
     ]
+  },
+  "product": {
+    "notFound": {
+      "title": "Produit Introuvable !",
+      "description": "Le produit que vous recherchez n'a pas pu être trouvé."
+    },
+    "specialBrand": "Marque Spéciale",
+    "productImage": "Image du Produit",
+    "inStock": "En Stock",
+    "outOfStock": "Rupture de Stock",
+    "qualityProduct": "Produit de Qualité",
+    "from": "de",
+    "customer": "Chère Cliente, Cher Client",
+    "home": "Accueil",
+    "breadcrumb": {
+      "home": "Sarina"
+    },
+    "rating": {
+      "from": "de",
+      "people": "personnes"
+    },
+    "size": {
+      "selected": "Taille Sélectionnée"
+    },
+    "color": {
+      "selected": "Couleur Sélectionnée"
+    },
+    "stock": {
+      "available": "Disponible",
+      "outOfStock": "En Rupture de Stock",
+      "remaining": "articles restants"
+    },
+    "variant": {
+      "unavailable": "Cette combinaison de couleur et de taille n'est pas disponible !",
+      "selectAnother": "Veuillez sélectionner une autre combinaison de taille et de couleur."
+    },
+    "cart": {
+      "viewCart": "Voir le Panier"
+    },
+    "keywords": "Mots-clés",
+    "specifications": "Spécifications & Dimensions",
+    "relatedProducts": "Produits Associés"
+  },
+   "metadata": {
+    "home": {
+      "title": "Atelier de Cuir Sarina",
+      "description": "Atelier de fabrication de sacs et de produits en cuir naturel. {categories} {rating} Livraison rapide, produits de haute qualité et garantie d'utilisation de cuir naturel."
+    },
+    "siteName": "Atelier de Cuir Sarina",
+    "keywords": {
+      "naturalLeather": "cuir naturel",
+      "womenLeatherBag": "sac en cuir femme"
+    }
+  },
+  "home": {
+    "siteName": "Atelier de Cuir Sarina",
+    "discoverMore": "Découvrir Plus"
   }
 }

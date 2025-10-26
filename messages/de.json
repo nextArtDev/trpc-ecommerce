@@ -40,5 +40,62 @@
         "url": "/images/commit3.jpg"
       }
     ]
+  },
+   "product": {
+    "notFound": {
+      "title": "Produkt Nicht Gefunden!",
+      "description": "Das gesuchte Produkt konnte nicht gefunden werden."
+    },
+    "specialBrand": "Besondere Marke",
+    "productImage": "Produktbild",
+    "inStock": "Auf Lager",
+    "outOfStock": "Nicht Auf Lager",
+    "qualityProduct": "Qualitätsprodukt",
+    "from": "von",
+    "customer": "Geschätzte Kundin, Geschätzter Kunde",
+    "home": "Startseite",
+    "breadcrumb": {
+      "home": "Sarina"
+    },
+    "rating": {
+      "from": "von",
+      "people": "Personen"
+    },
+    "size": {
+      "selected": "Ausgewählte Größe"
+    },
+    "color": {
+      "selected": "Ausgewählte Farbe"
+    },
+    "stock": {
+      "available": "Verfügbar",
+      "outOfStock": "Ausverkauft",
+      "remaining": "Stück übrig"
+    },
+    "variant": {
+      "unavailable": "Diese Farb- und Größenkombination ist nicht verfügbar!",
+      "selectAnother": "Bitte wählen Sie eine andere Kombination aus Größe und Farbe."
+    },
+    "cart": {
+      "viewCart": "Warenkorb Anzeigen"
+    },
+    "keywords": "Schlüsselwörter",
+    "specifications": "Spezifikationen & Abmessungen",
+    "relatedProducts": "Ähnliche Produkte"
+  },
+   "metadata": {
+    "home": {
+      "title": "Sarina Lederwerkstatt",
+      "description": "Werkstatt zur Herstellung von Taschen und Produkten aus Naturleder. {categories} {rating} Schneller Versand, hochwertige Produkte und die Garantie für die Verwendung von Naturleder."
+    },
+    "siteName": "Sarina Lederwerkstatt",
+    "keywords": {
+      "naturalLeather": "Naturleder",
+      "womenLeatherBag": "Damenledertasche"
+    }
+  },
+  "home": {
+    "siteName": "Sarina Lederwerkstatt",
+    "discoverMore": "Mehr Entdecken"
   }
 }

@@ -40,5 +40,63 @@
         "url": "/images/commit3.jpg"
       }
     ]
+  }, 
+  "product": {
+    "notFound": {
+      "title": "Product Not Found!",
+      "description": "The product you were looking for could not be found."
+    },
+    "specialBrand": "Special Brand",
+    "productImage": "Product Image",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "qualityProduct": "Quality Product",
+    "from": "from",
+    "customer": "Valued Customer",
+    "home": "Home",
+    "breadcrumb": {
+      "home": "Sarina"
+    },
+    "rating": {
+      "from": "from",
+      "people": "people"
+    },
+    "size": {
+      "selected": "Selected Size"
+    },
+    "color": {
+      "selected": "Selected Color"
+    },
+    "stock": {
+      "available": "Available",
+      "outOfStock": "Out of Stock",
+      "remaining": "items left"
+    },
+    "variant": {
+      "unavailable": "This color and size combination is not available!",
+      "selectAnother": "Please select another combination of size and color."
+    },
+    "cart": {
+      "viewCart": "View Cart"
+    },
+    "keywords": "Keywords",
+    "specifications": "Specifications & Dimensions",
+    "relatedProducts": "Related Products"
+  },
+    "metadata": {
+    "home": {
+      "title": "Sarina Leather Workshop",
+      "description": "Workshop for crafting bags and natural leather products. {categories} {rating} Fast shipping, high-quality products, and a guarantee of using natural leather."
+    },
+    "siteName": "Sarina Leather Workshop",
+    "keywords": {
+      "naturalLeather": "natural leather",
+      "womenLeatherBag": "women's leather bag"
+    }
+  },
+  "home": {
+    "siteName": "Sarina Leather Workshop",
+    "discoverMore": "Discover More"
   }
+ 
 }

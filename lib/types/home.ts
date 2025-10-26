@@ -28,15 +28,36 @@ export type BasicProductColor = {
   hex: string
 }
 
+export type Translation = {
+  name: string
+  description?: string
+}
+
+export type ProductTranslation = {
+  name: string
+  description: string
+  keywords?: string
+}
+
+export type SpecTranslation = {
+  name: string
+  value: string
+}
+
+export type QuestionTranslation = {
+  question: string
+  answer: string
+}
+
 export type CategoryInfo = {
   id: string
-  name: string
+  translations: Translation[]
   url: string
 }
 
 export type SubCategoryInfo = {
   id: string
-  name: string
+  translations: Translation[]
   url: string
 }
 
@@ -62,8 +83,9 @@ export type VariantsBasics = {
 // 1. Homepage Products Type
 export type HomepageProduct = {
   id: string
-  name: string
-  description: string
+  // name: string
+  // description: string
+  translations: ProductTranslation[]
   slug: string
   rating: number
   isFeatured: boolean
@@ -81,12 +103,15 @@ export type HomepageProductsResult = HomepageProduct[]
 // 2. Best Sellers Type
 export type BestSellerProduct = {
   id: string
-  name: string
   slug: string
   rating: number
   sales: number
+  brand: string | null
+  translations: ProductTranslation[]
   images: BasicProductImage[]
   variants: VariantsWithSizeAndColor[]
+  category: CategoryInfo
+  subCategory: SubCategoryInfo
 }
 
 export type BestSellersResult = BestSellerProduct[]
@@ -94,9 +119,9 @@ export type BestSellersResult = BestSellerProduct[]
 // 3. New Products Type
 export type NewProduct = {
   id: string
-  name: string
   slug: string
   rating: number
+  translations: ProductTranslation[]
   images: BasicProductImage[]
   variants: VariantsWithSizeAndColor[]
 }
@@ -106,18 +131,18 @@ export type NewProductsResult = NewProduct[]
 // 4. Categories with Stats Type
 export type CategoryWithStats = {
   id: string
-  name: string
   url: string
   featured: boolean
   updatedAt: Date
+  translations: Translation[]
   images: BasicProductImage[]
   _count: {
     products: number
   }
   subCategories: {
     id: string
-    name: string
     url: string
+    translations: Translation[]
     images: BasicProductImage[]
     _count: {
       products: number
@@ -125,13 +150,13 @@ export type CategoryWithStats = {
   }[]
 }
 
-// export type SubCategoryForHomePage = {
-//   id: string
-//   name: string
-//   url: string
-//   images:{url:string}
-// }
-export type SubCategoryForHomePage = SubCategory & { images: { url: string }[] }
+export type SubCategoryForHomePage = {
+  id: string
+  url: string
+  translations: Translation[]
+  images: { url: string }[]
+}
+
 export type CategoriesWithStatsResult = CategoryWithStats[]
 
 // 5. Search Products Types
@@ -171,7 +196,6 @@ export interface FiltersData {
 
 export interface SearchProduct {
   id: string
-  name: string
   slug: string
   brand: string | null
   rating: number
@@ -179,6 +203,7 @@ export interface SearchProduct {
   sales: number
   isSale: boolean
   saleEndDate: string | null
+  translations: ProductTranslation[]
   images: { url: string }[]
   variants: {
     price: number
@@ -188,8 +213,8 @@ export interface SearchProduct {
     images: ProductImage[]
     color: ProductColor
   }[]
-  category?: { name: string; url: string }
-  subCategory?: { name: string; url: string }
+  category?: CategoryInfo
+  subCategory?: SubCategoryInfo
 }
 
 export interface SearchPagination {
@@ -207,13 +232,11 @@ export interface SearchProductsResult {
 
 // 6. Product Details Types
 export type ProductSpec = {
-  name: string
-  value: string
+  translations: SpecTranslation[] // Single translation for current locale
 }
 
 export type ProductQuestion = {
-  question: string
-  answer: string
+  translations: QuestionTranslation[]
 }
 
 export type ProductReview = {
@@ -223,28 +246,24 @@ export type ProductReview = {
   isVerifiedPurchase: boolean
   isFeatured: boolean
   isPending: boolean
-
   rating: number
-
   likes: number
   createdAt: Date
   user: {
     name: string | null
-    // avatar: string | null
   }
   images: BasicProductImage[]
 }
 
 export type OfferTag = {
-  name: string
   url: string
+  translations: Translation[]
 }
 
 export type FreeShippingCity = {
   city: {
     id: number
     name: string
-    // Add other city fields as needed
   }
 }
 
@@ -258,8 +277,6 @@ export type FreeShipping = {
 
 export type ProductDetails = {
   id: string
-  name: string
-  description: string
   slug: string
   brand: string | null
   rating: number
@@ -271,16 +288,14 @@ export type ProductDetails = {
   isSale: boolean
   saleEndDate: string | null
   sku: string | null
-  keywords: string
-
   categoryId: string
   subCategoryId: string
   offerTagId: string | null
   createdAt: Date
   updatedAt: Date
+  translations: ProductTranslation[]
   images: ProductImage[]
   variants: VariantsWithSizeAndColor[]
-
   specs: ProductSpec[]
   questions: ProductQuestion[]
   reviews: ProductReview[]
@@ -288,14 +303,13 @@ export type ProductDetails = {
   subCategory: SubCategoryInfo
   offerTag: OfferTag | null
   freeShipping: FreeShipping | null
-} | null // null if product not found
-
+} | null
 // 7. Related Products Type
 export type RelatedProduct = {
   id: string
-  name: string
   slug: string
   rating: number
+  translations: ProductTranslation[]
   images: BasicProductImage[]
   variants: VariantsBasics[]
 }
@@ -307,8 +321,20 @@ export type PriceRange = {
   min: number
   max: number
 }
-
 // Additional utility types for components
+export type TransformedProduct<
+  T extends { translations: ProductTranslation[] }
+> = Omit<T, 'translations'> & {
+  name: string
+  description: string
+  keywords?: string
+}
+
+export type TransformedCategory<T extends { translations: Translation[] }> =
+  Omit<T, 'translations'> & {
+    name: string
+    description?: string
+  }
 
 // For product cards/listings
 export type ProductCardProps = {
@@ -337,19 +363,6 @@ export type SearchFiltersProps = {
   onFiltersChange: (filters: SearchFilters) => void
   currentFilters: SearchFilters
 }
-
-// export interface SearchFilters {
-//   search?: string
-//   categoryId?: string
-//   subCategoryId?: string
-//   minPrice?: number
-//   maxPrice?: number
-//   sortBy?: 'newest' | 'oldest' | 'price_asc' | 'price_desc' | 'rating' | 'sales'
-//   page?: number
-//   colors?: string[]
-//   sizes?: string[]
-// }
-
 export interface SortOption {
   name: string
   value: SearchFilters['sortBy']
@@ -393,12 +406,18 @@ export type ProductReviewsProps = {
 
 // For product specifications component
 export type ProductSpecsProps = {
-  specs: ProductSpec[]
+  specs: Array<{
+    name: string
+    value: string
+  }>
 }
 
 // For product Q&A component
 export type ProductQAProps = {
-  questions: ProductQuestion[]
+  questions: Array<{
+    question: string
+    answer: string
+  }>
 }
 
 // Example usage in components:
@@ -425,7 +444,6 @@ export type ProductPageProps = {
 }
 
 // Helper type for getting the actual return type from Prisma queries
-// This is useful if you want to ensure type safety with actual Prisma return types
 export type InferQueryResult<T> = T extends Promise<infer U> ? U : T
 
 // Example of how to use with actual function:
@@ -456,15 +474,12 @@ export type CartProductType = {
   slug: string
   name: string
   image: string
-
   size: string
   color: string
   price: number
   stock: number
   weight: number
-
   quantity: number
-
   shippingMethod: string
   shippingFee: number
   extraShippingFee: number
@@ -520,3 +535,66 @@ export interface NavigationData {
 }
 
 export type CurrentUserType = Prisma.PromiseReturnType<typeof getCurrentUser>
+
+/**
+ * Extracts the translation for display
+ * Assumes translations array has exactly one item (the current locale)
+ */
+export function extractTranslation<T extends { translations: any[] }>(
+  item: T
+): T extends { translations: (infer U)[] } ? U : never {
+  return item.translations[0] as any
+}
+
+/**
+ * Transform product with translations to simpler format
+ */
+export function transformProduct<
+  T extends { translations: ProductTranslation[] }
+>(product: T): TransformedProduct<T> {
+  const { translations, ...rest } = product
+  return {
+    ...rest,
+    name: translations[0]?.name || '',
+    description: translations[0]?.description || '',
+    keywords: translations[0]?.keywords,
+  } as TransformedProduct<T>
+}
+
+/**
+ * Transform category with translations to simpler format
+ */
+export function transformCategory<T extends { translations: Translation[] }>(
+  category: T
+): TransformedCategory<T> {
+  const { translations, ...rest } = category
+  return {
+    ...rest,
+    name: translations[0]?.name || '',
+    description: translations[0]?.description,
+  } as TransformedCategory<T>
+}
+
+/**
+ * Transform specs array
+ */
+export function transformSpecs(
+  specs: ProductSpec[]
+): Array<{ name: string; value: string }> {
+  return specs.map((spec) => ({
+    name: spec.translations[0]?.name || '',
+    value: spec.translations[0]?.value || '',
+  }))
+}
+
+/**
+ * Transform questions array
+ */
+export function transformQuestions(
+  questions: ProductQuestion[]
+): Array<{ question: string; answer: string }> {
+  return questions.map((q) => ({
+    question: q.translations[0]?.question || '',
+    answer: q.translations[0]?.answer || '',
+  }))
+}

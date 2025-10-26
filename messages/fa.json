@@ -40,5 +40,62 @@
         "url": "/images/commit3.jpg"
       }
     ]
+  },
+  "product": {
+    "notFound": {
+      "title": "محصول پیدا نشد!",
+      "description": "محصول مورد نظر شما پیدا نشد."
+    },
+    "specialBrand": "برند ویژه",
+    "productImage": "تصویر محصول",
+    "inStock": "موجود",
+    "outOfStock": "ناموجود",
+    "qualityProduct": "محصول با کیفیت",
+    "from": "از",
+    "customer": "خریدار محترم",
+    "home": "خانه",
+    "breadcrumb": {
+      "home": "سارینا"
+    },
+    "rating": {
+      "from": "از",
+      "people": "نفر"
+    },
+    "size": {
+      "selected": "سایز انتخابی"
+    },
+    "color": {
+      "selected": "رنگ انتخابی"
+    },
+    "stock": {
+      "available": "موجود",
+      "outOfStock": "اتمام موجودی",
+      "remaining": "عدد باقی مانده"
+    },
+    "variant": {
+      "unavailable": "این ترکیب رنگ و سایز موجود نیست!",
+      "selectAnother": "لطفا ترکیب دیگری از سایز و رنگ را انتخاب کنید."
+    },
+    "cart": {
+      "viewCart": "سبد خرید"
+    },
+    "keywords": "کلمات کلیدی",
+    "specifications": "ویژگی‌ها و ابعاد",
+    "relatedProducts": "محصولات مرتبط"
+  },
+  "metadata": {
+    "home": {
+      "title": "کارگاه چرم سارینا",
+      "description": "کارگاه ساخت کیف و محصولات چرم طبیعی. {categories} {rating} ارسال سریع، کیفیت بالای محصولات و تضمین استفاده از چرم طبیعی."
+    },
+    "siteName": "کارگاه چرم سارینا",
+    "keywords": {
+      "naturalLeather": "چرم طبیعی",
+      "womenLeatherBag": "کیف چرم طبیعی زنانه"
+    }
+  },
+  "home": {
+    "siteName": "کارگاه چرم سارینا",
+    "discoverMore": "بیشتر"
   }
 }

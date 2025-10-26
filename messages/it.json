@@ -40,5 +40,62 @@
         "url": "/images/commit3.jpg"
       }
     ]
+  },
+  "product": {
+    "notFound": {
+      "title": "Prodotto Non Trovato!",
+      "description": "Il prodotto che stavi cercando non è stato trovato."
+    },
+    "specialBrand": "Marchio Speciale",
+    "productImage": "Immagine del Prodotto",
+    "inStock": "Disponibile",
+    "outOfStock": "Non Disponibile",
+    "qualityProduct": "Prodotto di Qualità",
+    "from": "da",
+    "customer": "Gentile Cliente",
+    "home": "Home",
+    "breadcrumb": {
+      "home": "Sarina"
+    },
+    "rating": {
+      "from": "da",
+      "people": "persone"
+    },
+    "size": {
+      "selected": "Taglia Selezionata"
+    },
+    "color": {
+      "selected": "Colore Selezionato"
+    },
+    "stock": {
+      "available": "Disponibile",
+      "outOfStock": "Esaurito",
+      "remaining": "articoli rimanenti"
+    },
+    "variant": {
+      "unavailable": "Questa combinazione di colore e taglia non è disponibile!",
+      "selectAnother": "Seleziona un'altra combinazione di taglia e colore."
+    },
+    "cart": {
+      "viewCart": "Vedi Carrello"
+    },
+    "keywords": "Parole Chiave",
+    "specifications": "Specifiche & Dimensioni",
+    "relatedProducts": "Prodotti Correlati"
+  },
+  "metadata": {
+    "home": {
+      "title": "Laboratorio Pelle Sarina",
+      "description": "Laboratorio per la creazione di borse e prodotti in pelle naturale. {categories} {rating} Spedizione veloce, prodotti di alta qualità e garanzia di utilizzo di pelle naturale."
+    },
+    "siteName": "Laboratorio Pelle Sarina",
+    "keywords": {
+      "naturalLeather": "pelle naturale",
+      "womenLeatherBag": "borsa in pelle da donna"
+    }
+  },
+  "home": {
+    "siteName": "Laboratorio Pelle Sarina",
+    "discoverMore": "Scopri Di Più"
   }
 }

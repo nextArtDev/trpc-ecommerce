@@ -1,3 +1,5 @@
+// app/[locale]/products/[slug]/page.tsx
+
 import {
   getProductDetails,
   getRelatedProducts,
@@ -16,9 +18,15 @@ import {
   stripHtmlTags,
   truncateText,
 } from '@/lib/metadata-utils'
+import { getTranslations, getLocale } from 'next-intl/server'
+import {
+  transformProduct,
+  transformSpecs,
+  transformQuestions,
+} from '@/lib/types/home'
 
 interface ProductDetailsPageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
   searchParams: Promise<{
     sizeId: string
     page: string
@@ -28,16 +36,20 @@ interface ProductDetailsPageProps {
 export async function generateMetadata({
   params,
 }: ProductDetailsPageProps): Promise<Metadata> {
-  const slug = (await params).slug
+  const { slug, locale } = await params
   const product = await getProductDetails(slug)
+  const t = await getTranslations('product')
 
   if (!product) {
     return {
-      title: 'محصول پیدا نشد!',
-      description: 'محصول مورد نظر شما پیدا نشد.',
+      title: t('notFound.title'),
+      description: t('notFound.description'),
       robots: 'noindex, nofollow',
     }
   }
+
+  // Transform product with translations
+  const displayProduct = transformProduct(product)
 
   const productAverageRating = await prisma.review.aggregate({
     _avg: { rating: true },
@@ -48,30 +60,29 @@ export async function generateMetadata({
   const avgRating = productAverageRating._avg.rating
   const reviewCount = productAverageRating._count || 0
 
-  // Build dynamic title and description
-  const brandName = product.brand || 'ویژه'
-  // const categoryName = product.subCategory?.name || 'محصولات'
-  const title = `${product.name} - ${brandName} | ${STORE_NAME}`
+  const brandName = product.brand || t('specialBrand')
+  const title = `${displayProduct.name} - ${brandName} | ${STORE_NAME}`
 
-  // Count available variants
   const availableVariants =
     product.variants?.filter((v) => v.quantity > 0).length || 0
 
-  // Create optimized meta description
   const cleanDescription = createMetaDescription({
-    productName: product.name,
+    productName: displayProduct.name,
     brandName,
-    description: product.description,
+    description: displayProduct.description,
     avgRating,
     reviewCount,
     availableVariants,
     maxLength: 155,
   })
 
-  // Generate keywords
-  const keywords = generateProductKeywords(product)
+  const keywords = generateProductKeywords({
+    ...product,
+    name: displayProduct.name,
+    description: displayProduct.description,
+    keywords: displayProduct.keywords || '',
+  })
 
-  // Check availability and pricing
   const inStock =
     product.variants?.some((variant) => variant.quantity > 0) || false
   const lowestPrice = product.variants?.reduce(
@@ -79,9 +90,8 @@ export async function generateMetadata({
     product.variants?.[0]?.price || 0
   )
 
-  // Create clean descriptions for different platforms
-  const ogDescription = product.description
-    ? truncateText(stripHtmlTags(product.description), 200)
+  const ogDescription = displayProduct.description
+    ? truncateText(stripHtmlTags(displayProduct.description), 200)
     : cleanDescription
 
   const twitterDescription = truncateText(ogDescription, 140)
@@ -91,40 +101,37 @@ export async function generateMetadata({
     description: cleanDescription,
     keywords: keywords.join(', '),
 
-    // Open Graph metadata for social sharing
     openGraph: {
       type: 'website',
-      title: `${product.name} - ${brandName}`,
+      title: `${displayProduct.name} - ${brandName}`,
       description: ogDescription,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
       siteName: STORE_NAME,
       images:
         product.images?.map((img) => ({
           url: img.url,
           width: 800,
           height: 800,
-          alt: `${product.name} - تصویر محصول`,
+          alt: `${displayProduct.name} - ${t('productImage')}`,
         })) || [],
-      locale: 'fa_IR',
+      locale: locale === 'fa' ? 'fa_IR' : 'en_US',
     },
 
-    // Twitter Card metadata
     twitter: {
       card: 'summary_large_image',
-      title: `${product.name} - ${brandName}`,
+      title: `${displayProduct.name} - ${brandName}`,
       description: twitterDescription,
       images: product.images?.map((img) => img.url) || [],
       creator: TWITTER_HANDLE,
       site: TWITTER_HANDLE,
     },
 
-    // Product-specific metadata
     other: {
       'product:brand': brandName,
-      'product:availability': inStock ? 'موجود' : 'ناموجود',
+      'product:availability': inStock ? t('inStock') : t('outOfStock'),
       'product:condition': 'new',
       'product:price:amount': lowestPrice?.toString() || '0',
-      'product:price:currency': 'USD',
+      'product:price:currency': 'IRR',
       'product:retailer_item_id': product.id,
       ...(avgRating && {
         'product:rating:value': avgRating.toFixed(1),
@@ -133,7 +140,6 @@ export async function generateMetadata({
       }),
     },
 
-    // SEO robots
     robots: {
       index: true,
       follow: true,
@@ -146,12 +152,17 @@ export async function generateMetadata({
       },
     },
 
-    // Canonical URL
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
+      languages: {
+        fa: `${process.env.NEXT_PUBLIC_SITE_URL}/fa/products/${slug}`,
+        en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${slug}`,
+        de: `${process.env.NEXT_PUBLIC_SITE_URL}/de/products/${slug}`,
+        fr: `${process.env.NEXT_PUBLIC_SITE_URL}/fr/products/${slug}`,
+        it: `${process.env.NEXT_PUBLIC_SITE_URL}/it/products/${slug}`,
+      },
     },
 
-    // Verification tags
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
       yandex: process.env.YANDEX_VERIFICATION,
@@ -163,26 +174,53 @@ const ProductDetailsPage = async ({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
   searchParams: Promise<{
     size?: string
     color?: string
     page?: string
   }>
 }) => {
-  const slug = (await params).slug
+  const { slug, locale } = await params
   const searchParamsSize = (await searchParams).size
   const searchParamsColor = (await searchParams).color
+  const t = await getTranslations('product')
 
   const product = await getProductDetails(slug)
   if (!product || product.variants.length === 0) {
     notFound()
   }
 
+  // Transform product data
+  const displayProduct = transformProduct(product)
+  const displaySpecs = transformSpecs(product.specs)
+  const displayQuestions = transformQuestions(product.questions)
+  const displayCategory = {
+    ...product.category,
+    name: product.category.translations[0]?.name || '',
+  }
+  const displaySubCategory = {
+    ...product.subCategory,
+    name: product.subCategory.translations[0]?.name || '',
+  }
+  const displayOfferTag = product.offerTag
+    ? {
+        ...product.offerTag,
+        name: product.offerTag.translations[0]?.name || '',
+      }
+    : null
+
   const relatedProducts = await getRelatedProducts(
     product.id,
     product.subCategoryId
   )
+
+  // Transform related products
+  const displayRelatedProducts = relatedProducts?.map((rp) => ({
+    ...rp,
+    name: rp.translations[0]?.name || '',
+    description: rp.translations[0]?.description || '',
+  }))
 
   const urlMatchVariant = product.variants.find(
     (v) => v.size?.id === searchParamsSize && v.color?.id === searchParamsColor
@@ -210,26 +248,29 @@ const ProductDetailsPage = async ({
   const avgRating = productAverageRating._avg.rating
   const reviewCount = productAverageRating._count || 0
 
+  // Structured data with translated content
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
-    description: product.description
-      ? stripHtmlTags(product.description)
-      : `محصول با کیفیت ${product.name} از ${product.brand || 'برند ما'}`,
+    name: displayProduct.name,
+    description: displayProduct.description
+      ? stripHtmlTags(displayProduct.description)
+      : `${t('qualityProduct')} ${displayProduct.name} ${t('from')} ${
+          product.brand || t('specialBrand')
+        }`,
     image: product.images?.map((img) => img.url) || [],
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
     sku: product.sku || product.id,
     brand: {
       '@type': 'Brand',
-      name: product.brand || 'برند ویژه',
+      name: product.brand || t('specialBrand'),
     },
-    category: product.category?.name,
+    category: displayCategory.name,
     offers:
       product.variants?.map((variant) => ({
         '@type': 'Offer',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}?size=${variant.size?.id}&color=${variant.color?.id}`,
-        priceCurrency: 'USD',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}?size=${variant.size?.id}&color=${variant.color?.id}`,
+        priceCurrency: 'IRR',
         price: variant.price,
         availability:
           variant.quantity > 0
@@ -267,7 +308,7 @@ const ProductDetailsPage = async ({
           },
           author: {
             '@type': 'Person',
-            name: review.user?.name || 'خریدار محترم',
+            name: review.user?.name || t('customer'),
           },
           reviewBody: review.description
             ? stripHtmlTags(review.description)
@@ -275,42 +316,8 @@ const ProductDetailsPage = async ({
           datePublished: review.createdAt.toISOString(),
         })),
       }),
-    ...(product.variants &&
-      product.variants.length > 0 && {
-        hasVariant: product.variants.map((variant) => ({
-          '@type': 'ProductModel',
-          name: `${product.name} - ${variant.size?.name || 'سایز استاندارد'}`,
-          sku: `${product.sku || product.id}-${variant.size?.id || 'default'}`,
-          offers: {
-            '@type': 'Offer',
-            price: variant.price,
-            priceCurrency: 'USD',
-            availability:
-              variant.quantity > 0
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/OutOfStock',
-          },
-        })),
-      }),
-    additionalProperty: [
-      ...(product.variants
-        ?.filter((variant) => variant.color?.name)
-        .map((variant) => ({
-          '@type': 'PropertyValue',
-          name: 'رنگ',
-          value: variant.color!.name,
-        })) || []),
-      ...(product.variants
-        ?.filter((variant) => variant.size?.name)
-        .map((variant) => ({
-          '@type': 'PropertyValue',
-          name: 'سایز',
-          value: variant.size!.name,
-        })) || []),
-    ],
   }
 
-  // Breadcrumb structured data
   const breadcrumbData = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -318,26 +325,26 @@ const ProductDetailsPage = async ({
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'خانه',
-        item: process.env.NEXT_PUBLIC_SITE_URL,
+        name: t('home'),
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: product.category?.name || 'دسته‌بندی',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL}/categories/${product.subCategory?.url}`,
+        name: displayCategory.name,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/categories/${displayCategory.url}`,
       },
       {
         '@type': 'ListItem',
         position: 3,
-        name: product.subCategory?.name || 'زیردسته',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL}/subcategories/${product.subCategory?.url}`,
+        name: displaySubCategory.name,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/subcategories/${displaySubCategory.url}`,
       },
       {
         '@type': 'ListItem',
         position: 4,
-        name: product.name,
-        item: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}`,
+        name: displayProduct.name,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
       },
     ],
   }
@@ -357,7 +364,17 @@ const ProductDetailsPage = async ({
         }}
       />
       <ProductPage
-        data={product}
+        data={{
+          ...product,
+          name: displayProduct.name,
+          description: displayProduct.description,
+          keywords: displayProduct.keywords || '',
+          category: displayCategory,
+          subCategory: displaySubCategory,
+          offerTag: displayOfferTag,
+          specs: displaySpecs,
+          questions: displayQuestions,
+        }}
         selectedSizeId={selectedVariant.size?.id ?? ''}
         selectedColorId={selectedVariant.color?.id ?? ''}
         productAverageRating={
@@ -371,7 +388,7 @@ const ProductDetailsPage = async ({
         reviews={product.reviews}
         userId={user?.id ?? null}
         userReview={userReview}
-        relatedProducts={relatedProducts}
+        relatedProducts={displayRelatedProducts}
         isInWishList={!!isInWishList}
       />
     </div>

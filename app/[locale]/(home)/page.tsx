@@ -23,7 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     getHomePageReviews(),
   ])
 
-  const categoryNames = categories?.map((cat) => cat.name).slice(0, 5)
+  const categoryNames = categories
+    ?.map((cat) => cat.translations[0]?.name)
+    .slice(0, 5)
   const avgRating = !!reviews?.length
     ? (
         reviews?.reduce((sum, review) => sum + review.rating, 0) /
@@ -214,8 +216,8 @@ export default async function Home() {
               position: index + 1,
               item: {
                 '@type': 'Product',
-                name: product.name,
-                description: product.description,
+                name: product.translations[0]?.name,
+                description: product.translations[0]?.description,
                 image: product.images?.[0]?.url,
                 url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.slug}`,
 
@@ -245,8 +247,8 @@ export default async function Home() {
             position: index + 1,
             item: {
               '@type': 'Product',
-              name: product.name,
-              description: product.description,
+              name: product.translations[0]?.name,
+              description: product.translations[0]?.description,
               image: product.images?.[0]?.url,
               url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.slug}`,
 
