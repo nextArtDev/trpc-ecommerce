@@ -117,6 +117,8 @@
       "copySuccess": "Link copiato!",
       "copyError": "Errore nella copia del link"
     },
+    "noImage": "Nessuna Immagine", 
+    "goToSlide": "Vai alla slide {slide}",
     "views": "Visualizzazioni"
   },
   "products": {
@@ -128,6 +130,10 @@
     "error": {
       "title": "Errore di Caricamento",
       "description": "Si è verificato un problema durante il caricamento dei risultati della ricerca. Riprova."
+    },
+    "noProducts": {
+      "title": "Nessun Prodotto Trovato!",
+      "description": "Si prega di regolare i filtri o cercare qualcos'altro"
     }
   },
   "metadata": {
@@ -184,6 +190,16 @@
   "banner": {
     "message1": "Tutti i prodotti sono in pelle naturale e fatti a mano.",
     "message2": "Acquista ora!"
+  },
+ "subcategory": {
+    "notFound": {
+      "title": "Sottocategoria Non Trovata",
+      "description": "La sottocategoria che stavi cercando non è stata trovata."
+    },
+    "metaDescription": "Esplora {subcategoryName} di {categoryName}. {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}.",
+    "collectionImage": "Collezione {name}",
+    "defaultDescription": "Esplora la collezione {name}.",
+    "heroImageAlt": "Immagine di {name}"
   },
   "search": {
     "meta": {

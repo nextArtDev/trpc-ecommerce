@@ -117,7 +117,9 @@
       "copySuccess": "لینک کپی شد!",
       "copyError": "خطا در کپی لینک"
     },
-    "views": "مشاهده"
+    "views": "مشاهده",
+    "noImage": "بدون عکس", 
+    "goToSlide": "برو به اسلاید {slide}"
   },
    "products": {
     "allProducts": "همه محصولات",
@@ -128,6 +130,10 @@
     "error": {
       "title": "خطا در بارگذاری",
       "description": "مشکلی در بارگذاری نتایج جستجو رخ داده است. لطفاً دوباره تلاش کنید."
+    },
+    "noProducts": {
+      "title": "محصولی یافت نشد!",
+      "description": "لطفاً فیلترها را تغییر دهید یا عبارت دیگری جستجو کنید"
     }
   },
   "metadata": {
@@ -176,6 +182,22 @@
   "banner": {
     "message1": "تمام محصولات چرم طبیعی و بوسیله دست تهیه شده‌اند.",
     "message2": "همین حالا خرید کنید!"
+  },
+   "subcategory": {
+    "notFound": {
+      "title": "زیردسته یافت نشد",
+      "description": "زیردسته‌ای که به دنبال آن بودید یافت نشد."
+    },
+    "metaDescription": "{subcategoryName} از {categoryName}. {count, plural, =0 {هیچ محصولی یافت نشد} one {# محصول یافت شد} other {# محصول یافت شد}}.",
+    "collectionImage": "مجموعه {name}",
+    "defaultDescription": "مجموعه {name} را کاوش کنید.",
+    "heroImageAlt": "تصویر {name}"
+  },
+  "keywords": {
+    "shop": "خرید",
+    "buyOnline": "خرید آنلاین",
+    "premiumQuality": "کیفیت برتر",
+    "fastShipping": "ارسال سریع"
   },
    "search": {
     "meta": {

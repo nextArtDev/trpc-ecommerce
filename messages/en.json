@@ -128,6 +128,8 @@
       "copySuccess": "Link copied!",
       "copyError": "Failed to copy link"
     },
+    "noImage": "No Image", 
+    "goToSlide": "Go to slide {slide}",
     "views": "Views"
   },
   "products": {
@@ -139,6 +141,10 @@
     "error": {
       "title": "Loading Error",
       "description": "There was a problem loading the search results. Please try again."
+    },
+    "noProducts": {
+      "title": "No Products Found!",
+      "description": "Please adjust your filters or search for something else"
     }
   },
   "metadata": {
@@ -195,6 +201,16 @@
   "banner": {
     "message1": "All products are made of natural leather and handmade.",
     "message2": "Shop now!"
+  },
+   "subcategory": {
+    "notFound": {
+      "title": "Subcategory Not Found",
+      "description": "The subcategory you were looking for could not be found."
+    },
+    "metaDescription": "Explore {subcategoryName} from {categoryName}. {count, plural, =0 {No products found} one {# product found} other {# products found}}.",
+    "collectionImage": "{name} Collection",
+    "defaultDescription": "Explore the {name} collection.",
+    "heroImageAlt": "Image of {name}"
   },
   "search": {
     "meta": {

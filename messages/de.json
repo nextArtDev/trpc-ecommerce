@@ -117,6 +117,8 @@
       "copySuccess": "Link kopiert!",
       "copyError": "Fehler beim Kopieren des Links"
     },
+    "noImage": "Kein Bild", 
+    "goToSlide": "Gehe zu Folie {slide}",
     "views": "Ansichten"
   },
   "products": {
@@ -128,6 +130,10 @@
     "error": {
       "title": "Ladefehler",
       "description": "Beim Laden der Suchergebnisse ist ein Problem aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "noProducts": {
+      "title": "Keine Produkte Gefunden!",
+      "description": "Bitte passen Sie Ihre Filter an oder suchen Sie nach etwas anderem"
     }
   },
   "metadata": {
@@ -184,6 +190,16 @@
   "banner": {
     "message1": "Alle Produkte sind aus Naturleder und von Hand gefertigt.",
     "message2": "Jetzt einkaufen!"
+  },
+    "subcategory": {
+    "notFound": {
+      "title": "Unterkategorie Nicht Gefunden",
+      "description": "Die Unterkategorie, die Sie gesucht haben, konnte nicht gefunden werden."
+    },
+    "metaDescription": "Entdecken Sie {subcategoryName} von {categoryName}. {count, plural, =0 {Keine Produkte gefunden} one {# Produkt gefunden} other {# Produkte gefunden}}.",
+    "collectionImage": "{name} Kollektion",
+    "defaultDescription": "Entdecken Sie die {name} Kollektion.",
+    "heroImageAlt": "Bild von {name}"
   },
   "search": {
     "meta": {

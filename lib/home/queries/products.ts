@@ -1,17 +1,12 @@
 import { currentUser } from '@/lib/auth'
 import { Language, Prisma, Review } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
-import {
-  CategoryWithStats,
-  ProductDetails,
-  SearchFilters,
-  SubCategoryForHomePage,
-} from '@/lib/types/home'
+import { SearchFilters } from '@/lib/types/home'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
 import { getLocale } from 'next-intl/server'
 
-const getTranslationSelect = (locale: Language) => ({
+export const getTranslationSelect = (locale: Language) => ({
   where: { language: locale },
   select: {
     name: true,
@@ -860,6 +855,7 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
       url: slug,
     },
     include: {
+      translations: true,
       images: {
         select: { url: true },
       },
@@ -868,7 +864,7 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
           id: true, // You'll likely need this
           // name: true,
           translations: {
-            select: { name: true },
+            select: { name: true, description: true },
           },
           slug: true,
           brand: true,

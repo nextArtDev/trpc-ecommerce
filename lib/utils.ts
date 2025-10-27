@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -6,6 +7,7 @@ import qs from 'query-string'
 import { CartProductType } from './types/home'
 import { STORE_NAME } from '@/constants/store'
 import { Metadata } from 'next'
+import prisma from './prisma'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -29,7 +31,6 @@ const formatDistanceLocale = {
   almostXYears: '{{count}} سال',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function formatDistance(token: string, count: number, options?: any): string {
   options = options || {}
 
@@ -196,7 +197,6 @@ export const formatDateTime = (dateString: Date) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function formatError(error: any) {
   if (error.name === 'ZodError') {
     // Handle Zod error
@@ -245,6 +245,21 @@ export function formatError(error: any) {
 //   }
 // }
 
+export function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]*>/g, '').trim()
+}
+
+/**
+ * Truncate text to a specified length
+ */
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text
+  return text.substring(0, maxLength).trim() + '...'
+}
+
+/**
+ * Generate search metadata with translations
+ */
 export async function generateSearchMetadata(
   params: {
     q?: string
@@ -257,16 +272,12 @@ export async function generateSearchMetadata(
     colors?: string | string[]
     sizes?: string | string[]
   },
-  locale?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  translations?: any
+  locale: string,
+  t: any // Translation function from next-intl
 ): Promise<Metadata> {
   const query = params.q || ''
   const page = Number(params.page) || 1
   const isSearch = !!query
-
-  // Get translations if not provided
-  const t = translations || (await getTranslations('search'))
 
   // Build dynamic title and description
   let title = ''
@@ -274,29 +285,28 @@ export async function generateSearchMetadata(
   let keywords: string[] = []
 
   if (isSearch) {
-    title = t('meta.title', {
+    title = t('searchResultsTitle', {
       query,
-      page: page > 1 ? t('meta.page', { page }) : '',
+      page: page > 1 ? ` - ${t('page')} ${page}` : '',
     })
-    description = t('meta.description', { query })
+    description = t('searchResultsDescription', { query })
     keywords = [
       query,
       t('keywords.search'),
       t('keywords.products'),
+      t('keywords.onlineStore'),
       t('keywords.leatherStore'),
-      t('keywords.store'),
     ]
   } else {
-    title = t('meta.allProductsTitle', {
-      page: page > 1 ? t('meta.page', { page }) : '',
+    title = t('allProductsTitle', {
+      page: page > 1 ? ` - ${t('page')} ${page}` : '',
     })
-    description = t('meta.allProductsDescription')
+    description = t('allProductsDescription')
     keywords = [
       t('keywords.naturalLeather'),
       t('keywords.leatherBag'),
       t('keywords.onlineShopping'),
       t('keywords.leatherStore'),
-      t('keywords.store'),
     ]
   }
 
@@ -305,19 +315,29 @@ export async function generateSearchMetadata(
     const colors = Array.isArray(params.colors)
       ? params.colors
       : [params.colors]
-    keywords.push(...colors.map((c) => `${t('keywords.colorPrefix')}${c} `))
+    keywords.push(
+      ...colors.map((c) => t('keywords.colorProduct', { color: c }))
+    )
   }
 
   if (params.sizes) {
     const sizes = Array.isArray(params.sizes) ? params.sizes : [params.sizes]
-    keywords.push(...sizes.map((s) => ` ${t('keywords.sizePrefix')}${s}`))
+    keywords.push(...sizes.map((s) => t('keywords.size', { size: s })))
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  const currentUrl = new URL(`${baseUrl}/${locale || 'en'}/products`)
+  const currentUrl = new URL(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products` ||
+      `http://localhost:3000/${locale}/products`
+  )
 
   Object.entries(params).forEach(([key, value]) => {
-    if (value) currentUrl.searchParams.set(key, String(value))
+    if (value) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => currentUrl.searchParams.append(key, String(v)))
+      } else {
+        currentUrl.searchParams.set(key, String(value))
+      }
+    }
   })
 
   return {
@@ -327,14 +347,12 @@ export async function generateSearchMetadata(
 
     openGraph: {
       type: 'website',
-      title: isSearch
-        ? t('og.searchTitle', { query })
-        : t('og.allProductsTitle'),
+      title: isSearch ? t('searchTitle', { query }) : t('productsTitle'),
       description,
       url: currentUrl.toString(),
       siteName: STORE_NAME,
       images: ['/default-search-og.jpg'],
-      locale: locale === 'fa' ? 'fa_IR' : 'en_US',
+      locale: locale,
     },
 
     twitter: {
@@ -358,11 +376,21 @@ export async function generateSearchMetadata(
     alternates: {
       canonical: page === 1 ? currentUrl.toString() : undefined,
       languages: {
-        fa: `${baseUrl}/fa/products${currentUrl.search}`,
-        en: `${baseUrl}/en/products${currentUrl.search}`,
-        de: `${baseUrl}/de/products${currentUrl.search}`,
-        fr: `${baseUrl}/fr/products${currentUrl.search}`,
-        it: `${baseUrl}/it/products${currentUrl.search}`,
+        fa: `${process.env.NEXT_PUBLIC_SITE_URL}/fa/products${
+          params.q ? `?q=${params.q}` : ''
+        }`,
+        en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products${
+          params.q ? `?q=${params.q}` : ''
+        }`,
+        de: `${process.env.NEXT_PUBLIC_SITE_URL}/de/products${
+          params.q ? `?q=${params.q}` : ''
+        }`,
+        fr: `${process.env.NEXT_PUBLIC_SITE_URL}/fr/products${
+          params.q ? `?q=${params.q}` : ''
+        }`,
+        it: `${process.env.NEXT_PUBLIC_SITE_URL}/it/products${
+          params.q ? `?q=${params.q}` : ''
+        }`,
       },
     },
 
@@ -373,10 +401,6 @@ export async function generateSearchMetadata(
     },
   }
 }
-
-// utils/rateLimit.ts
-import prisma from '@/lib/prisma'
-import { getTranslations } from 'next-intl/server'
 
 export async function checkRateLimit(userId: string) {
   const oneHourAgo = new Date(Date.now() - 1000 * 60 * 60)

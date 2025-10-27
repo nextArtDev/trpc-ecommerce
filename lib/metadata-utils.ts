@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // lib/utils/metadata.ts
 
 /**
@@ -40,9 +41,6 @@ export function truncateText(
   return truncated + '...'
 }
 
-/**
- * Creates an optimized meta description from rich text content
- */
 export function createMetaDescription({
   productName,
   brandName,
@@ -51,8 +49,7 @@ export function createMetaDescription({
   reviewCount,
   availableVariants,
   maxLength = 155,
-  locale = 'en',
-  translations,
+  t,
 }: {
   productName: string
   brandName: string
@@ -61,24 +58,8 @@ export function createMetaDescription({
   reviewCount?: number
   availableVariants?: number
   maxLength?: number
-  locale?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  translations?: any
+  t?: any // Translation function (optional for backwards compatibility)
 }): string {
-  // Get translations if not provided
-  const t = translations || {
-    buy: locale === 'fa' ? 'خرید' : 'Buy',
-    from: locale === 'fa' ? 'از' : 'from',
-    rating: locale === 'fa' ? 'امتیاز' : 'Rating',
-    fromCustomers: locale === 'fa' ? 'از خریدار' : 'from customers',
-    availableIn: locale === 'fa' ? 'موجود در' : 'Available in',
-    models: locale === 'fa' ? 'مدل' : 'models',
-    fastShipping:
-      locale === 'fa'
-        ? 'ارسال سریع به تمام نقاط کشور'
-        : 'Fast shipping nationwide',
-  }
-
   let cleanDescription = ''
 
   if (description) {
@@ -86,68 +67,116 @@ export function createMetaDescription({
     const strippedDescription = stripHtmlTags(description)
 
     // Create a more SEO-friendly description
-    cleanDescription = `${t.buy} ${productName} ${t.from} ${brandName}. ${strippedDescription}`
+    if (t) {
+      cleanDescription =
+        t('metaDescription.buy', {
+          productName,
+          brandName,
+        }) +
+        '. ' +
+        strippedDescription
 
-    // Add rating info if available
-    if (reviewCount && reviewCount > 0 && avgRating) {
-      cleanDescription += ` | ${t.rating} ${avgRating.toFixed(1)}/5 ${
-        t.fromCustomers
-      } ${reviewCount}`
+      // Add rating info if available
+      if (reviewCount && reviewCount > 0 && avgRating) {
+        cleanDescription +=
+          ' | ' +
+          t('metaDescription.rating', {
+            rating: avgRating.toFixed(1),
+            count: reviewCount,
+          })
+      }
+
+      // Add availability info
+      if (availableVariants && availableVariants > 0) {
+        cleanDescription +=
+          ' | ' +
+          t('metaDescription.variants', {
+            count: availableVariants,
+          })
+      }
+
+      cleanDescription += ' | ' + t('metaDescription.shipping')
+    } else {
+      // Fallback to Persian (for backwards compatibility)
+      cleanDescription = `خرید ${productName} از ${brandName}. ${strippedDescription}`
+
+      if (reviewCount && reviewCount > 0 && avgRating) {
+        cleanDescription += ` | امتیاز ${avgRating.toFixed(
+          1
+        )}/5 از ${reviewCount} خریدار`
+      }
+
+      if (availableVariants && availableVariants > 0) {
+        cleanDescription += ` | موجود در ${availableVariants} مدل`
+      }
+
+      cleanDescription += ' | ارسال سریع به تمام نقاط کشور'
     }
 
-    // Add availability info
-    if (availableVariants && availableVariants > 0) {
-      cleanDescription += ` | ${t.availableIn} ${availableVariants} ${t.models}`
-    }
-
-    cleanDescription += ` | ${t.fastShipping}`
-
-    // Truncate to optimal length
     cleanDescription = truncateText(cleanDescription, maxLength)
   } else {
     // Fallback description if no product description exists
-    cleanDescription = `${t.buy} ${productName} ${t.from} ${brandName}.${
-      reviewCount && reviewCount > 0 && avgRating
-        ? ` ${t.rating} ${avgRating.toFixed(1)}/5 ${
-            t.fromCustomers
-          } ${reviewCount}.`
-        : ''
-    } ${
-      availableVariants
-        ? `${t.availableIn} ${availableVariants} ${t.models}.`
-        : ''
-    } ${t.fastShipping}.`
+    if (t) {
+      cleanDescription =
+        t('metaDescription.buy', { productName, brandName }) + '.'
+
+      if (reviewCount && reviewCount > 0 && avgRating) {
+        cleanDescription +=
+          ' ' +
+          t('metaDescription.rating', {
+            rating: avgRating.toFixed(1),
+            count: reviewCount,
+          }) +
+          '.'
+      }
+
+      if (availableVariants) {
+        cleanDescription +=
+          ' ' +
+          t('metaDescription.variants', {
+            count: availableVariants,
+          }) +
+          '.'
+      }
+
+      cleanDescription += ' ' + t('metaDescription.shipping') + '.'
+    } else {
+      // Fallback to Persian
+      cleanDescription = `خرید ${productName} از ${brandName}.`
+
+      if (reviewCount && reviewCount > 0 && avgRating) {
+        cleanDescription += ` امتیاز ${avgRating.toFixed(
+          1
+        )}/5 از ${reviewCount} خریدار.`
+      }
+
+      if (availableVariants) {
+        cleanDescription += ` موجود در ${availableVariants} مدل.`
+      }
+
+      cleanDescription += ' ارسال سریع به تمام نقاط کشور.'
+    }
 
     cleanDescription = truncateText(cleanDescription, maxLength)
   }
 
   return cleanDescription
 }
+
 /**
  * Generates SEO-friendly keywords from product data
  */
-export function generateProductKeywords(
-  product: {
-    name: string
-    brand?: string | null
-    subCategory?: { name: string } | null
-    variants?: Array<{
-      color?: { name: string } | null
-      size?: { name: string } | null
-    }>
-  },
-  locale = 'en',
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  translations?: any
-): string[] {
-  // Get translations if not provided
-  const t = translations || {
-    onlineShopping: locale === 'fa' ? 'خرید آنلاین' : 'Online shopping',
-    store: locale === 'fa' ? 'فروشگاه' : 'Store',
-    bestQuality: locale === 'fa' ? 'بهترین کیفیت' : 'Best quality',
-    fastShipping: locale === 'fa' ? 'ارسال سریع' : 'Fast shipping',
-  }
-
+export function generateProductKeywords(product: {
+  name: string
+  description?: string
+  keywords?: string
+  brand?: string | null
+  subCategory?: { name: string } | null
+  variants?: Array<{
+    color?: { name: string } | null
+    size?: { name: string } | null
+  }>
+}): string[] {
   const keywords: string[] = [
     product.name.toLowerCase(),
     ...(product.brand ? [product.brand.toLowerCase()] : []),
@@ -156,31 +185,42 @@ export function generateProductKeywords(
       : []),
   ]
 
+  // Add custom keywords if provided
+  if (product.keywords) {
+    const customKeywords = product.keywords
+      .split(',')
+      .map((k) => k.trim().toLowerCase())
+      .filter(Boolean)
+    keywords.push(...customKeywords)
+  }
+
+  // Extract keywords from description
+  if (product.description) {
+    const descWords = stripHtmlTags(product.description)
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((word) => word.length > 3) // Only words longer than 3 chars
+      .slice(0, 5) // Take first 5 words
+    keywords.push(...descWords)
+  }
+
   // Add color variations
   if (product.variants) {
     const colors = product.variants
       .map((v) => v.color?.name)
       .filter(Boolean)
       .map((color) => color!.toLowerCase())
-    keywords.push(...new Set(colors)) // Remove duplicates
+    keywords.push(...new Set(colors))
 
     // Add size variations
     const sizes = product.variants
       .map((v) => v.size?.name)
       .filter(Boolean)
       .map((size) => size!.toLowerCase())
-    keywords.push(...new Set(sizes)) // Remove duplicates
+    keywords.push(...new Set(sizes))
   }
 
-  // Add common e-commerce keywords
-  keywords.push(
-    t.onlineShopping.toLowerCase(),
-    t.store.toLowerCase(),
-    t.bestQuality.toLowerCase(),
-    t.fastShipping.toLowerCase()
-  )
-
-  return [...new Set(keywords)] // Remove any remaining duplicates
+  return [...new Set(keywords)] // Remove duplicates
 }
 
 /**

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Language } from '@/lib/generated/prisma'
 
 // Type for any entity that has translations
 type TranslatableEntity<T> = {
@@ -213,7 +212,7 @@ export function getName<T extends { name: string }>(translations: T[]): string {
 /**
  * Helper to safely get description from translations array
  */
-export function getDescription<T extends { description?: string }>(
+export function getDescription<T extends { description?: string | null }>(
   translations: T[]
 ): string {
   return translations[0]?.description || ''

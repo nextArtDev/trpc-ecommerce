@@ -1,14 +1,16 @@
-import { getAllCategories, searchProducts } from '@/lib/home/queries/products'
-import { getFiltersData } from '@/lib/home/queries/products' // Add this function
+// app/[locale]/search/page.tsx
 
+import { getAllCategories, searchProducts } from '@/lib/home/queries/products'
+import { getFiltersData } from '@/lib/home/queries/products'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-
 import { parseSearchParams } from './components/utils'
 import SearchPageClient from './components/SearchPageClient'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { generateSearchMetadata } from '@/lib/utils'
+import { getName } from '@/lib/translation-utils'
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -28,11 +30,18 @@ export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
   const params = await searchParams
-  return generateSearchMetadata(params)
+  const locale = await getLocale()
+  const t = await getTranslations('products')
+
+  return generateSearchMetadata(params, locale, t)
 }
 
 async function SearchPageContent({ searchParams }: SearchPageProps) {
   const params = await searchParams
+  const locale = await getLocale()
+  const t = await getTranslations('products')
+  const tHome = await getTranslations('home')
+
   const filters = parseSearchParams(params)
 
   try {
@@ -43,13 +52,138 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
       getAllCategories({}),
     ])
 
+    // Transform categories to include name field
+    const transformedCategories = categoriesData.categories.map((cat) => ({
+      ...cat,
+      name: getName(cat.translations),
+    }))
+
+    // Transform search results to include name and description
+    const transformedProducts = searchResults.products.map((product) => ({
+      ...product,
+      name: getName(product.translations),
+      description: product.translations[0]?.description || '',
+    }))
+
+    // Build breadcrumb structured data
+    const breadcrumbData = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: tHome('breadcrumb.home'),
+          item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: params.q ? t('searchResults') : t('allProducts'),
+          item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/search`,
+        },
+        ...(params.q
+          ? [
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: `"${params.q}"`,
+                item: `${
+                  process.env.NEXT_PUBLIC_SITE_URL
+                }/${locale}/search?q=${encodeURIComponent(params.q)}`,
+              },
+            ]
+          : []),
+      ],
+    }
+
+    // Build search results structured data
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': params.q ? 'SearchResultsPage' : 'CollectionPage',
+      name: params.q
+        ? t('searchResultsFor', { query: params.q })
+        : t('allProducts'),
+      description: params.q
+        ? t('searchResultsDescription', {
+            query: params.q,
+            count: transformedProducts.length,
+          })
+        : t('allProductsDescription', {
+            count: transformedProducts.length,
+          }),
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/search${
+        params.q ? `?q=${encodeURIComponent(params.q)}` : ''
+      }`,
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: transformedProducts.length,
+        itemListElement: transformedProducts
+          .slice(0, 20)
+          .map((product, index) => {
+            const firstVariant = product.variants[0]
+            const price = firstVariant
+              ? firstVariant.price -
+                firstVariant.price * (firstVariant.discount / 100)
+              : 0
+
+            return {
+              '@type': 'ListItem',
+              position: index + 1,
+              item: {
+                '@type': 'Product',
+                name: product.name,
+                description: product.brand || product.description,
+                image: product.images?.[0]?.url,
+                url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${product.slug}`,
+                offers: {
+                  '@type': 'Offer',
+                  price: price,
+                  priceCurrency: 'IRR',
+                  availability:
+                    firstVariant && firstVariant.quantity > 0
+                      ? 'https://schema.org/InStock'
+                      : 'https://schema.org/OutOfStock',
+                },
+                ...(product.rating > 0 && {
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: product.rating.toFixed(1),
+                    reviewCount: product.numReviews || 0,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                }),
+              },
+            }
+          }),
+      },
+    }
+
     return (
-      <SearchPageClient
-        initialResults={searchResults}
-        filtersData={filtersData}
-        categories={categoriesData.categories}
-        initialFilters={filters}
-      />
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbData),
+          }}
+        />
+        <SearchPageClient
+          initialResults={{
+            ...searchResults,
+            products: transformedProducts,
+          }}
+          filtersData={filtersData}
+          categories={transformedCategories}
+          initialFilters={filters}
+        />
+      </>
     )
   } catch (error) {
     console.error('Search page error:', error)
@@ -57,15 +191,15 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
   }
 }
 
-function SearchError() {
+async function SearchError() {
+  const t = await getTranslations('products')
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardContent className="py-12 text-center">
-          <div className="text-lg font-medium mb-2">خطا در بارگذاری</div>
-          <div className="text-muted-foreground">
-            مشکلی در بارگذاری نتایج جستجو رخ داده است. لطفاً دوباره تلاش کنید.
-          </div>
+          <div className="text-lg font-medium mb-2">{t('error.title')}</div>
+          <div className="text-muted-foreground">{t('error.description')}</div>
         </CardContent>
       </Card>
     </div>

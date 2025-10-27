@@ -5,7 +5,6 @@ import {
   getRelatedProducts,
 } from '@/lib/home/queries/products'
 import { notFound } from 'next/navigation'
-import React from 'react'
 import ProductPage from '../components/ProductPage'
 import { currentUser } from '@/lib/auth'
 import prisma from '@/lib/prisma'
@@ -17,7 +16,7 @@ import {
   stripHtmlTags,
   truncateText,
 } from '@/lib/metadata-utils'
-import { getTranslations, getLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import { getIsWhishedByUser } from '@/lib/home/queries/user'
 import { getName, getProductTranslation } from '@/lib/translation-utils'
 
@@ -75,11 +74,12 @@ export async function generateMetadata({
     maxLength: 155,
   })
 
-  const categoryName = getName(product.category.translations)
+  // const categoryName = getName(product.category.translations)
   const subCategoryName = getName(product.subCategory.translations)
 
   const keywords = generateProductKeywords({
     name: productName,
+    description: productDescription,
     keywords: productTranslation.keywords || '',
     brand: product.brand,
     subCategory: { name: subCategoryName },

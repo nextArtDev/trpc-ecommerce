@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import ProductCard from '@/components/product/product-card'
 import { Card, CardContent } from '@/components/ui/card'
-
 import { Skeleton } from '@/components/ui/skeleton'
 import { SearchProduct } from '@/lib/types/home'
+import { useTranslations } from 'next-intl'
 
 interface ProductGridProps {
   products: SearchProduct[]
@@ -16,9 +16,11 @@ export default function ProductGrid({
   loading = false,
   isInSearchPage = true,
 }: ProductGridProps) {
+  const t = useTranslations('products')
+
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4   gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {Array.from({ length: 12 }).map((_, i) => (
           <Card key={i} className="rounded-none">
             <CardContent className="p-4">
@@ -37,10 +39,12 @@ export default function ProductGrid({
     return (
       <Card className="rounded-none">
         <CardContent className="py-12 text-center">
-          <div className="text-lg font-medium mb-2">محصولی یافت نشد!</div>
+          <div className="text-lg font-medium mb-2">
+            {t('noProducts.title')}
+          </div>
           {isInSearchPage && (
             <div className="text-muted-foreground">
-              لطفاً فیلترها را تغییر دهید یا عبارت دیگری جستجو کنید
+              {t('noProducts.description')}
             </div>
           )}
         </CardContent>
@@ -49,7 +53,7 @@ export default function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-0.5">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0.5">
       {products.map((product) => (
         <Suspense key={product.id} fallback={<ProductCardSkeleton />}>
           <ProductCard product={product} />
