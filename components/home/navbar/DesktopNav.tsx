@@ -13,6 +13,7 @@ import { CurrentUserType, NavigationData } from '@/lib/types/home'
 import { ListItem } from './MainNav'
 import { cn } from '@/lib/utils'
 import { TransitionLink } from '../shared/TransitionLink'
+import { useLocale, useTranslations } from 'next-intl'
 
 type Props = {
   navigation: NavigationData
@@ -20,9 +21,13 @@ type Props = {
 }
 
 const DesktopNav = ({ navigation, session }: Props) => {
+  const locale = useLocale()
+  const t = useTranslations('navigation')
+  const isRTL = locale === 'fa'
+
   return (
     <div>
-      <NavigationMenu dir="rtl" className="hidden lg:block">
+      <NavigationMenu dir={isRTL ? 'rtl' : 'ltr'} className="hidden lg:block">
         <NavigationMenuList>
           {navigation.categories.map((category) => (
             <NavigationMenuItem key={category.name}>
@@ -67,13 +72,13 @@ const DesktopNav = ({ navigation, session }: Props) => {
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <TransitionLink
-                  href={'/dashboard'}
+                  href={`/${locale}/dashboard`}
                   className={cn(
                     navigationMenuTriggerStyle(),
                     'bg-primary text-secondary'
                   )}
                 >
-                  دشبورد
+                  {t('dashboard')}
                 </TransitionLink>
               </NavigationMenuLink>
             </NavigationMenuItem>

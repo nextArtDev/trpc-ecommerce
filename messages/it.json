@@ -122,5 +122,23 @@
   "discoverMore": {
     "title": "Scopri di Più",
     "viewCategory": "Vedi {name}"
+  },
+   "navigation": {
+    "home": "Home",
+    "about": "Chi Siamo",
+    "contact": "Contatti",
+    "faq": "FAQ",
+    "view": "Vedi",
+    "closeMenu": "Chiudi menu di navigazione",
+    "openMenu": "Apri menu di navigazione",
+    "expanded": "espanso",
+    "collapsed": "compresso",
+    "signIn": "Accedi/Registrati",
+    "profile": "Profilo",
+    "dashboard": "Dashboard"
+  },
+  "banner": {
+    "message1": "Tutti i prodotti sono in pelle naturale e fatti a mano.",
+    "message2": "Acquista ora!"
   }
 }

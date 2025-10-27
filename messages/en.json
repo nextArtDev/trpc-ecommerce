@@ -122,5 +122,23 @@
   "discoverMore": {
     "title": "Discover More",
     "viewCategory": "View {name}"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "faq": "FAQ",
+    "view": "View",
+    "closeMenu": "Close navigation menu",
+    "openMenu": "Open navigation menu",
+    "expanded": "expanded",
+    "collapsed": "collapsed",
+    "signIn": "Sign In/Register",
+    "profile": "Profile",
+    "dashboard": "Dashboard"
+  },
+  "banner": {
+    "message1": "All products are made of natural leather and handmade.",
+    "message2": "Shop now!"
   }
 }

@@ -114,5 +114,23 @@
    "discoverMore": {
     "title": "بیشتر",
     "viewCategory": "{name} دیدن"
+  },
+  "navigation": {
+    "home": "خانه",
+    "about": "درباره ما",
+    "contact": "ارتباط با ما",
+    "faq": "سوالات متداول",
+    "view": "مشاهده",
+    "closeMenu": "بستن منوی ناوبری",
+    "openMenu": "باز کردن منوی ناوبری",
+    "expanded": "باز شده",
+    "collapsed": "بسته شده",
+    "signIn": "ورود/عضویت",
+    "profile": "پروفایل",
+    "dashboard": "دشبورد"
+  },
+  "banner": {
+    "message1": "تمام محصولات چرم طبیعی و بوسیله دست تهیه شده‌اند.",
+    "message2": "همین حالا خرید کنید!"
   }
 }

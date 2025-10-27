@@ -122,5 +122,23 @@
   "discoverMore": {
    "title": "Découvrir Plus",
     "viewCategory": "Voir {name}"
+  },
+   "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "view": "Voir",
+    "closeMenu": "Fermer le menu de navigation",
+    "openMenu": "Ouvrir le menu de navigation",
+    "expanded": "développé",
+    "collapsed": "réduit",
+    "signIn": "Connexion/Inscription",
+    "profile": "Profil",
+    "dashboard": "Tableau de bord"
+  },
+  "banner": {
+    "message1": "Tous les produits sont en cuir naturel et faits à la main.",
+    "message2": "Achetez maintenant!"
   }
 }

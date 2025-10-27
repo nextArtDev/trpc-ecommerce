@@ -13,6 +13,7 @@ import Logo from './Logo'
 import TopBanner from './TopBanner'
 import { TransitionLink } from '../shared/TransitionLink'
 import LanguageSwitcher from '@/components/shared/language-switcher'
+import { useTranslations } from 'next-intl'
 
 export const ListItem = React.forwardRef<
   HTMLAnchorElement,
@@ -21,6 +22,7 @@ export const ListItem = React.forwardRef<
     children: React.ReactNode
   }
 >(({ className, title, children, href, ...props }, ref) => {
+  const t = useTranslations('navigation')
   return (
     <NavigationMenuLink asChild>
       <TransitionLink
@@ -37,7 +39,7 @@ export const ListItem = React.forwardRef<
           {title}
         </div>
         <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-          مشاهده
+          {t('view')}
         </p>
       </TransitionLink>
     </NavigationMenuLink>
@@ -53,6 +55,7 @@ export default function MainNav({
   session: CurrentUserType
 }) {
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  // const t = useTranslations('navigation')
 
   const toggleSearch = React.useCallback(() => {
     setIsSearchOpen((prev) => !prev)

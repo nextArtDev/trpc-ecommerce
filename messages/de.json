@@ -122,5 +122,23 @@
   "discoverMore": {
     "title": "Mehr Entdecken",
     "viewCategory": "{name} Ansehen"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "faq": "FAQ",
+    "view": "Ansehen",
+    "closeMenu": "Navigationsmenü schließen",
+    "openMenu": "Navigationsmenü öffnen",
+    "expanded": "erweitert",
+    "collapsed": "zusammengeklappt",
+    "signIn": "Anmelden/Registrieren",
+    "profile": "Profil",
+    "dashboard": "Dashboard"
+  },
+  "banner": {
+    "message1": "Alle Produkte sind aus Naturleder und von Hand gefertigt.",
+    "message2": "Jetzt einkaufen!"
   }
 }

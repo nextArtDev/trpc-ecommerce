@@ -5,6 +5,7 @@ import { motion, AnimatePresence, easeInOut } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { CurrentUserType, NavigationData } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
+import { useTranslations } from 'next-intl'
 
 interface MobileNavProps {
   navigation: NavigationData
@@ -14,7 +15,7 @@ interface MobileNavProps {
 export default function MobileNav({ navigation, session }: MobileNavProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-
+  const t = useTranslations('navigation')
   const mobileMenuVariants = {
     closed: {
       opacity: 0,
@@ -103,8 +104,8 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
                         .toLowerCase()}`}
                       aria-label={`${category.name}, ${
                         expandedCategory === category.name
-                          ? 'expanded'
-                          : 'collapsed'
+                          ? t('expanded')
+                          : t('collapsed')
                       }`}
                     >
                       <span>{category.name}</span>
@@ -169,7 +170,7 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
                     className="text-foreground hover:bg-muted block w-full rounded-lg py-3 text-center font-medium transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    ورود/عضویت
+                    {t('signIn')}
                   </TransitionLink>
                 ) : (
                   <TransitionLink
@@ -178,7 +179,7 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
                     className="bg-foreground text-background hover:bg-foreground/90 block w-full rounded-lg py-3 text-center font-medium transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    پروفایل
+                    {t('profile')}
                   </TransitionLink>
                 )}
               </motion.div>
@@ -193,7 +194,7 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
                     className="text-foreground hover:bg-muted block w-full rounded-lg py-3 text-center font-medium transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    دشبورد
+                    {t('dashboard')}
                   </TransitionLink>
                 </motion.div>
               )}
