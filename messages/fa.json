@@ -132,5 +132,47 @@
   "banner": {
     "message1": "تمام محصولات چرم طبیعی و بوسیله دست تهیه شده‌اند.",
     "message2": "همین حالا خرید کنید!"
+  },
+  "footer": {
+    "quickLinks": {
+      "title": "دسترسی سریع",
+      "home": "خانه",
+      "products": "محصولات",
+      "about": "درباره ما",
+      "contact": "ارتباط با ما",
+      "faq": "سوالات متداول"
+    },
+    "contact": {
+      "title": "ارتباط با ما",
+      "address": "خوزستان",
+      "city": "دزفول",
+      "phone": "",
+      "email": ""
+    },
+    "followUs": {
+      "title": "ما را دنبال کنید",
+      "facebook": "فیسبوک",
+      "facebookTooltip": "ما را در فیسبوک دنبال کنید",
+      "twitter": "توییتر",
+      "twitterTooltip": "ما را در توییتر دنبال کنید",
+      "instagram": "اینستاگرام",
+      "instagramTooltip": "ما را در اینستاگرام دنبال کنید",
+      "linkedin": "لینکدین",
+      "linkedinTooltip": "با ما در لینکدین ارتباط برقرار کنید"
+    },
+    "copyright": "سعید",
+    "allRightsReserved": "تمام حقوق محفوظ است",
+    "legal": {
+      "privacyPolicy": "سیاست حفظ حریم خصوصی",
+      "termsOfService": "شرایط استفاده",
+      "cookieSettings": "تنظیمات کوکی"
+    },
+    "chat": {
+      "title": "چت زنده",
+      "support": "پشتیبانی",
+      "welcomeMessage": "سلام! چگونه می‌توانم به شما کمک کنم؟",
+      "placeholder": "پیام خود را تایپ کنید...",
+      "send": "ارسال پیام"
+    }
   }
 }

@@ -140,5 +140,47 @@
   "banner": {
     "message1": "Alle Produkte sind aus Naturleder und von Hand gefertigt.",
     "message2": "Jetzt einkaufen!"
+  },
+  "footer": {
+    "quickLinks": {
+      "title": "Schnelllinks",
+      "home": "Startseite",
+      "products": "Produkte",
+      "about": "Über uns",
+      "contact": "Kontakt",
+      "faq": "FAQ"
+    },
+    "contact": {
+      "title": "Kontakt",
+     "address": "Iran - Khouzestan",
+      "city": "Deezful",
+      "phone": "",
+      "email": ""
+    },
+    "followUs": {
+      "title": "Folgen Sie uns",
+      "facebook": "Facebook",
+      "facebookTooltip": "Folgen Sie uns auf Facebook",
+      "twitter": "Twitter",
+      "twitterTooltip": "Folgen Sie uns auf Twitter",
+      "instagram": "Instagram",
+      "instagramTooltip": "Folgen Sie uns auf Instagram",
+      "linkedin": "LinkedIn",
+      "linkedinTooltip": "Verbinden Sie sich mit uns auf LinkedIn"
+    },
+    "copyright": "Saeid",
+    "allRightsReserved": "Alle Rechte vorbehalten",
+    "legal": {
+      "privacyPolicy": "Datenschutzerklärung",
+      "termsOfService": "Nutzungsbedingungen",
+      "cookieSettings": "Cookie-Einstellungen"
+    },
+    "chat": {
+      "title": "Live-Chat",
+      "support": "Support",
+      "welcomeMessage": "Hallo! Wie kann ich Ihnen heute helfen?",
+      "placeholder": "Nachricht eingeben...",
+      "send": "Nachricht senden"
+    }
   }
 }

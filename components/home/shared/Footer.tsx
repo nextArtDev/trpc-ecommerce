@@ -10,90 +10,73 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Facebook, Instagram, Linkedin, Send, Twitter } from 'lucide-react'
-
 import * as React from 'react'
 import { TransitionLink } from './TransitionLink'
 import { STORE_NAME } from '@/constants/store'
+import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 
 export default function Footer() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isChatOpen, setIsChatOpen] = React.useState(false)
+  const locale = useLocale()
+  const t = useTranslations('footer')
 
   return (
     <footer className="relative border-t bg-background text-foreground transition-colors duration-300">
       <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
         <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {/* <div className="relative">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight">
-              Stay Connected
-            </h2>
-            <p className="mb-6 text-muted-foreground">
-              Join our newsletter for the latest updates and exclusive offers.
-            </p>
-            <form className="relative">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="pr-12 backdrop-blur-sm"
-              />
-              <Button
-                type="submit"
-                size="icon"
-                className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105"
-              >
-                <Send className="h-4 w-4" />
-                <span className="sr-only">Subscribe</span>
-              </Button>
-            </form>
-            <div className="absolute -right-4 top-0 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
-          </div> */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">دسترسی سریع</h3>
+            <h3 className="mb-4 text-lg font-semibold">
+              {t('quickLinks.title')}
+            </h3>
             <nav className="space-y-2 text-sm">
               <TransitionLink
-                href="/"
+                href={`/${locale}`}
                 className="block transition-colors hover:text-primary"
               >
-                خانه
+                {t('quickLinks.home')}
               </TransitionLink>
               <TransitionLink
-                href="/products"
+                href={`/${locale}/products`}
                 className="block transition-colors hover:text-primary"
               >
-                محصولات
+                {t('quickLinks.products')}
               </TransitionLink>
               <TransitionLink
-                href="/about-us"
+                href={`/${locale}/about-us`}
                 className="block transition-colors hover:text-primary"
               >
-                درباره ما
+                {t('quickLinks.about')}
               </TransitionLink>
               <TransitionLink
-                href="/contact-us"
+                href={`/${locale}/contact-us`}
                 className="block transition-colors hover:text-primary"
               >
-                ارتباط با ما
+                {t('quickLinks.contact')}
               </TransitionLink>
               <TransitionLink
-                href="/faq"
+                href={`/${locale}/faq`}
                 className="block transition-colors hover:text-primary"
               >
-                سوالات متداول
+                {t('quickLinks.faq')}
               </TransitionLink>
             </nav>
           </div>
           <div>
-            <h3 className="mb-4 text-lg font-semibold">ارتباط با ما</h3>
+            <h3 className="mb-4 text-lg font-semibold">{t('contact.title')}</h3>
             <address className="space-y-2 text-sm not-italic">
-              <p>123 Innovation Street</p>
-              <p>Tech City, TC 12345</p>
-              <p>Phone: (123) 456-7890</p>
-              <p>Email: hello@example.com</p>
+              <p>{t('contact.address')}</p>
+              <p>{t('contact.city')}</p>
+              <p>{t('contact.phone')}</p>
+              <p>{t('contact.email')}</p>
             </address>
           </div>
           <div className="relative">
-            <h3 className="mb-4   text-lg font-semibold">ما را دنبال کنید</h3>
-            <div className="mb-6 flex items-center  space-x-4">
+            <h3 className="mb-4 text-lg font-semibold">
+              {t('followUs.title')}
+            </h3>
+            <div className="mb-6 flex items-center space-x-4">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -101,13 +84,14 @@ export default function Footer() {
                       variant="outline"
                       size="icon"
                       className="rounded-full"
+                      aria-label={t('followUs.facebook')}
                     >
                       <Facebook className="h-4 w-4" />
-                      <span className="sr-only">Facebook</span>
+                      <span className="sr-only">{t('followUs.facebook')}</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Facebook</p>
+                    <p>{t('followUs.facebookTooltip')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -118,13 +102,14 @@ export default function Footer() {
                       variant="outline"
                       size="icon"
                       className="rounded-full"
+                      aria-label={t('followUs.twitter')}
                     >
                       <Twitter className="h-4 w-4" />
-                      <span className="sr-only">Twitter</span>
+                      <span className="sr-only">{t('followUs.twitter')}</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Twitter</p>
+                    <p>{t('followUs.twitterTooltip')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -135,13 +120,14 @@ export default function Footer() {
                       variant="outline"
                       size="icon"
                       className="rounded-full"
+                      aria-label={t('followUs.instagram')}
                     >
                       <Instagram className="h-4 w-4" />
-                      <span className="sr-only">Instagram</span>
+                      <span className="sr-only">{t('followUs.instagram')}</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Instagram</p>
+                    <p>{t('followUs.instagramTooltip')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -152,92 +138,70 @@ export default function Footer() {
                       variant="outline"
                       size="icon"
                       className="rounded-full"
+                      aria-label={t('followUs.linkedin')}
                     >
                       <Linkedin className="h-4 w-4" />
-                      <span className="sr-only">LinkedIn</span>
+                      <span className="sr-only">{t('followUs.linkedin')}</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Connect with us on LinkedIn</p>
+                    <p>{t('followUs.linkedinTooltip')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
             <div className="w-fit p-1">
-              <ThemeSwitcher
-              // defaultValue="light"
-              // onChange={setTheme}
-              // value={theme as 'light' | 'dark' | 'system'}
-              />
+              <ThemeSwitcher />
             </div>
-            {/* <div className="flex items-center space-x-2">
-              <Sun className="h-4 w-4" />
-              <Switch
-                id="dark-mode"
-                checked={isDarkMode}
-                onCheckedChange={setIsDarkMode}
-              />
-              <Moon className="h-4 w-4" />
-              <Label htmlFor="dark-mode" className="sr-only">
-                Toggle dark mode
-              </Label>
-            </div> */}
           </div>
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Saeid. All rights reserved.
+            © {new Date().getFullYear()} {t('copyright')}.{' '}
+            {t('allRightsReserved')}.
           </p>
           <nav className="flex gap-4 text-sm">
             <TransitionLink
-              href="#"
+              href={`/${locale}/privacy-policy`}
               className="transition-colors hover:text-primary"
             >
-              Privacy Policy
+              {t('legal.privacyPolicy')}
             </TransitionLink>
             <TransitionLink
-              href="#"
+              href={`/${locale}/terms-of-service`}
               className="transition-colors hover:text-primary"
             >
-              Terms of Service
+              {t('legal.termsOfService')}
             </TransitionLink>
             <TransitionLink
-              href="#"
+              href={`/${locale}/cookie-settings`}
               className="transition-colors hover:text-primary"
             >
-              Cookie Settings
+              {t('legal.cookieSettings')}
             </TransitionLink>
           </nav>
         </div>
       </div>
-      {/* <Button
-        onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-4 right-4 z-50 rounded-full shadow-lg"
-      >
-        {isChatOpen ? 'Close Chat' : 'Open Chat'}
-      </Button> */}
+
       {isChatOpen && (
         <div className="fixed bottom-20 right-4 z-50 w-80 rounded-lg border bg-background p-4 shadow-lg">
-          <h4 className="mb-4 text-lg font-semibold">Live Chat</h4>
+          <h4 className="mb-4 text-lg font-semibold">{t('chat.title')}</h4>
           <div className="mb-4 h-40 overflow-y-auto rounded border p-2">
             <p className="mb-2">
-              <strong>Support:</strong> Hello! How can I assist you today?
+              <strong>{t('chat.support')}:</strong> {t('chat.welcomeMessage')}
             </p>
           </div>
           <form className="flex gap-2">
-            <Textarea
-              placeholder="Type your message..."
-              className="flex-grow"
-            />
+            <Textarea placeholder={t('chat.placeholder')} className="grow" />
             <Button type="submit" size="icon">
               <Send className="h-4 w-4" />
-              <span className="sr-only">Send message</span>
+              <span className="sr-only">{t('chat.send')}</span>
             </Button>
           </form>
         </div>
       )}
-      <div className=" w-full flex mt-4 items-center justify-center   ">
-        <h1 className="text-center text-3xl md:text-5xl lg:text-[10rem] font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-700 to-neutral-900 select-none">
+      <div className="w-full flex mt-4 items-center justify-center">
+        <h1 className="text-center text-3xl md:text-5xl lg:text-[10rem] font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-700 to-neutral-900 select-none">
           {STORE_NAME}
         </h1>
       </div>

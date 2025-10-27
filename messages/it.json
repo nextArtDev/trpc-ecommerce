@@ -140,5 +140,47 @@
   "banner": {
     "message1": "Tutti i prodotti sono in pelle naturale e fatti a mano.",
     "message2": "Acquista ora!"
+  },
+  "footer": {
+    "quickLinks": {
+      "title": "Link Rapidi",
+      "home": "Home",
+      "products": "Prodotti",
+      "about": "Chi Siamo",
+      "contact": "Contatti",
+      "faq": "FAQ"
+    },
+    "contact": {
+      "title": "Contattaci",
+     "address": "Iran - Khouzestan",
+      "city": "Deezful",
+      "phone": "",
+      "email": ""
+    },
+    "followUs": {
+      "title": "Seguici",
+      "facebook": "Facebook",
+      "facebookTooltip": "Seguici su Facebook",
+      "twitter": "Twitter",
+      "twitterTooltip": "Seguici su Twitter",
+      "instagram": "Instagram",
+      "instagramTooltip": "Seguici su Instagram",
+      "linkedin": "LinkedIn",
+      "linkedinTooltip": "Connettiti con noi su LinkedIn"
+    },
+    "copyright": "Saeid",
+    "allRightsReserved": "Tutti i diritti riservati",
+    "legal": {
+      "privacyPolicy": "Politica sulla Privacy",
+      "termsOfService": "Termini di Servizio",
+      "cookieSettings": "Impostazioni Cookie"
+    },
+    "chat": {
+      "title": "Chat Live",
+      "support": "Supporto",
+      "welcomeMessage": "Ciao! Come posso aiutarti oggi?",
+      "placeholder": "Digita il tuo messaggio...",
+      "send": "Invia messaggio"
+    }
   }
 }
