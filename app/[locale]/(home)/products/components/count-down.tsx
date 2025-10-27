@@ -2,6 +2,7 @@
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { FC, useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   targetDate: string // Target date in a string format (e.g., "2024-12-31T23:59:59")
@@ -20,6 +21,7 @@ const Countdown: FC<Props> = ({ targetDate, home_style }) => {
     minutes: 0,
     seconds: 0,
   })
+  const t = useTranslations('product')
 
   useEffect(() => {
     const targetTime = new Date(targetDate).getTime()
@@ -54,6 +56,7 @@ const Countdown: FC<Props> = ({ targetDate, home_style }) => {
 
     return () => clearInterval(timer)
   }, [targetDate])
+
   return (
     <div
       className={cn(' leading-4', {
@@ -65,8 +68,8 @@ const Countdown: FC<Props> = ({ targetDate, home_style }) => {
           'text-2xl font-bold': home_style,
         })}
       >
-        <p className="mr-1 inline font-bold ">پایان فروش ویژه: </p>
-        <div dir="ltr" className="inline-block ">
+        <p className="mr-1 inline font-bold">{t('countdown.title')}: </p>
+        <div dir="ltr" className="inline-block">
           <Badge
             variant={'destructive'}
             className={cn('  ', {

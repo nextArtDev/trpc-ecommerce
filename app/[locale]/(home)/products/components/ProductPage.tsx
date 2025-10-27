@@ -22,6 +22,7 @@ import { Check } from 'lucide-react'
 import ProductDescription from './ProductDescription'
 import { ShareButton } from './share-button'
 import { useTranslations, useLocale } from 'next-intl'
+import { getName } from '@/lib/translation-utils'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -101,7 +102,7 @@ const ProductPage: FC<ProductPageProp> = ({
           { id: '1', label: t('breadcrumb.home'), href: `/${locale}` },
           {
             id: '2',
-            label: subCategory.name,
+            label: getName(subCategory.translations),
             href: `/${locale}/sub-categories/${subCategory.url}`,
           },
           { id: '3', label: name, href: `/${locale}/products/${slug}` },

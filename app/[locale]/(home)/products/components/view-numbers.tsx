@@ -5,12 +5,15 @@ import {
 } from '@/components/ui/tooltip'
 import { Eye } from 'lucide-react'
 import { FC } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface ViewNumbersProps {
   views: number
 }
 
 const ViewNumbers: FC<ViewNumbersProps> = ({ views }) => {
+  const t = useTranslations('product')
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -20,7 +23,7 @@ const ViewNumbers: FC<ViewNumbersProps> = ({ views }) => {
         </span>
       </TooltipTrigger>
       <TooltipContent>
-        <p>مشاهده</p>
+        <p>{t('views')}</p>
       </TooltipContent>
     </Tooltip>
   )

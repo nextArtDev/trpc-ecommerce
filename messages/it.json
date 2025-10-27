@@ -84,7 +84,40 @@
     },
     "keywords": "Parole Chiave",
     "specifications": "Specifiche e Dimensioni",
-    "relatedProducts": "Prodotti Correlati"
+    "relatedProducts": "Prodotti Correlati",
+    "bookmark": {
+      "addToWishlist": "Aggiungi alla lista dei desideri",
+      "removeFromWishlist": "Rimuovi dalla lista dei desideri"
+    },
+    "countdown": {
+      "title": "Fine dell'offerta speciale"
+    },
+    "description": {
+      "title": "Descrizione"
+    },
+    "specificationsTable": {
+      "title": "Specifiche",
+      "value": "Valore",
+      "dimensions": "Dimensioni (L×l×H)",
+      "weight": "Peso",
+      "unit": {
+        "cm": "cm",
+        "g": "g"
+      }
+    },
+    "reviews": {
+      "beFirst": "Sii il primo a lasciare una recensione!",
+      "signInPrompt": "Per favore",
+      "signInLink": "accedi al tuo account"
+    },
+    "share": {
+      "title": "Scopri questo prodotto",
+      "text": "Ho trovato questo prodotto fantastico che potrebbe piacerti!",
+      "copyLink": "Copia link",
+      "copySuccess": "Link copiato!",
+      "copyError": "Errore nella copia del link"
+    },
+    "views": "Visualizzazioni"
   },
   "products": {
     "allProducts": "Tutti i Prodotti",

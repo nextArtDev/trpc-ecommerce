@@ -286,8 +286,8 @@ export type ProductDetails = {
   keywords: string
   images: ProductImage[]
   variants: VariantsWithSizeAndColor[]
-  specs: ProductSpec[]
-  questions: ProductQuestion[]
+  specs: SpecTranslation[]
+  questions: QuestionTranslation[]
   shippingFeeMethod: 'ITEM' | 'WEIGHT' | 'FIXED'
   isSale: boolean
   saleEndDate: string | null
@@ -327,20 +327,19 @@ export type PriceRange = {
   max: number
 }
 // Additional utility types for components
-export type TransformedProduct<
-  T extends { translations: ProductTranslation[] }
-> = Omit<T, 'translations'> & {
+export type TransformedProduct = Omit<SearchProduct, 'translations'> & {
   name: string
   description: string
-  keywords?: string
 }
 
-export type TransformedCategory<T extends { translations: Translation[] }> =
-  Omit<T, 'translations'> & {
-    name: string
-    description?: string
-  }
+export type TransformedCategory = Omit<CategoryData, 'translations'> & {
+  name: string
+}
 
+export type TransformedRelatedProduct = Omit<RelatedProduct, 'translations'> & {
+  name: string
+  description: string
+}
 // For product cards/listings
 export type ProductCardProps = {
   product:
@@ -554,52 +553,37 @@ export function extractTranslation<T extends { translations: any[] }>(
 /**
  * Transform product with translations to simpler format
  */
-export function transformProduct<
-  T extends { translations: ProductTranslation[] }
->(product: T): TransformedProduct<T> {
-  const { translations, ...rest } = product
+export function isTransformedProduct(
+  product: SearchProduct | TransformedProduct
+): product is TransformedProduct {
+  return 'name' in product && typeof product.name === 'string'
+}
+
+/**
+ * Helper to transform search product to include name/description
+ */
+export function transformSearchProduct(
+  product: SearchProduct
+): TransformedProduct {
+  const translation = product.translations[0]
   return {
-    ...rest,
-    name: translations[0]?.name || '',
-    description: translations[0]?.description || '',
-    keywords: translations[0]?.keywords,
-  } as TransformedProduct<T>
+    ...product,
+    name: translation?.name || '',
+    description: translation?.description || '',
+  }
 }
 
 /**
- * Transform category with translations to simpler format
+ * Helper to transform category to include name
  */
-export function transformCategory<T extends { translations: Translation[] }>(
-  category: T
-): TransformedCategory<T> {
-  const { translations, ...rest } = category
+export function transformCategoryData(category: {
+  id: string
+  translations: { name: string }[]
+  url: string
+  featured: boolean
+}): CategoryData {
   return {
-    ...rest,
-    name: translations[0]?.name || '',
-    description: translations[0]?.description,
-  } as TransformedCategory<T>
-}
-
-/**
- * Transform specs array
- */
-export function transformSpecs(
-  specs: ProductSpec[]
-): Array<{ name: string; value: string }> {
-  return specs.map((spec) => ({
-    name: spec.translations[0]?.name || '',
-    value: spec.translations[0]?.value || '',
-  }))
-}
-
-/**
- * Transform questions array
- */
-export function transformQuestions(
-  questions: ProductQuestion[]
-): Array<{ question: string; answer: string }> {
-  return questions.map((q) => ({
-    question: q.translations[0]?.question || '',
-    answer: q.translations[0]?.answer || '',
-  }))
+    ...category,
+    name: category.translations[0]?.name || '',
+  }
 }

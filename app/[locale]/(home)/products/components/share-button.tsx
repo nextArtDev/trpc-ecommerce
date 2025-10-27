@@ -1,5 +1,4 @@
 'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -10,8 +9,11 @@ import { cn } from '@/lib/utils'
 import { Share2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
+
 export function ShareButton() {
   const [url, setUrl] = useState('')
+  const t = useTranslations('product')
 
   // Get the current page URL once the component mounts on the client
   useEffect(() => {
@@ -22,8 +24,8 @@ export function ShareButton() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Check out this product',
-          text: 'I found this amazing product you might like!',
+          title: t('share.title'),
+          text: t('share.text'),
           url: url,
         })
       } catch (error) {
@@ -36,10 +38,10 @@ export function ShareButton() {
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(url)
-      toast.success('لینک کپی شد!')
+      toast.success(t('share.copySuccess'))
     } catch (error) {
       console.error('Failed to copy link:', error)
-      toast.error('خطا در کپی لینک')
+      toast.error(t('share.copyError'))
     }
   }
 
@@ -55,7 +57,7 @@ export function ShareButton() {
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>کپی لینک</p>
+        <p>{t('share.copyLink')}</p>
       </TooltipContent>
     </Tooltip>
   )

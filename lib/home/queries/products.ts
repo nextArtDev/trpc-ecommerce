@@ -530,6 +530,8 @@ export async function getRelatedProducts(
   subCategoryId: string,
   limit: number = 6
 ) {
+  const locale = (await getLocale()) as Language
+
   return await prisma.product.findMany({
     where: {
       subCategoryId,
@@ -537,14 +539,16 @@ export async function getRelatedProducts(
     },
     select: {
       id: true,
-      // name: true,
-      translations: {
-        select: {
-          name: true,
-        },
-      },
       slug: true,
       rating: true,
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true, // Added description
+        },
+        take: 1,
+      },
       images: {
         take: 1,
         select: {
@@ -563,7 +567,6 @@ export async function getRelatedProducts(
       },
     },
     take: limit,
-
     orderBy: {
       rating: 'desc',
     },

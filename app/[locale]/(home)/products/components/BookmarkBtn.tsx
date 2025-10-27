@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import { Bookmark } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { FC, useActionState, useOptimistic, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface BookmarkBtnProps {
   productId: string
@@ -19,6 +20,7 @@ interface BookmarkBtnProps {
 const BookmarkBtn: FC<BookmarkBtnProps> = ({ productId, isInWishList }) => {
   const path = usePathname()
   const [isPending, startTransition] = useTransition()
+  const t = useTranslations('product')
 
   // Optimistic state for immediate UI feedback
   const [optimisticIsInWishList, setOptimisticIsInWishList] = useOptimistic(
@@ -70,7 +72,9 @@ const BookmarkBtn: FC<BookmarkBtnProps> = ({ productId, isInWishList }) => {
         </TooltipTrigger>
         <TooltipContent>
           <p>
-            {isInWishList ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'}
+            {optimisticIsInWishList
+              ? t('bookmark.removeFromWishlist')
+              : t('bookmark.addToWishlist')}
           </p>
         </TooltipContent>
       </Tooltip>

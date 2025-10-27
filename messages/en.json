@@ -82,9 +82,53 @@
     "cart": {
       "viewCart": "View Cart"
     },
-    "keywords": "Keywords",
     "specifications": "Specifications & Dimensions",
-    "relatedProducts": "Related Products"
+    "keywords": "Keywords",
+    "specificationsList": {
+      "title": "Specifications",
+      "value": "Value",
+      "dimensions": "Dimensions (L×W×H)",
+      "weight": "Weight",
+      "unit": {
+        "cm": "cm",
+        "g": "g"
+      }
+    }
+   ,
+    "relatedProducts": "Related Products",
+    "bookmark": {
+      "addToWishlist": "Add to Wishlist",
+      "removeFromWishlist": "Remove from Wishlist"
+    },
+    "countdown": {
+      "title": "Special Sale Ends"
+    },
+    "description": {
+      "title": "Description"
+    },
+    "specificationsTable": {
+      "title": "Specifications",
+      "value": "Value",
+      "dimensions": "Dimensions (L×W×H)",
+      "weight": "Weight",
+      "unit": {
+        "cm": "cm",
+        "g": "g"
+      }
+    },
+    "reviews": {
+      "beFirst": "Be the first to leave a review!",
+      "signInPrompt": "Please",
+      "signInLink": "sign in to your account"
+    },
+    "share": {
+      "title": "Check out this product",
+      "text": "I found this amazing product you might like!",
+      "copyLink": "Copy Link",
+      "copySuccess": "Link copied!",
+      "copyError": "Failed to copy link"
+    },
+    "views": "Views"
   },
   "products": {
     "allProducts": "All Products",

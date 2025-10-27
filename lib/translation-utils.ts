@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Language } from '@/lib/generated/prisma'
 
 // Type for any entity that has translations
-export type TranslatableEntity<T> = {
+type TranslatableEntity<T> = {
   translations: T[]
 }
 
 // Type for translation objects
-export type TranslationFields = {
+type TranslationFields = {
   name: string
   description?: string
 }
 
-export type ProductTranslationFields = {
+type ProductTranslationFields = {
   name: string
   description: string
   keywords?: string
 }
 
-export type SpecTranslationFields = {
+type SpecTranslationFields = {
   name: string
   value: string
 }
 
-export type QuestionTranslationFields = {
+type QuestionTranslationFields = {
   question: string
   answer: string
 }
@@ -220,11 +221,21 @@ export function getDescription<T extends { description?: string }>(
 
 /**
  * Helper for product translations
+ * Returns partial if some fields are missing
  */
 export function getProductTranslation(
-  translations: ProductTranslationFields[]
-): ProductTranslationFields {
-  return translations[0] || { name: '', description: '', keywords: '' }
+  translations: Array<{
+    name?: string
+    description?: string
+    keywords?: string
+  }>
+): { name: string; description: string; keywords?: string } {
+  const first = translations[0]
+  return {
+    name: first?.name || '',
+    description: first?.description || '',
+    keywords: first?.keywords,
+  }
 }
 
 /**

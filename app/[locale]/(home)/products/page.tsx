@@ -1,17 +1,16 @@
 import { getAllCategories, searchProducts } from '@/lib/home/queries/products'
-import { getFiltersData } from '@/lib/home/queries/products' // Add this function
+import { getFiltersData } from '@/lib/home/queries/products'
 
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-// import { generateSearchMetadata } from '@/lib/utils'
 import { parseSearchParams } from '../search/components/utils'
 import SearchPageClient from '../search/components/SearchPageClient'
-// import { STORE_NAME } from '@/constants/store'
 import { generateSearchMetadata } from '@/lib/utils'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { getName } from '@/lib/translation-utils'
 import { useTranslations } from 'next-intl'
 
 interface SearchPageProps {
@@ -37,6 +36,7 @@ export async function generateMetadata({
 
   return generateSearchMetadata(params, locale, t)
 }
+
 async function SearchPageContent({ searchParams }: SearchPageProps) {
   const params = await searchParams
 
@@ -45,6 +45,7 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
   const tHome = await getTranslations('home')
 
   const filters = parseSearchParams(params)
+
   try {
     // Fetch data in parallel for better performance
     const [searchResults, filtersData, categoriesData] = await Promise.all([
@@ -52,7 +53,20 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
       getFiltersData(filters.categoryId, filters.subCategoryId),
       getAllCategories({}),
     ])
-    // console.log(searchResults.products)
+
+    // Transform categories to include name field
+    const transformedCategories = categoriesData.categories.map((cat) => ({
+      ...cat,
+      name: getName(cat.translations),
+    }))
+
+    // Transform search results to include name and description
+    const transformedProducts = searchResults.products.map((product) => ({
+      ...product,
+      name: getName(product.translations),
+      description: product.translations[0]?.description || '',
+    }))
+
     const breadcrumbData = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
@@ -83,6 +97,7 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
           : []),
       ],
     }
+
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': params.q ? 'SearchResultsPage' : 'CollectionPage',
@@ -92,18 +107,18 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
       description: params.q
         ? t('searchResultsDescription', {
             query: params.q,
-            count: searchResults.products.length,
+            count: transformedProducts.length,
           })
         : t('allProductsDescription', {
-            count: searchResults.products.length,
+            count: transformedProducts.length,
           }),
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products${
         params.q ? `?q=${encodeURIComponent(params.q)}` : ''
       }`,
       mainEntity: {
         '@type': 'ItemList',
-        numberOfItems: searchResults.products.length,
-        itemListElement: searchResults.products
+        numberOfItems: transformedProducts.length,
+        itemListElement: transformedProducts
           .slice(0, 20)
           .map((product, index) => ({
             '@type': 'ListItem',
@@ -147,9 +162,12 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
           }}
         />
         <SearchPageClient
-          initialResults={searchResults}
+          initialResults={{
+            ...searchResults,
+            products: transformedProducts,
+          }}
           filtersData={filtersData}
-          categories={categoriesData.categories}
+          categories={transformedCategories}
           initialFilters={filters}
         />
       </>

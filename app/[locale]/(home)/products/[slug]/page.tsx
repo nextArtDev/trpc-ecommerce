@@ -18,19 +18,15 @@ import {
   truncateText,
 } from '@/lib/metadata-utils'
 import { getTranslations, getLocale } from 'next-intl/server'
-import {
-  transformProduct,
-  transformSpecs,
-  transformQuestions,
-} from '@/lib/types/home'
-import { getTranslation, getTranslationField } from '@/lib/translation-utils'
 import { getIsWhishedByUser } from '@/lib/home/queries/user'
+import { getName, getProductTranslation } from '@/lib/translation-utils'
 
 interface ProductDetailsPageProps {
   params: Promise<{ slug: string; locale: string }>
   searchParams: Promise<{
-    sizeId: string
-    page: string
+    size?: string
+    color?: string
+    page?: string
   }>
 }
 
@@ -40,7 +36,6 @@ export async function generateMetadata({
   const { slug, locale } = await params
   const product = await getProductDetails(slug)
   const t = await getTranslations('product')
-  const tHome = await getTranslations('home')
 
   if (!product) {
     return {
@@ -49,8 +44,11 @@ export async function generateMetadata({
       robots: 'noindex, nofollow',
     }
   }
-  // Transform product with translations
-  const displayProduct = transformProduct(product)
+
+  // Get translated fields
+  const productTranslation = getProductTranslation(product.translations)
+  const productName = productTranslation.name
+  const productDescription = productTranslation.description
 
   const productAverageRating = await prisma.review.aggregate({
     _avg: { rating: true },
@@ -62,26 +60,34 @@ export async function generateMetadata({
   const reviewCount = productAverageRating._count || 0
 
   const brandName = product.brand || t('specialBrand')
-  const title = `${displayProduct.name} - ${brandName} | ${STORE_NAME}`
+  const title = `${productName} - ${brandName} | ${STORE_NAME}`
 
   const availableVariants =
     product.variants?.filter((v) => v.quantity > 0).length || 0
 
   const cleanDescription = createMetaDescription({
-    productName: displayProduct.name,
+    productName,
     brandName,
-    description: displayProduct.description,
+    description: productDescription,
     avgRating,
     reviewCount,
     availableVariants,
     maxLength: 155,
   })
 
+  const categoryName = getName(product.category.translations)
+  const subCategoryName = getName(product.subCategory.translations)
+
   const keywords = generateProductKeywords({
-    ...product,
-    name: displayProduct.name,
-    description: displayProduct.description,
-    keywords: displayProduct.keywords || '',
+    name: productName,
+    description: productDescription,
+    keywords: productTranslation.keywords || '',
+    brand: product.brand,
+    subCategory: { name: subCategoryName },
+    variants: product.variants?.map((v) => ({
+      color: v.color ? { name: v.color.name } : null,
+      size: v.size ? { name: v.size.name } : null,
+    })),
   })
 
   const inStock =
@@ -91,8 +97,8 @@ export async function generateMetadata({
     product.variants?.[0]?.price || 0
   )
 
-  const ogDescription = displayProduct.description
-    ? truncateText(stripHtmlTags(displayProduct.description), 200)
+  const ogDescription = productDescription
+    ? truncateText(stripHtmlTags(productDescription), 200)
     : cleanDescription
 
   const twitterDescription = truncateText(ogDescription, 140)
@@ -104,7 +110,7 @@ export async function generateMetadata({
 
     openGraph: {
       type: 'website',
-      title: `${displayProduct.name} - ${brandName}`,
+      title: `${productName} - ${brandName}`,
       description: ogDescription,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
       siteName: STORE_NAME,
@@ -113,14 +119,14 @@ export async function generateMetadata({
           url: img.url,
           width: 800,
           height: 800,
-          alt: `${displayProduct.name} - ${t('productImage')}`,
+          alt: `${productName} - ${t('productImage')}`,
         })) || [],
-      locale: locale === 'fa' ? 'fa_IR' : 'en_US',
+      locale: locale === 'fa' ? 'fa_IR' : locale === 'en' ? 'en_US' : locale,
     },
 
     twitter: {
       card: 'summary_large_image',
-      title: `${displayProduct.name} - ${brandName}`,
+      title: `${productName} - ${brandName}`,
       description: twitterDescription,
       images: product.images?.map((img) => img.url) || [],
       creator: TWITTER_HANDLE,
@@ -170,20 +176,14 @@ export async function generateMetadata({
     },
   }
 }
+
 const ProductDetailsPage = async ({
   params,
   searchParams,
-}: {
-  params: Promise<{ slug: string; locale: string }>
-  searchParams: Promise<{
-    size?: string
-    color?: string
-    page?: string
-  }>
-}) => {
+}: ProductDetailsPageProps) => {
   const { slug, locale } = await params
-  const searchParamsSize = (await searchParams).size
-  const searchParamsColor = (await searchParams).color
+  const { size: searchParamsSize, color: searchParamsColor } =
+    await searchParams
   const t = await getTranslations('product')
   const tHome = await getTranslations('home')
 
@@ -192,44 +192,40 @@ const ProductDetailsPage = async ({
     notFound()
   }
 
-  // Transform product data using our utility functions
-  const displayProduct = transformProduct(product)
-  const displaySpecs = transformSpecs(product.specs)
-  const displayQuestions = transformQuestions(product.questions)
-
-  // Use our translation utility for category, subcategory, and offer tag
-  const displayCategory = {
-    ...product.category,
-    name: getTranslationField(product.category.translations, locale, 'name'),
-  }
-
-  const displaySubCategory = {
-    ...product.subCategory,
-    name: getTranslationField(product.subCategory.translations, locale, 'name'),
-  }
-
-  const displayOfferTag = product.offerTag
-    ? {
-        ...product.offerTag,
-        name: getTranslationField(
-          product.offerTag.translations,
-          locale,
-          'name'
-        ),
-      }
+  // Extract translations from the product
+  const productTranslation = getProductTranslation(product.translations)
+  const categoryName = getName(product.category.translations)
+  const subCategoryName = getName(product.subCategory.translations)
+  const offerTagName = product.offerTag
+    ? getName(product.offerTag.translations)
     : null
+
+  // Transform specs and questions
+  const displaySpecs = product.specs.map((spec) => ({
+    name: getName(spec.translations),
+    value: spec.translations[0]?.value || '',
+  }))
+
+  const displayQuestions = product.questions.map((q) => ({
+    question: q.translations[0]?.question || '',
+    answer: q.translations[0]?.answer || '',
+  }))
 
   const relatedProducts = await getRelatedProducts(
     product.id,
     product.subCategoryId
   )
 
-  // Transform related products using our utility function
-  const displayRelatedProducts = relatedProducts?.map((rp) => ({
-    ...rp,
-    name: getTranslation(rp.translations, 'name'),
-    description: getTranslationField(rp.translations, 'description'),
-  }))
+  // Transform related products
+  const displayRelatedProducts = relatedProducts?.map((rp) => {
+    const rpName = getName(rp.translations)
+    const rpDesc = rp.translations[0]?.description || ''
+    return {
+      ...rp,
+      name: rpName,
+      description: rpDesc,
+    }
+  })
 
   const urlMatchVariant = product.variants.find(
     (v) => v.size?.id === searchParamsSize && v.color?.id === searchParamsColor
@@ -261,10 +257,10 @@ const ProductDetailsPage = async ({
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: displayProduct.name,
-    description: displayProduct.description
-      ? stripHtmlTags(displayProduct.description)
-      : `${t('qualityProduct')} ${displayProduct.name} ${t('from')} ${
+    name: productTranslation.name,
+    description: productTranslation.description
+      ? stripHtmlTags(productTranslation.description)
+      : `${t('qualityProduct')} ${productTranslation.name} ${t('from')} ${
           product.brand || t('specialBrand')
         }`,
     image: product.images?.map((img) => img.url) || [],
@@ -274,7 +270,7 @@ const ProductDetailsPage = async ({
       '@type': 'Brand',
       name: product.brand || t('specialBrand'),
     },
-    category: displayCategory.name,
+    category: categoryName,
     offers:
       product.variants?.map((variant) => ({
         '@type': 'Offer',
@@ -340,19 +336,19 @@ const ProductDetailsPage = async ({
       {
         '@type': 'ListItem',
         position: 2,
-        name: displayCategory.name,
-        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/categories/${displayCategory.url}`,
+        name: categoryName,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/categories/${product.category.url}`,
       },
       {
         '@type': 'ListItem',
         position: 3,
-        name: displaySubCategory.name,
-        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/subcategories/${displaySubCategory.url}`,
+        name: subCategoryName,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/subcategories/${product.subCategory.url}`,
       },
       {
         '@type': 'ListItem',
         position: 4,
-        name: displayProduct.name,
+        name: productTranslation.name,
         item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${slug}`,
       },
     ],
@@ -375,12 +371,25 @@ const ProductDetailsPage = async ({
       <ProductPage
         data={{
           ...product,
-          name: displayProduct.name,
-          description: displayProduct.description,
-          keywords: displayProduct.keywords || '',
-          category: displayCategory,
-          subCategory: displaySubCategory,
-          offerTag: displayOfferTag,
+          name: productTranslation.name,
+          description: productTranslation.description,
+          keywords: productTranslation.keywords || '',
+          category: {
+            id: product.category.id,
+            url: product.category.url,
+            translations: [{ name: categoryName }],
+          },
+          subCategory: {
+            id: product.subCategory.id,
+            url: product.subCategory.url,
+            translations: [{ name: subCategoryName }],
+          },
+          offerTag: product.offerTag
+            ? {
+                url: product.offerTag.url,
+                translations: [{ name: offerTagName! }],
+              }
+            : null,
           specs: displaySpecs,
           questions: displayQuestions,
         }}

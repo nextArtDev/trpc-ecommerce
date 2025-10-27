@@ -84,7 +84,40 @@
     },
     "keywords": "کلمات کلیدی",
     "specifications": "مشخصات و ابعاد",
-    "relatedProducts": "محصولات مرتبط"
+    "relatedProducts": "محصولات مرتبط",
+    "bookmark": {
+      "addToWishlist": "افزودن به علاقه‌مندی‌ها",
+      "removeFromWishlist": "حذف از علاقه‌مندی‌ها"
+    },
+    "countdown": {
+      "title": "پایان فروش ویژه"
+    },
+    "description": {
+      "title": "توضیحات"
+    },
+    "specificationsTable": {
+      "title": "مشخصات",
+      "value": "مقدار",
+      "dimensions": "ابعاد (طول×عرض×ارتفاع)",
+      "weight": "وزن",
+      "unit": {
+        "cm": "سانتی‌متر",
+        "g": "گرم"
+      }
+    },
+    "reviews": {
+      "beFirst": "اولین نفری باشید که نظر می‌دهید!",
+      "signInPrompt": "لطفا",
+      "signInLink": "وارد حساب خود شوید"
+    },
+    "share": {
+      "title": "این محصول را بررسی کنید",
+      "text": "من این محصول شگفت‌انگیز را پیدا کردم که ممکن است دوست داشته باشید!",
+      "copyLink": "کپی لینک",
+      "copySuccess": "لینک کپی شد!",
+      "copyError": "خطا در کپی لینک"
+    },
+    "views": "مشاهده"
   },
    "products": {
     "allProducts": "همه محصولات",

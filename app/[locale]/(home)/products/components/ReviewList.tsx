@@ -1,15 +1,14 @@
 import { ProductReview } from '@/lib/types/home'
-
 import TestimonialCarousel from '@/components/home/testemonial/Testemonial'
 import { Review } from '@/lib/generated/prisma'
 import Link from 'next/link'
 import ReviewForm from './ReviewForm'
+import { useTranslations, useLocale } from 'next-intl'
 
 type Props = {
   reviews: ProductReview[]
   productId: string
   productSlug: string
-  //   numReviews: number
   userId?: string | null
   userReview: Review | null
 }
@@ -18,23 +17,25 @@ const ReviewList = ({
   reviews,
   productId,
   productSlug,
-  //   numReviews,
   userReview,
   userId,
 }: Props) => {
+  const t = useTranslations('product')
+  const locale = useLocale()
+
   return (
     <div className="space-y-4">
-      {reviews.length === 0 && <div>اولین نفری باشید که نظر می‌دهید!</div>}
+      {reviews.length === 0 && <div>{t('reviews.beFirst')}</div>}
       {userId ? (
         <ReviewForm productId={productId} initialData={userReview} />
       ) : (
         <div>
-          لطفا
+          {t('reviews.signInPrompt')}
           <Link
             className="text-blue-700 px-2"
-            href={`/sign-in?callbackUrl=/products/${productSlug}`}
+            href={`/${locale}/sign-in?callbackUrl=/${locale}/products/${productSlug}`}
           >
-            وارد حساب خود شوید
+            {t('reviews.signInLink')}
           </Link>
         </div>
       )}
