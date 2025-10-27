@@ -185,6 +185,30 @@
     "message1": "Alle Produkte sind aus Naturleder und von Hand gefertigt.",
     "message2": "Jetzt einkaufen!"
   },
+  "search": {
+    "meta": {
+      "title": "Suchergebnisse für \"{query}\"{page}",
+      "page": " - Seite {page}",
+      "description": "Finden Sie die besten Ergebnisse für \"{query}\".",
+      "allProductsTitle": "Produkte{page}",
+      "allProductsDescription": "Entdecken Sie unsere komplette Produktsammlung. Filtern Sie nach Kategorie, Preis, Farbe und Größe, um genau das zu finden, was Sie benötigen."
+    },
+    "og": {
+      "searchTitle": "Suche: {query}",
+      "allProductsTitle": "Produkte"
+    },
+    "keywords": {
+      "search": "suche",
+      "products": "produkte",
+      "leatherStore": "ledergeschäft",
+      "store": "geschäft",
+      "naturalLeather": "echtes leder",
+      "leatherBag": "ledertasche",
+      "onlineShopping": "online-shopping",
+      "colorPrefix": "produkte",
+      "sizePrefix": "größe"
+    }
+  },
   "footer": {
     "quickLinks": {
       "title": "Schnelllinks",

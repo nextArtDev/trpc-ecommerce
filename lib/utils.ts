@@ -245,20 +245,28 @@ export function formatError(error: any) {
 //   }
 // }
 
-export async function generateSearchMetadata(params: {
-  q?: string
-  categoryId?: string
-  subCategoryId?: string
-  minPrice?: string
-  maxPrice?: string
-  sortBy?: string
-  page?: string
-  colors?: string | string[]
-  sizes?: string | string[]
-}): Promise<Metadata> {
+export async function generateSearchMetadata(
+  params: {
+    q?: string
+    categoryId?: string
+    subCategoryId?: string
+    minPrice?: string
+    maxPrice?: string
+    sortBy?: string
+    page?: string
+    colors?: string | string[]
+    sizes?: string | string[]
+  },
+  locale?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  translations?: any
+): Promise<Metadata> {
   const query = params.q || ''
   const page = Number(params.page) || 1
   const isSearch = !!query
+
+  // Get translations if not provided
+  const t = translations || (await getTranslations('search'))
 
   // Build dynamic title and description
   let title = ''
@@ -266,27 +274,29 @@ export async function generateSearchMetadata(params: {
   let keywords: string[] = []
 
   if (isSearch) {
-    title = `"${query} نتایج جست‌وجوی"${
-      page > 1 ? ` ${page} - صفحه ` : ''
-    } | ${STORE_NAME}`
-    description = `"${query}" پیدا کردن بهترین نتایج برای.`
+    title = t('meta.title', {
+      query,
+      page: page > 1 ? t('meta.page', { page }) : '',
+    })
+    description = t('meta.description', { query })
     keywords = [
       query,
-      'جست‌وجو',
-      'محصولات',
-      'فروشگاه چرم آنلاین',
-      'فروشگاه چرم',
+      t('keywords.search'),
+      t('keywords.products'),
+      t('keywords.leatherStore'),
+      t('keywords.store'),
     ]
   } else {
-    title = `محصولات${page > 1 ? ` - Page ${page}` : ''} | ${STORE_NAME}`
-    description = 'جست‌وجوی محصولات کامل فروشگاه'
-    // 'Discover our complete product collection. Filter by category, price, color, and size to find exactly what you need.'
+    title = t('meta.allProductsTitle', {
+      page: page > 1 ? t('meta.page', { page }) : '',
+    })
+    description = t('meta.allProductsDescription')
     keywords = [
-      'چرم طبیعی',
-      'کیف چرمی',
-      'خرید آنلاین',
-      'فروشگاه چرم',
-      'فروشگاه چرم',
+      t('keywords.naturalLeather'),
+      t('keywords.leatherBag'),
+      t('keywords.onlineShopping'),
+      t('keywords.leatherStore'),
+      t('keywords.store'),
     ]
   }
 
@@ -295,18 +305,17 @@ export async function generateSearchMetadata(params: {
     const colors = Array.isArray(params.colors)
       ? params.colors
       : [params.colors]
-    keywords.push(...colors.map((c) => `محصولات${c} `))
+    keywords.push(...colors.map((c) => `${t('keywords.colorPrefix')}${c} `))
   }
 
   if (params.sizes) {
     const sizes = Array.isArray(params.sizes) ? params.sizes : [params.sizes]
-    keywords.push(...sizes.map((s) => `  ${s}سایز`))
+    keywords.push(...sizes.map((s) => ` ${t('keywords.sizePrefix')}${s}`))
   }
 
-  const currentUrl = new URL(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/products` || 'localhost:3000/products'
-    // `localhost:3000/products`
-  )
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const currentUrl = new URL(`${baseUrl}/${locale || 'en'}/products`)
+
   Object.entries(params).forEach(([key, value]) => {
     if (value) currentUrl.searchParams.set(key, String(value))
   })
@@ -318,11 +327,14 @@ export async function generateSearchMetadata(params: {
 
     openGraph: {
       type: 'website',
-      title: isSearch ? `${query}جست‌وجوی: ` : 'محصولات',
+      title: isSearch
+        ? t('og.searchTitle', { query })
+        : t('og.allProductsTitle'),
       description,
       url: currentUrl.toString(),
-      siteName: `${STORE_NAME}`,
-      images: ['/default-search-og.jpg'], // Add a default search page image
+      siteName: STORE_NAME,
+      images: ['/default-search-og.jpg'],
+      locale: locale === 'fa' ? 'fa_IR' : 'en_US',
     },
 
     twitter: {
@@ -333,7 +345,7 @@ export async function generateSearchMetadata(params: {
     },
 
     robots: {
-      index: page === 1, // Only index page 1
+      index: page === 1,
       follow: true,
       googleBot: {
         index: page === 1,
@@ -344,7 +356,14 @@ export async function generateSearchMetadata(params: {
     },
 
     alternates: {
-      canonical: page === 1 ? currentUrl.toString() : undefined, // Only canonical for page 1
+      canonical: page === 1 ? currentUrl.toString() : undefined,
+      languages: {
+        fa: `${baseUrl}/fa/products${currentUrl.search}`,
+        en: `${baseUrl}/en/products${currentUrl.search}`,
+        de: `${baseUrl}/de/products${currentUrl.search}`,
+        fr: `${baseUrl}/fr/products${currentUrl.search}`,
+        it: `${baseUrl}/it/products${currentUrl.search}`,
+      },
     },
 
     other: {
@@ -357,6 +376,7 @@ export async function generateSearchMetadata(params: {
 
 // utils/rateLimit.ts
 import prisma from '@/lib/prisma'
+import { getTranslations } from 'next-intl/server'
 
 export async function checkRateLimit(userId: string) {
   const oneHourAgo = new Date(Date.now() - 1000 * 60 * 60)

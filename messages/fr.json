@@ -185,6 +185,30 @@
     "message1": "Tous les produits sont en cuir naturel et faits à la main.",
     "message2": "Achetez maintenant!"
   },
+  "search": {
+    "meta": {
+      "title": "Résultats de recherche pour \"{query}\"{page}",
+      "page": " - Page {page}",
+      "description": "Trouvez les meilleurs résultats pour \"{query}\".",
+      "allProductsTitle": "Produits{page}",
+      "allProductsDescription": "Découvrez notre collection complète de produits. Filtrez par catégorie, prix, couleur et taille pour trouver exactement ce dont vous avez besoin."
+    },
+    "og": {
+      "searchTitle": "Recherche: {query}",
+      "allProductsTitle": "Produits"
+    },
+    "keywords": {
+      "search": "recherche",
+      "products": "produits",
+      "leatherStore": "magasin de cuir",
+      "store": "magasin",
+      "naturalLeather": "cuir naturel",
+      "leatherBag": "sac en cuir",
+      "onlineShopping": "achat en ligne",
+      "colorPrefix": "produits",
+      "sizePrefix": "taille"
+    }
+  },
   "footer": {
     "quickLinks": {
       "title": "Liens Rapides",

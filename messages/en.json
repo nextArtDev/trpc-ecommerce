@@ -196,6 +196,30 @@
     "message1": "All products are made of natural leather and handmade.",
     "message2": "Shop now!"
   },
+  "search": {
+    "meta": {
+      "title": "Search Results for \"{query}\"{page}",
+      "page": " - Page {page}",
+      "description": "Find the best results for \"{query}\".",
+      "allProductsTitle": "Products{page}",
+      "allProductsDescription": "Discover our complete product collection. Filter by category, price, color, and size to find exactly what you need."
+    },
+    "og": {
+      "searchTitle": "Search: {query}",
+      "allProductsTitle": "Products"
+    },
+    "keywords": {
+      "search": "search",
+      "products": "products",
+      "leatherStore": "leather store",
+      "store": "store",
+      "naturalLeather": "natural leather",
+      "leatherBag": "leather bag",
+      "onlineShopping": "online shopping",
+      "colorPrefix": "products",
+      "sizePrefix": "size"
+    }
+  },
   "footer": {
     "quickLinks": {
       "title": "Quick Links",

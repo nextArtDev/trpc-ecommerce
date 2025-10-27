@@ -80,7 +80,6 @@ export async function generateMetadata({
 
   const keywords = generateProductKeywords({
     name: productName,
-    description: productDescription,
     keywords: productTranslation.keywords || '',
     brand: product.brand,
     subCategory: { name: subCategoryName },

@@ -185,6 +185,30 @@
     "message1": "Tutti i prodotti sono in pelle naturale e fatti a mano.",
     "message2": "Acquista ora!"
   },
+  "search": {
+    "meta": {
+      "title": "Risultati della ricerca per \"{query}\"{page}",
+      "page": " - Pagina {page}",
+      "description": "Trova i migliori risultati per \"{query}\".",
+      "allProductsTitle": "Prodotti{page}",
+      "allProductsDescription": "Scopri la nostra collezione completa di prodotti. Filtra per categoria, prezzo, colore e taglia per trovare esattamente ciò di cui hai bisogno."
+    },
+    "og": {
+      "searchTitle": "Ricerca: {query}",
+      "allProductsTitle": "Prodotti"
+    },
+    "keywords": {
+      "search": "ricerca",
+      "products": "prodotti",
+      "leatherStore": "negozio di pelle",
+      "store": "negozio",
+      "naturalLeather": "pelle naturale",
+      "leatherBag": "borsetta in pelle",
+      "onlineShopping": "shopping online",
+      "colorPrefix": "prodotti",
+      "sizePrefix": "taglia"
+    }
+  },
   "footer": {
     "quickLinks": {
       "title": "Link Rapidi",
