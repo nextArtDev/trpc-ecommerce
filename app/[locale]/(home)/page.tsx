@@ -15,9 +15,12 @@ import {
   getSubCategories,
 } from '@/lib/home/queries/products'
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata(): Promise<Metadata> {
   // Fetch data for dynamic meta information
+  const t = await getTranslations('metadata')
+
   const [categories, reviews] = await Promise.all([
     getCategoriesWithStats(),
     getHomePageReviews(),
@@ -33,39 +36,33 @@ export async function generateMetadata(): Promise<Metadata> {
       ).toFixed(1)
     : null
 
-  const description = `کارگاه ساخت کیف و محصولات چرم طبیعی. ${categoryNames.join(
-    ', '
-  )} ${
-    avgRating ? `امتیاز ${avgRating}/5 بوسیله ${reviews?.length} خریدار.` : ''
-  } ارسال سریع، کیفیت بالای محصولات و تضمین استفاده از چرم طبیعی.`
+  const description = t('home.description', {
+    categories: categoryNames?.join(', '),
+    rating: avgRating ? `${avgRating}/5` : '',
+    reviewCount: reviews?.length || 0,
+  })
 
   return {
-    title: 'کارگاه چرم سارینا',
+    title: t('home.title'),
     description,
     keywords: [
-      ...categoryNames?.map((name) => name.toLowerCase()),
-      'چرم طبیعی',
-      'کیف چرم طبیعی زنانه',
-      'کیف چرمی زنانه',
-      'چرم طبیعی تضمین شده',
-      'فروشگاه آنلاین',
-      'کارگاه چرم دست‌دوز',
-      'فروشگاه چرم',
+      ...categoryNames?.map((name) => name?.toLowerCase() || ''),
+      ...t('keywords.common').split(','),
     ].join(', '),
 
     // Open Graph for social sharing
     openGraph: {
       type: 'website',
-      title: 'کارگاه چرم سارینا ',
+      title: t('home.title'),
       description,
       url: process.env.NEXT_PUBLIC_SITE_URL,
-      siteName: 'کارگاه چرم سارینا',
+      siteName: t('siteName'),
       images: [
         {
-          url: '/hero-image.webp', // Your home page OG image
+          url: '/hero-image.webp',
           width: 1200,
           height: 630,
-          alt: 'کارگاه چرم سارینا ',
+          alt: t('home.title'),
         },
       ],
       locale: 'en_US',
@@ -74,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // Twitter Card
     twitter: {
       card: 'summary_large_image',
-      title: 'کارگاه چرم سارینا ',
+      title: t('home.title'),
       description,
       images: ['/twitter-home.jpg'],
       creator: '@yourstorehandle',
@@ -103,12 +100,11 @@ export async function generateMetadata(): Promise<Metadata> {
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
       yandex: process.env.YANDEX_VERIFICATION,
-      // bing: process.env.BING_SITE_VERIFICATION,
     },
 
     // Additional tags
     other: {
-      'theme-color': '#eceae8', // Your brand color
+      'theme-color': '#eceae8',
       'mobile-web-app-capable': 'yes',
       'apple-mobile-web-app-capable': 'yes',
       'apple-mobile-web-app-status-bar-style': 'default',
@@ -117,6 +113,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 export default async function Home() {
+  const t = await getTranslations('home')
+  const tBestSellers = await getTranslations('bestSellers')
+  const tNewestSellers = await getTranslations('newestSellers')
   // await seed()
 
   const [products, bestSellers, subCategories, reviews] = await Promise.all([
@@ -130,37 +129,31 @@ export default async function Home() {
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'کارگاه چرم سارینا',
+    name: t('siteName'),
     url: process.env.NEXT_PUBLIC_SITE_URL,
     logo: `${process.env.NEXT_PUBLIC_SITE_URL}/logo.png`,
-    description:
-      'Premium online store offering quality products with fast shipping and excellent customer service',
+    description: t('organization.description'),
     contactPoint: {
       '@type': 'ContactPoint',
-      // telephone: '+1-555-123-4567', // Your phone number
-      // contactType: 'Customer Service',
-      // email: 'support@yourstore.com', // Your email
       availableLanguage: ['English', 'Persian'],
     },
     sameAs: [
-      'https://facebook.com/yourstore', // Your social media links
+      'https://facebook.com/yourstore',
       'https://instagram.com/yourstore',
       'https://twitter.com/yourstore',
     ],
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'Iran', // Your country
+      addressCountry: 'Iran',
       addressLocality: 'Dezful',
       addressRegion: 'Khozestan',
-      // postalCode: '12345',
-      // streetAddress: 'Your Address',
     },
   }
 
   const websiteData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'کارگاه چرم سارینا',
+    name: t('siteName'),
     url: process.env.NEXT_PUBLIC_SITE_URL,
     potentialAction: {
       '@type': 'SearchAction',
@@ -179,7 +172,7 @@ export default async function Home() {
         '@type': 'AggregateRating',
         itemReviewed: {
           '@type': 'Organization',
-          name: 'کارگاه چرم سارینا',
+          name: t('siteName'),
           url: process.env.NEXT_PUBLIC_SITE_URL,
         },
         ratingValue: (
@@ -198,8 +191,8 @@ export default async function Home() {
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: 'پرفروش‌ترینها',
-          description: 'Our most popular products',
+          name: tNewestSellers('title'),
+          description: tNewestSellers('description'),
           numberOfItems: bestSellers.length,
           itemListElement: bestSellers.slice(0, 10)?.map((product, index) => {
             const firstVariant = product.variants[0]
@@ -220,7 +213,6 @@ export default async function Home() {
                 description: product.translations[0]?.description,
                 image: product.images?.[0]?.url,
                 url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.slug}`,
-
                 offers: {
                   '@type': 'Offer',
                   price: price,
@@ -239,8 +231,8 @@ export default async function Home() {
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: 'New Arrivals',
-          description: 'Latest products in our collection',
+          name: t('newestSellers.title'),
+          description: t('newestSellers.description'),
           numberOfItems: products.length,
           itemListElement: products.slice(0, 10)?.map((product, index) => ({
             '@type': 'ListItem',
@@ -251,7 +243,6 @@ export default async function Home() {
               description: product.translations[0]?.description,
               image: product.images?.[0]?.url,
               url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.slug}`,
-
               offers: {
                 '@type': 'Offer',
                 price: product.variants[0]
@@ -278,29 +269,30 @@ export default async function Home() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'خانه',
+        name: t('breadcrumb.home'),
         item: process.env.NEXT_PUBLIC_SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'محصولات',
+        name: t('breadcrumb.products'),
         item: `${process.env.NEXT_PUBLIC_SITE_URL}/products`,
       },
       {
         '@type': 'ListItem',
         position: 3,
-        name: 'درباره ما',
+        name: t('breadcrumb.about'),
         item: `${process.env.NEXT_PUBLIC_SITE_URL}/about-us`,
       },
       {
         '@type': 'ListItem',
-        position: 3,
-        name: 'ارتباط با ما',
+        position: 4,
+        name: t('breadcrumb.contact'),
         item: `${process.env.NEXT_PUBLIC_SITE_URL}/contact-us`,
       },
     ],
   }
+
   return (
     <div className="relative w-full h-full items-center justify-items-center min-h-screen mx-auto">
       <script

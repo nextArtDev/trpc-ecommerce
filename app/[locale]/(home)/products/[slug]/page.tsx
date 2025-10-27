@@ -11,7 +11,6 @@ import { currentUser } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { Metadata } from 'next'
 import { STORE_NAME, TWITTER_HANDLE } from '@/constants/store'
-import { getIsWhishedByUser } from '@/lib/home/queries/user'
 import {
   createMetaDescription,
   generateProductKeywords,
@@ -24,6 +23,8 @@ import {
   transformSpecs,
   transformQuestions,
 } from '@/lib/types/home'
+import { getTranslationField } from '@/lib/translation-utils'
+import { getIsWhishedByUser } from '@/lib/home/queries/user'
 
 interface ProductDetailsPageProps {
   params: Promise<{ slug: string; locale: string }>
@@ -39,6 +40,7 @@ export async function generateMetadata({
   const { slug, locale } = await params
   const product = await getProductDetails(slug)
   const t = await getTranslations('product')
+  const tHome = await getTranslations('home')
 
   if (!product) {
     return {
@@ -185,28 +187,37 @@ const ProductDetailsPage = async ({
   const searchParamsSize = (await searchParams).size
   const searchParamsColor = (await searchParams).color
   const t = await getTranslations('product')
+  const tHome = await getTranslations('home')
 
   const product = await getProductDetails(slug)
   if (!product || product.variants.length === 0) {
     notFound()
   }
 
-  // Transform product data
+  // Transform product data using our utility functions
   const displayProduct = transformProduct(product)
   const displaySpecs = transformSpecs(product.specs)
   const displayQuestions = transformQuestions(product.questions)
+
+  // Use our translation utility for category, subcategory, and offer tag
   const displayCategory = {
     ...product.category,
-    name: product.category.translations[0]?.name || '',
+    name: getTranslationField(product.category.translations, locale, 'name'),
   }
+
   const displaySubCategory = {
     ...product.subCategory,
-    name: product.subCategory.translations[0]?.name || '',
+    name: getTranslationField(product.subCategory.translations, locale, 'name'),
   }
+
   const displayOfferTag = product.offerTag
     ? {
         ...product.offerTag,
-        name: product.offerTag.translations[0]?.name || '',
+        name: getTranslationField(
+          product.offerTag.translations,
+          locale,
+          'name'
+        ),
       }
     : null
 
@@ -215,11 +226,11 @@ const ProductDetailsPage = async ({
     product.subCategoryId
   )
 
-  // Transform related products
+  // Transform related products using our utility function
   const displayRelatedProducts = relatedProducts?.map((rp) => ({
     ...rp,
-    name: rp.translations[0]?.name || '',
-    description: rp.translations[0]?.description || '',
+    name: getTranslationField(rp.translations, locale, 'name'),
+    description: getTranslationField(rp.translations, locale, 'description'),
   }))
 
   const urlMatchVariant = product.variants.find(
@@ -325,7 +336,7 @@ const ProductDetailsPage = async ({
       {
         '@type': 'ListItem',
         position: 1,
-        name: t('home'),
+        name: tHome('breadcrumb.home'),
         item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
       },
       {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { Language } from '@/lib/generated/prisma'
+import { Language } from '@/lib/generated/prisma'
 
 // Type for any entity that has translations
 type TranslatableEntity<T> = {
@@ -30,47 +30,27 @@ type QuestionTranslationFields = {
 
 /**
  * Gets the translation for a specific locale from a translations array
- * @param translations - Array of translation objects
- * @param locale - The locale to get the translation for
- * @param fallbackLocale - Optional fallback locale if translation is not found
- * @returns The translation object for the specified locale or the first one as fallback
+ * Always returns the first available translation (assumes queries already filtered by locale)
+ * @param translations - Array of translation objects (should only contain one translation for current locale)
+ * @returns The first translation or undefined
  */
-export function getTranslation<T extends Record<string, any>>(
-  translations: T[],
-  locale: string,
-  fallbackLocale?: string
-): T | undefined {
-  // Try to find translation for the specified locale
-  let translation = translations.find((t) => t.language === locale)
-
-  // If not found and fallback is provided, try fallback
-  if (!translation && fallbackLocale) {
-    translation = translations.find((t) => t.language === fallbackLocale)
-  }
-
-  // If still not found, return the first translation as ultimate fallback
-  if (!translation && translations.length > 0) {
-    return translations[0]
-  }
-
-  return translation
+export function getTranslation<T>(translations: T[]): T | undefined {
+  return translations[0]
 }
 
 /**
  * Gets a specific field from a translation
  * @param translations - Array of translation objects
- * @param locale - The locale to get the translation for
  * @param field - The field to extract
  * @param fallbackValue - Optional fallback value if field is not found
  * @returns The field value or fallback
  */
 export function getTranslationField<T extends Record<string, any>>(
   translations: T[],
-  locale: string,
   field: keyof T,
   fallbackValue?: string
 ): string {
-  const translation = getTranslation(translations, locale)
+  const translation = getTranslation(translations)
   const value = translation?.[field]
 
   return (value as string) || fallbackValue || ''
@@ -79,19 +59,13 @@ export function getTranslationField<T extends Record<string, any>>(
 /**
  * Transforms an entity to include translation fields directly
  * @param entity - The entity with translations
- * @param locale - The locale to use
- * @param fallbackLocale - Optional fallback locale
  * @returns The entity with translation fields at the top level
  */
 export function transformWithTranslations<
   T extends TranslatableEntity<TranslationFields>
->(
-  entity: T,
-  locale: string,
-  fallbackLocale?: string
-): Omit<T, 'translations'> & TranslationFields {
+>(entity: T): Omit<T, 'translations'> & TranslationFields {
   const { translations, ...rest } = entity
-  const translation = getTranslation(translations, locale, fallbackLocale)
+  const translation = getTranslation(translations)
 
   return {
     ...rest,
@@ -105,13 +79,9 @@ export function transformWithTranslations<
  */
 export function transformProductWithTranslations<
   T extends TranslatableEntity<ProductTranslationFields>
->(
-  entity: T,
-  locale: string,
-  fallbackLocale?: string
-): Omit<T, 'translations'> & ProductTranslationFields {
+>(entity: T): Omit<T, 'translations'> & ProductTranslationFields {
   const { translations, ...rest } = entity
-  const translation = getTranslation(translations, locale, fallbackLocale)
+  const translation = getTranslation(translations)
 
   return {
     ...rest,
@@ -126,13 +96,9 @@ export function transformProductWithTranslations<
  */
 export function transformSpecWithTranslations<
   T extends TranslatableEntity<SpecTranslationFields>
->(
-  entity: T,
-  locale: string,
-  fallbackLocale?: string
-): Omit<T, 'translations'> & SpecTranslationFields {
+>(entity: T): Omit<T, 'translations'> & SpecTranslationFields {
   const { translations, ...rest } = entity
-  const translation = getTranslation(translations, locale, fallbackLocale)
+  const translation = getTranslation(translations)
 
   return {
     ...rest,
@@ -146,13 +112,9 @@ export function transformSpecWithTranslations<
  */
 export function transformQuestionWithTranslations<
   T extends TranslatableEntity<QuestionTranslationFields>
->(
-  entity: T,
-  locale: string,
-  fallbackLocale?: string
-): Omit<T, 'translations'> & QuestionTranslationFields {
+>(entity: T): Omit<T, 'translations'> & QuestionTranslationFields {
   const { translations, ...rest } = entity
-  const translation = getTranslation(translations, locale, fallbackLocale)
+  const translation = getTranslation(translations)
 
   return {
     ...rest,
@@ -166,14 +128,8 @@ export function transformQuestionWithTranslations<
  */
 export function transformArrayWithTranslations<
   T extends TranslatableEntity<TranslationFields>
->(
-  entities: T[],
-  locale: string,
-  fallbackLocale?: string
-): Array<Omit<T, 'translations'> & TranslationFields> {
-  return entities.map((entity) =>
-    transformWithTranslations(entity, locale, fallbackLocale)
-  )
+>(entities: T[]): Array<Omit<T, 'translations'> & TranslationFields> {
+  return entities.map((entity) => transformWithTranslations(entity))
 }
 
 /**
@@ -181,14 +137,8 @@ export function transformArrayWithTranslations<
  */
 export function transformProductsWithTranslations<
   T extends TranslatableEntity<ProductTranslationFields>
->(
-  products: T[],
-  locale: string,
-  fallbackLocale?: string
-): Array<Omit<T, 'translations'> & ProductTranslationFields> {
-  return products.map((product) =>
-    transformProductWithTranslations(product, locale, fallbackLocale)
-  )
+>(products: T[]): Array<Omit<T, 'translations'> & ProductTranslationFields> {
+  return products.map((product) => transformProductWithTranslations(product))
 }
 
 /**
@@ -196,14 +146,8 @@ export function transformProductsWithTranslations<
  */
 export function transformSpecsWithTranslations<
   T extends TranslatableEntity<SpecTranslationFields>
->(
-  specs: T[],
-  locale: string,
-  fallbackLocale?: string
-): Array<Omit<T, 'translations'> & SpecTranslationFields> {
-  return specs.map((spec) =>
-    transformSpecWithTranslations(spec, locale, fallbackLocale)
-  )
+>(specs: T[]): Array<Omit<T, 'translations'> & SpecTranslationFields> {
+  return specs.map((spec) => transformSpecWithTranslations(spec))
 }
 
 /**
@@ -211,57 +155,93 @@ export function transformSpecsWithTranslations<
  */
 export function transformQuestionsWithTranslations<
   T extends TranslatableEntity<QuestionTranslationFields>
->(
-  questions: T[],
-  locale: string,
-  fallbackLocale?: string
-): Array<Omit<T, 'translations'> & QuestionTranslationFields> {
+>(questions: T[]): Array<Omit<T, 'translations'> & QuestionTranslationFields> {
   return questions.map((question) =>
-    transformQuestionWithTranslations(question, locale, fallbackLocale)
+    transformQuestionWithTranslations(question)
   )
 }
 
 /**
  * Creates a translation hook for client components
- * @param locale - The current locale
+ * Note: Since queries already filter by locale, we just need helpers to extract the first translation
  * @returns An object with translation helper functions
  */
-export function createTranslationHelpers(
-  locale: string,
-  fallbackLocale = 'en'
-) {
+export function createTranslationHelpers() {
   return {
     getTranslation: <T extends Record<string, any>>(translations: T[]) =>
-      getTranslation(translations, locale, fallbackLocale),
+      getTranslation(translations),
 
     getTranslationField: <T extends Record<string, any>>(
       translations: T[],
       field: keyof T,
       fallbackValue?: string
-    ) => getTranslationField(translations, locale, field, fallbackValue),
+    ) => getTranslationField(translations, field, fallbackValue),
 
     transformWithTranslations: <
       T extends TranslatableEntity<TranslationFields>
     >(
       entity: T
-    ) => transformWithTranslations(entity, locale, fallbackLocale),
+    ) => transformWithTranslations(entity),
 
     transformProductWithTranslations: <
       T extends TranslatableEntity<ProductTranslationFields>
     >(
       entity: T
-    ) => transformProductWithTranslations(entity, locale, fallbackLocale),
+    ) => transformProductWithTranslations(entity),
 
     transformSpecWithTranslations: <
       T extends TranslatableEntity<SpecTranslationFields>
     >(
       entity: T
-    ) => transformSpecWithTranslations(entity, locale, fallbackLocale),
+    ) => transformSpecWithTranslations(entity),
 
     transformQuestionWithTranslations: <
       T extends TranslatableEntity<QuestionTranslationFields>
     >(
       entity: T
-    ) => transformQuestionWithTranslations(entity, locale, fallbackLocale),
+    ) => transformQuestionWithTranslations(entity),
   }
+}
+
+/**
+ * Helper to safely get name from translations array
+ */
+export function getName<T extends { name: string }>(translations: T[]): string {
+  return translations[0]?.name || ''
+}
+
+/**
+ * Helper to safely get description from translations array
+ */
+export function getDescription<T extends { description?: string }>(
+  translations: T[]
+): string {
+  return translations[0]?.description || ''
+}
+
+/**
+ * Helper for product translations
+ */
+export function getProductTranslation(
+  translations: ProductTranslationFields[]
+): ProductTranslationFields {
+  return translations[0] || { name: '', description: '', keywords: '' }
+}
+
+/**
+ * Helper for spec translations
+ */
+export function getSpecTranslation(
+  translations: SpecTranslationFields[]
+): SpecTranslationFields {
+  return translations[0] || { name: '', value: '' }
+}
+
+/**
+ * Helper for question translations
+ */
+export function getQuestionTranslation(
+  translations: QuestionTranslationFields[]
+): QuestionTranslationFields {
+  return translations[0] || { question: '', answer: '' }
 }

@@ -1,22 +1,24 @@
 {
   "Hero": {
     "title": "Laboratorio Pelle Sarina",
-    "description": "I nostri prodotti sono pensati per donne che cercano di esprimere la loro personalità autentica, non di mostrarla. Ogni borsa è la manifestazione di una bellezza grezza e naturale e dell'artigianato artistico, fatto con amore.",
+    "description": "I nostri prodotti sono progettati per donne che cercano di esprimere la loro personalità autentica, non solo mostrarla. Ogni borsa è una manifestazione di bellezza grezza, naturale e di artigianato fatto a mano, creato con amore.",
     "linkTitle": "Prodotti"
   },
   "StoreStatements": {
     "title": "L'Inizio della Nostra Storia",
-    "description": "Il nostro piccolo laboratorio è il luogo dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con un'enorme passione e una visione di un futuro luminoso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il cuore della creazione di prodotti destinati a essere tuoi compagni per tutta la vita."
+    "description": "Il nostro piccolo laboratorio è dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con immensa passione e una visione per un futuro luminoso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il nucleo della creazione di prodotti destinati a essere compagni per tutta la vita."
   },
   "bestSellers": {
-    "title": "I più venduti"
+    "title": "Bestseller",
+    "description": "I nostri prodotti popolari"
   },
   "newestSellers": {
-    "title": "Novità"
+    "title": "Nuovi Arrivi",
+    "description": "Ultimi prodotti nella nostra collezione"
   },
   "workVideo": {
     "title": "L'Arte dell'Artigianato: Autenticità in Ogni Punto",
-    "description": "Siamo specializzati nella creazione di articoli in pelle che richiedono una finezza squisita, con un'attenzione particolare alla nostra selezione di materiali. Tutte le nostre collezioni sono realizzate esclusivamente in pelle full-grain—il tipo più autentico e pregiato di pelle naturale."
+    "description": "Ci specializziamo nella creazione di articoli in pelle che richiedono una finezza squisita, con un'attenzione particolare alla nostra selezione di materiali. Tutte le nostre collezioni sono fatte esclusivamente in pelle pieno fiore—il tipo più autentico e premium di pelle naturale."
   },
   "commitments": {
     "title": "I Nostri Impegni",
@@ -24,32 +26,32 @@
       {
         "id": "1",
         "title": "Amore per la Pelle Autentica",
-        "description": "Utilizziamo solo le più pregiate pelli naturali full-grain. Con cuciture meticolose e artistiche, queste pelli diventano prodotti durevoli e unici che diventeranno più belli e autentici con il tempo. Garantiamo che nessuno dei nostri prodotti è in pelle artificiale (plastica).",
+        "description": "Usiamo solo le migliori pelli naturali pieno fiore. Con cuciture meticolose e artistiche, queste pelli diventano prodotti durevoli e unici che diventano più belli e autentici con il tempo. Garantiamo che nessuno dei nostri prodotti sia fatto di pelle artificiale (plastica).",
         "url": "/images/commit1.webp"
       },
       {
-        "id": "2",
-        "title": "Artigianato Etico e Responsabile",
-        "description": "La produzione avviene nel nostro laboratorio in condizioni eque e rispettose. Rispettiamo l'ambiente e i diritti umani, utilizzando materie prime riciclate ea basso consumo idrico ove possibile ed evitando gli inquinanti nel nostro processo di produzione. I nostri piccoli passi verso un futuro più verde.",
+        "id": "2", 
+        "title": "Etica e Responsabilità",
+        "description": "La produzione avviene nel nostro laboratorio in condizioni eque e rispettose. Rispettiamo l'ambiente e i diritti umani, usando materie prime riciclate e a basso consumo d'acqua quando possibile ed evitando inquinanti nel nostro processo di produzione. I nostri piccoli passi verso un futuro più verde.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
         "title": "Attenzione Meticolosa ai Dettagli",
-        "description": "Non ci accontentiamo di nulla di meno che della perfezione. Dalla scelta di un pezzo di pelle all'ultima cucitura e all'installazione di una chiusura, ogni passaggio viene eseguito con precisione meticolosa e amore artistico. Ogni borsa non è un articolo, ma un'opera d'arte che porta il tuo nome.",
+        "description": "Non accontentiamoci di meno della perfezione. Dalla selezione di un pezzo di pelle all'ultima cucitura e all'installazione di una chiusura, ogni passaggio è eseguito con precisione meticolosa e amore artistico. Ogni borsa non è solo un articolo, ma un'opera d'arte che porta il tuo nome.",
         "url": "/images/commit3.jpg"
       }
     ]
-  },
+  }, 
   "product": {
     "notFound": {
       "title": "Prodotto Non Trovato!",
       "description": "Il prodotto che stavi cercando non è stato trovato."
     },
     "specialBrand": "Marchio Speciale",
-    "productImage": "Immagine del Prodotto",
+    "productImage": "Immagine Prodotto",
     "inStock": "Disponibile",
-    "outOfStock": "Non Disponibile",
+    "outOfStock": "Esaurito",
     "qualityProduct": "Prodotto di Qualità",
     "from": "da",
     "customer": "Gentile Cliente",
@@ -58,7 +60,7 @@
       "home": "Sarina"
     },
     "rating": {
-      "from": "da",
+      "from": "su",
       "people": "persone"
     },
     "size": {
@@ -70,7 +72,7 @@
     "stock": {
       "available": "Disponibile",
       "outOfStock": "Esaurito",
-      "remaining": "articoli rimanenti"
+      "remaining": "articoli rimasti"
     },
     "variant": {
       "unavailable": "Questa combinazione di colore e taglia non è disponibile!",
@@ -80,7 +82,7 @@
       "viewCart": "Vedi Carrello"
     },
     "keywords": "Parole Chiave",
-    "specifications": "Specifiche & Dimensioni",
+    "specifications": "Specifiche e Dimensioni",
     "relatedProducts": "Prodotti Correlati"
   },
   "metadata": {
@@ -91,11 +93,32 @@
     "siteName": "Laboratorio Pelle Sarina",
     "keywords": {
       "naturalLeather": "pelle naturale",
-      "womenLeatherBag": "borsa in pelle da donna"
+      "womenLeatherBag": "borsa in pelle donna",
+      "common": "pelle naturale, borsa in pelle donna, borsa in pelle donna, pelle naturale garantita, negozio online, laboratorio pelle fatto a mano, negozio di pelle"
     }
   },
   "home": {
     "siteName": "Laboratorio Pelle Sarina",
-    "discoverMore": "Scopri Di Più"
+    "discoverMore": "Scopri di Più",
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Prodotti",
+      "about": "Chi Siamo",
+      "contact": "Contatti"
+    },
+    "organization": {
+      "description": "Negozio online premium che offre prodotti di qualità con spedizione veloce e eccellente servizio clienti"
+    },
+    "bestSellers": {
+      "title": "Bestseller",
+      "description": "I nostri prodotti popolari"
+    },
+    "newestSellers": {
+      "title": "Nuovi Arrivi",
+      "description": "Ultimi prodotti nella nostra collezione"
+    }
+  },
+  "discoverMore": {
+    "viewCategory": "Vedi {name}"
   }
 }

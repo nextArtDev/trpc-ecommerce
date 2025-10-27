@@ -1,22 +1,24 @@
 {
   "Hero": {
     "title": "Atelier de Cuir Sarina",
-    "description": "Nos produits sont conçus pour les femmes qui cherchent à exprimer leur personnalité authentique, pas à l'exposer. Chaque sac est la manifestation d'une beauté brute et naturelle et d'un artisanat artistique, fait avec amour.",
+    "description": "Nos produits sont conçus pour les femmes cherchant à exprimer leur personnalité authentique, pas seulement à la montrer. Chaque sac est une manifestation de beauté brute, naturelle et d'artisanat à la main, fait avec amour.",
     "linkTitle": "Produits"
   },
   "StoreStatements": {
     "title": "Le Début de Notre Histoire",
-    "description": "Notre petit atelier est l'endroit où les rêves de cuir deviennent réalité. Nous avons commencé notre voyage avec une immense passion et une vision d'un avenir radieux, concevant et créant des sacs et des accessoires. Nous croyons que le design intemporel et la qualité exceptionnelle sont au cœur de la création de produits destinés à être vos compagnons pour toute la vie."
+    "description": "Notre petit atelier est l'endroit où les rêves en cuir deviennent réalité. Nous avons commencé notre voyage avec une immense passion et une vision pour un avenir radieux, concevant et fabriquant des sacs et des accessoires. Nous croyons que le design intemporel et la qualité exceptionnelle sont au cœur de la création de produits destinés à être vos compagnons de toute une vie."
   },
   "bestSellers": {
-    "title": "Meilleures ventes"
+    "title": "Meilleures Ventes",
+    "description": "Nos produits populaires"
   },
   "newestSellers": {
-    "title": "Nouveautés"
+    "title": "Nouveautés",
+    "description": "Derniers produits dans notre collection"
   },
   "workVideo": {
-    "title": "L'Art de l'Artisanat : Authenticité en Chaque Point",
-    "description": "Nous sommes spécialisés dans la création d'articles en cuir qui exigent une finesse exquise, avec une attention particulière portée à notre sélection de matériaux. Toutes nos collections sont réalisées exclusivement en cuir full-grain — le type de cuir naturel le plus authentique et le plus premium."
+    "title": "L'Art de l'Artisanat : Authenticité dans Chaque Point",
+    "description": "Nous nous spécialisons dans la fabrication d'articles en cuir qui exigent une finesse exquise, avec un accent particulier sur notre sélection de matériaux. Toutes nos collections sont fabriquées exclusivement à partir de cuir pleine fleur—le type de cuir naturel le plus authentique et premium."
   },
   "commitments": {
     "title": "Nos Engagements",
@@ -24,41 +26,41 @@
       {
         "id": "1",
         "title": "Amour du Cuir Authentique",
-        "description": "Nous n'utilisons que les plus beaux cuirs naturels full-grain. Avec des coutures méticuleuses et artistiques, ces cuirs deviennent des produits durables et uniques qui deviendront plus beaux et authentiques avec le temps. Nous garantissons qu'aucun de nos produits n'est en cuir artificiel (plastique).",
+        "description": "Nous n'utilisons que les meilleurs cuirs naturels pleine fleur. Avec des coutures méticuleuses et artistiques, ces cuirs deviennent des produits durables et uniques qui deviennent plus beaux et authentiques avec le temps. Nous garantissons qu'aucun de nos produits n'est fabriqué à partir de cuir artificiel (plastique).",
         "url": "/images/commit1.webp"
       },
       {
-        "id": "2",
-        "title": "Artisanat Éthique et Responsable",
-        "description": "La production a lieu dans notre propre atelier dans des conditions équitables et respectueuses. Nous respectons l'environnement et les droits de l'homme, en utilisant des matières premières recyclées et à faible consommation d'eau lorsque cela est possible et en évitant les polluants dans notre processus de production. Nos petits pas vers un avenir plus vert.",
+        "id": "2", 
+        "title": "Éthique et Responsabilités",
+        "description": "La production a lieu dans notre propre atelier dans des conditions équitables et respectueuses. Nous respectons l'environnement et les droits de l'homme, utilisant des matières premières recyclées et à faible consommation d'eau lorsque possible et évitant les polluants dans notre processus de production. Nos petits pas vers un avenir plus vert.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
         "title": "Attention Meticuleuse aux Détails",
-        "description": "Nous ne nous contentons de rien moins que la perfection. Du choix d'un morceau de cuir à la dernière couture et à l'installation d'une fermoir, chaque étape est réalisée avec une précision méticuleuse et un amour artistique. Chaque sac n'est pas un article, mais une œuvre d'art qui porte votre nom.",
+        "description": "Nous n'acceptons rien moins que la perfection. De la sélection d'un morceau de cuir à la dernière couture et à l'installation d'un fermoir, chaque étape est réalisée avec une précision méticuleuse et un amour artistique. Chaque sac n'est pas seulement un article, mais une œuvre d'art qui porte votre nom.",
         "url": "/images/commit3.jpg"
       }
     ]
-  },
+  }, 
   "product": {
     "notFound": {
-      "title": "Produit Introuvable !",
-      "description": "Le produit que vous recherchez n'a pas pu être trouvé."
+      "title": "Produit Non Trouvé !",
+      "description": "Le produit que vous cherchiez n'a pas pu être trouvé."
     },
     "specialBrand": "Marque Spéciale",
     "productImage": "Image du Produit",
     "inStock": "En Stock",
     "outOfStock": "Rupture de Stock",
     "qualityProduct": "Produit de Qualité",
-    "from": "de",
-    "customer": "Chère Cliente, Cher Client",
+    "from": "à partir de",
+    "customer": "Chère Cliente",
     "home": "Accueil",
     "breadcrumb": {
       "home": "Sarina"
     },
     "rating": {
-      "from": "de",
+      "from": "sur",
       "people": "personnes"
     },
     "size": {
@@ -69,7 +71,7 @@
     },
     "stock": {
       "available": "Disponible",
-      "outOfStock": "En Rupture de Stock",
+      "outOfStock": "Rupture de Stock",
       "remaining": "articles restants"
     },
     "variant": {
@@ -80,22 +82,43 @@
       "viewCart": "Voir le Panier"
     },
     "keywords": "Mots-clés",
-    "specifications": "Spécifications & Dimensions",
+    "specifications": "Spécifications et Dimensions",
     "relatedProducts": "Produits Associés"
   },
-   "metadata": {
+  "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",
-      "description": "Atelier de fabrication de sacs et de produits en cuir naturel. {categories} {rating} Livraison rapide, produits de haute qualité et garantie d'utilisation de cuir naturel."
+      "description": "Atelier de fabrication de sacs et produits en cuir naturel. {categories} {rating} Livraison rapide, produits de haute qualité et garantie d'utilisation de cuir naturel."
     },
     "siteName": "Atelier de Cuir Sarina",
     "keywords": {
       "naturalLeather": "cuir naturel",
-      "womenLeatherBag": "sac en cuir femme"
+      "womenLeatherBag": "sac en cuir femme",
+      "common": "cuir naturel, sac en cuir femme, sac en cuir femme, cuir naturel garanti, boutique en ligne, atelier de cuir fait main, magasin de cuir"
     }
   },
   "home": {
     "siteName": "Atelier de Cuir Sarina",
-    "discoverMore": "Découvrir Plus"
+    "discoverMore": "Découvrir Plus",
+    "breadcrumb": {
+      "home": "Accueil",
+      "products": "Produits",
+      "about": "À Propos",
+      "contact": "Contact"
+    },
+    "organization": {
+      "description": "Boutique en ligne premium offrant des produits de qualité avec livraison rapide et excellent service client"
+    },
+    "bestSellers": {
+      "title": "Meilleures Ventes",
+      "description": "Nos produits populaires"
+    },
+    "newestSellers": {
+      "title": "Nouveautés",
+      "description": "Derniers produits dans notre collection"
+    }
+  },
+  "discoverMore": {
+    "viewCategory": "Voir {name}"
   }
 }

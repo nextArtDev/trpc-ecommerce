@@ -9,10 +9,12 @@
     "description": "Our small workshop is where leather dreams become reality. We began our journey with immense passion and a vision for a bright future, designing and crafting bags and accessories. We believe that timeless design and exceptional quality are the core of creating products destined to be your lifelong companions."
   },
   "bestSellers": {
-    "title": "Bestsellers"
+    "title": "Bestsellers",
+    "description": "Our popular products"
   },
   "newestSellers": {
-    "title": "New Arrivals"
+    "title": "New Arrivals",
+    "description": "Latest products in our collection"
   },
   "workVideo": {
     "title": "The Art of Craftsmanship: Authenticity in Every Stitch",
@@ -83,7 +85,7 @@
     "specifications": "Specifications & Dimensions",
     "relatedProducts": "Related Products"
   },
-    "metadata": {
+  "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",
       "description": "Workshop for crafting bags and natural leather products. {categories} {rating} Fast shipping, high-quality products, and a guarantee of using natural leather."
@@ -91,12 +93,32 @@
     "siteName": "Sarina Leather Workshop",
     "keywords": {
       "naturalLeather": "natural leather",
-      "womenLeatherBag": "women's leather bag"
+      "womenLeatherBag": "women's leather bag",
+      "common": "natural leather, women's leather bag, women's leather bag, guaranteed natural leather, online store, handmade leather workshop, leather store"
     }
   },
   "home": {
     "siteName": "Sarina Leather Workshop",
-    "discoverMore": "Discover More"
+    "discoverMore": "Discover More",
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products",
+      "about": "About Us",
+      "contact": "Contact Us"
+    },
+    "organization": {
+      "description": "Premium online store offering quality products with fast shipping and excellent customer service"
+    },
+    "bestSellers": {
+      "title": "Bestsellers",
+      "description": "Our popular products"
+    },
+    "newestSellers": {
+      "title": "New Arrivals",
+      "description": "Latest products in our collection"
+    }
+  },
+  "discoverMore": {
+    "viewCategory": "View {name}"
   }
- 
 }

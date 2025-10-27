@@ -1,22 +1,24 @@
 {
   "Hero": {
     "title": "Sarina Lederwerkstatt",
-    "description": "Unsere Produkte sind für Frauen konzipiert, die ihren authentischen Charakter ausdrücken möchten, nicht ihn zur Schau stellen. Jede Tasche ist ein Manifest roher, natürlicher Schönheit und handwerklicher Kunst, die mit Liebe gemacht wurde.",
+    "description": "Unsere Produkte sind für Frauen konzipiert, die ihren authentischen Charakter zum Ausdruck bringen wollen, nicht nur zur Schau stellen. Jede Tasche ist ein Manifestation von roher, natürlicher Schönheit und handgefertigter Kunst, mit Liebe hergestellt.",
     "linkTitle": "Produkte"
   },
   "StoreStatements": {
     "title": "Der Anfang unserer Geschichte",
-    "description": "Unsere kleine Werkstatt ist der Ort, an dem Lederträume wahr werden. Wir begannen unsere Reise mit riesiger Leidenschaft und einer Vision für eine strahlende Zukunft, in der wir Taschen und Accessoires entwerfen und fertigen. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern für die Schaffung von Produkten sind, die Ihr lebenslanger Begleiter sein sollen."
+    "description": "Unsere kleine Werkstatt ist der Ort, an dem Lederträume Wirklichkeit werden. Wir begannen unsere Reise mit großer Leidenschaft und einer Vision für eine strahlende Zukunft und entwarfen und fertigten Taschen und Accessoires. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern der Schaffung von Produkten sind, die dazu bestimmt sind, Ihre lebenslangen Begleiter zu sein."
   },
   "bestSellers": {
-    "title": "Bestseller"
+    "title": "Bestseller",
+    "description": "Unsere beliebtesten Produkte"
   },
   "newestSellers": {
-    "title": "Neuankömmlinge"
+    "title": "Neuankömmlinge",
+    "description": "Neueste Produkte in unserer Kollektion"
   },
   "workVideo": {
     "title": "Die Kunst des Handwerks: Authentizität in jedem Stich",
-    "description": "Wir sind auf die Herstellung von Lederwaren spezialisiert, die exquisite Finesse erfordern, mit besonderem Augenmerk auf unsere Materialauswahl. Alle unsere Kollektionen werden ausschließlich aus Full-Grain-Leder hergestellt – der authentischsten und hochwertigsten Art von Naturleder."
+    "description": "Wir spezialisieren uns auf die Herstellung von Lederwaren, die exzellente Finesse erfordern, mit besonderem Augenmerk auf unsere Materialauswahl. Alle unsere Kollektionen werden ausschließlich aus Vollgrainleder hergestellt - dem authentischsten und hochwertigsten Typ von Naturleder."
   },
   "commitments": {
     "title": "Unsere Verpflichtungen",
@@ -24,35 +26,35 @@
       {
         "id": "1",
         "title": "Liebe zu authentischem Leder",
-        "description": "Wir verwenden nur die feinsten Full-Grain-Naturleder. Mit sorgfältiger und künstlerischer Naht werden diese Leder zu langlebigen, einzigartigen Produkten, die mit der Zeit schöner und authentischer werden. Wir garantieren, dass keines unserer Produkte aus Kunstleder (Kunststoff) besteht.",
+        "description": "Wir verwenden nur die feinsten Vollgrannaturleder. Mit sorgfältiger und künstlerischer Naht werden diese Leder zu langlebigen, einzigartigen Produkten, die mit der Zeit schöner und authentischer werden. Wir garantieren, dass keine unserer Produkte aus künstlichem (Kunststoff-)Leder hergestellt sind.",
         "url": "/images/commit1.webp"
       },
       {
-        "id": "2",
-        "title": "Ethisches und verantwortungsvolles Handwerk",
-        "description": "Die Produktion findet in unserer eigenen Werkstatt unter fairen und respektvollen Bedingungen statt. Wir respektieren die Umwelt und die Menschenrechte und verwenden nach Möglichkeit recycelte und wassersparende Rohstoffe und vermeiden Schadstoffe in unserem Produktionsprozess. Unsere kleinen Schritte für eine grünere Zukunft.",
+        "id": "2", 
+        "title": "Ethik und Verantwortlichkeiten",
+        "description": "Die Produktion findet in unserer eigenen Werkstatt unter fairen und respektvollen Bedingungen statt. Wir respektieren die Umwelt und die Menschenrechte, verwenden nach Möglichkeit recycelte und wassersparende Rohstoffe und vermeiden Schadstoffe in unserem Produktionsprozess. Unsere kleinen Schritte zu einer grüneren Zukunft.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
-        "title": "Meticulöse Aufmerksamkeit für Details",
-        "description": "Wir geben uns mit nichts weniger als Perfektion zufrieden. Von der Auswahl eines Lederstücks bis zum letzten Stich und der Installation eines Verschlusses wird jeder Schritt mit metikulöser Präzision und künstlerischer Liebe ausgeführt. Jede Tasche ist nicht nur ein Artikel, sondern ein Kunstwerk, das Ihren Namen trägt.",
+        "title": "Sorgfältige Aufmerksamkeit auf Details",
+        "description": "Wir akzeptieren nichts weniger als Perfektion. Von der Auswahl eines Lederteils bis zum letzten Stich und der Installation einer Verschluss - jeder Schritt wird mit sorgfältiger Präzision und künstlerischer Liebe ausgeführt. Jede Tasche ist nicht nur ein Artikel, sondern ein Kunstwerk, das Ihren Namen trägt.",
         "url": "/images/commit3.jpg"
       }
     ]
-  },
-   "product": {
+  }, 
+  "product": {
     "notFound": {
-      "title": "Produkt Nicht Gefunden!",
+      "title": "Produkt nicht gefunden!",
       "description": "Das gesuchte Produkt konnte nicht gefunden werden."
     },
-    "specialBrand": "Besondere Marke",
+    "specialBrand": "Spezialmarke",
     "productImage": "Produktbild",
     "inStock": "Auf Lager",
-    "outOfStock": "Nicht Auf Lager",
+    "outOfStock": "Nicht auf Lager",
     "qualityProduct": "Qualitätsprodukt",
-    "from": "von",
-    "customer": "Geschätzte Kundin, Geschätzter Kunde",
+    "from": "ab",
+    "customer": "Geschätzter Kunde",
     "home": "Startseite",
     "breadcrumb": {
       "home": "Sarina"
@@ -69,33 +71,54 @@
     },
     "stock": {
       "available": "Verfügbar",
-      "outOfStock": "Ausverkauft",
-      "remaining": "Stück übrig"
+      "outOfStock": "Nicht verfügbar",
+      "remaining": "Artikel übrig"
     },
     "variant": {
       "unavailable": "Diese Farb- und Größenkombination ist nicht verfügbar!",
       "selectAnother": "Bitte wählen Sie eine andere Kombination aus Größe und Farbe."
     },
     "cart": {
-      "viewCart": "Warenkorb Anzeigen"
+      "viewCart": "Warenkorb anzeigen"
     },
     "keywords": "Schlüsselwörter",
     "specifications": "Spezifikationen & Abmessungen",
-    "relatedProducts": "Ähnliche Produkte"
+    "relatedProducts": "Verwandte Produkte"
   },
-   "metadata": {
+  "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",
-      "description": "Werkstatt zur Herstellung von Taschen und Produkten aus Naturleder. {categories} {rating} Schneller Versand, hochwertige Produkte und die Garantie für die Verwendung von Naturleder."
+      "description": "Werkstatt für die Herstellung von Taschen und Naturlederprodukten. {categories} {rating} Schneller Versand, hochwertige Produkte und Garantie für die Verwendung von Naturleder."
     },
     "siteName": "Sarina Lederwerkstatt",
     "keywords": {
       "naturalLeather": "Naturleder",
-      "womenLeatherBag": "Damenledertasche"
+      "womenLeatherBag": "Damenledertasche",
+      "common": "Naturleder, Damenledertasche, Damenledertasche, garantiertes Naturleder, Online-Shop, Leder-Nähwerkstatt, Lederladen"
     }
   },
   "home": {
     "siteName": "Sarina Lederwerkstatt",
-    "discoverMore": "Mehr Entdecken"
+    "discoverMore": "Mehr entdecken",
+    "breadcrumb": {
+      "home": "Startseite",
+      "products": "Produkte",
+      "about": "Über uns",
+      "contact": "Kontakt"
+    },
+    "organization": {
+      "description": "Premium-Online-Shop, der qualitativ hochwertige Produkte mit schnellem Versand und exzellentem Kundenservice anbietet"
+    },
+    "bestSellers": {
+      "title": "Bestseller",
+      "description": "Unsere beliebtesten Produkte"
+    },
+    "newestSellers": {
+      "title": "Neuankömmlinge",
+      "description": "Neueste Produkte in unserer Kollektion"
+    }
+  },
+  "discoverMore": {
+    "viewCategory": "{name} ansehen"
   }
 }
