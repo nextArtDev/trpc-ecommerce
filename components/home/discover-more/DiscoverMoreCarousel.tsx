@@ -23,12 +23,15 @@ export default function DiscoverMoreCarousel({
   const carouselRef = useRef(null)
   const locale = useLocale()
   const t = useTranslations('discoverMore')
-  const { getTranslationField } = createTranslationHelpers(locale)
+  const { getTranslationField } = createTranslationHelpers()
 
   const isInView = useInView(carouselRef, { once: true, amount: 0.3 })
 
   return (
-    <section className="w-full h-full">
+    <section className="flex flex-col w-full h-full gap-6  text-center py-12 ">
+      <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8  ">
+        {t('title')}
+      </h2>
       <Carousel
         opts={{
           align: 'start',

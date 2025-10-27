@@ -51,6 +51,7 @@
     "specialBrand": "برند ویژه",
     "productImage": "تصویر محصول",
     "inStock": "موجود",
+    "currency": "تومان",
     "outOfStock": "ناموجود",
     "qualityProduct": "محصول با کیفیت",
     "from": "از",
@@ -109,5 +110,9 @@
     "organization": {
       "description": "فروشگاه برتر آنلاین که محصولات با کیفیت با ارسال سریع و خدمات عالی به مشتریان ارائه می‌دهد"
     }
+  },
+   "discoverMore": {
+    "title": "بیشتر",
+    "viewCategory": "{name} دیدن"
   }
 }

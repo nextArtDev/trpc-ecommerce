@@ -50,6 +50,7 @@
     },
     "specialBrand": "Marque Spéciale",
     "productImage": "Image du Produit",
+    "currency": "$",
     "inStock": "En Stock",
     "outOfStock": "Rupture de Stock",
     "qualityProduct": "Produit de Qualité",
@@ -119,6 +120,7 @@
     }
   },
   "discoverMore": {
+   "title": "Découvrir Plus",
     "viewCategory": "Voir {name}"
   }
 }

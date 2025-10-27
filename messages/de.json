@@ -52,6 +52,7 @@
     "productImage": "Produktbild",
     "inStock": "Auf Lager",
     "outOfStock": "Nicht auf Lager",
+    "currency": "$",
     "qualityProduct": "Qualitätsprodukt",
     "from": "ab",
     "customer": "Geschätzter Kunde",
@@ -119,6 +120,7 @@
     }
   },
   "discoverMore": {
-    "viewCategory": "{name} ansehen"
+    "title": "Mehr Entdecken",
+    "viewCategory": "{name} Ansehen"
   }
 }

@@ -50,6 +50,7 @@
     },
     "specialBrand": "Special Brand",
     "productImage": "Product Image",
+    "currency": "$", 
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
     "qualityProduct": "Quality Product",
@@ -119,6 +120,7 @@
     }
   },
   "discoverMore": {
+    "title": "Discover More",
     "viewCategory": "View {name}"
   }
 }

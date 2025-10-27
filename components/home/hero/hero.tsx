@@ -6,7 +6,7 @@ import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
 import { getTranslations, getLocale } from 'next-intl/server'
-import { getTranslationField } from '@/lib/translation-utils'
+import { createTranslationHelpers } from '@/lib/translation-utils'
 
 const Hero = async ({
   subCategories,
@@ -15,6 +15,7 @@ const Hero = async ({
 }) => {
   const t = await getTranslations('Hero')
   const locale = await getLocale()
+  const { getTranslationField } = createTranslationHelpers()
 
   return (
     <Bounded
@@ -77,7 +78,7 @@ const Hero = async ({
                       href={`/${locale}/sub-categories/${sub.url}`}
                       className="bg-linear-to-b from-white/5 to-white/30 backdrop-blur-[2px] border rounded-none px-2 py-1 text-center text-white border-white"
                     >
-                      {getTranslationField(sub.translations, locale, 'name')}
+                      {getTranslationField(sub.translations, 'name')}
                     </TransitionLink>
                   </FadeIn>
                 </li>

@@ -1,29 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Language } from '@/lib/generated/prisma'
 
 // Type for any entity that has translations
-type TranslatableEntity<T> = {
+export type TranslatableEntity<T> = {
   translations: T[]
 }
 
 // Type for translation objects
-type TranslationFields = {
+export type TranslationFields = {
   name: string
   description?: string
 }
 
-type ProductTranslationFields = {
+export type ProductTranslationFields = {
   name: string
   description: string
   keywords?: string
 }
 
-type SpecTranslationFields = {
+export type SpecTranslationFields = {
   name: string
   value: string
 }
 
-type QuestionTranslationFields = {
+export type QuestionTranslationFields = {
   question: string
   answer: string
 }

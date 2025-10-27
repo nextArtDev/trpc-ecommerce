@@ -30,7 +30,7 @@ export type BasicProductColor = {
 
 export type Translation = {
   name: string
-  description?: string
+  description?: string | null
 }
 
 export type ProductTranslation = {

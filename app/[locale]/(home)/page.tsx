@@ -349,10 +349,7 @@ export default async function Home() {
       <section className=" ">
         <Commitments />
       </section>
-      <section className="flex flex-col w-full h-full gap-6  text-center py-12 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8  ">
-          بیشتر{' '}
-        </h2>
+      <section className="">
         <DiscoverMoreCarousel subCategories={subCategories} />
       </section>
 
