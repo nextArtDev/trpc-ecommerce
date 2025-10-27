@@ -1,6 +1,5 @@
 import ProductDetailCarousel from '@/components/product/product-detail-carousel'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
-
 import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
 import ProductStatements from '@/components/product/product-detail/ProductStatemeents'
 import { buttonVariants } from '@/components/ui/button'
@@ -9,7 +8,6 @@ import { Review } from '@/lib/generated/prisma'
 import { ProductDetails, ProductReview, RelatedProduct } from '@/lib/types/home'
 import { FC, useMemo } from 'react'
 import ReviewList from './ReviewList'
-// import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import RelatedProductCarousel from '@/components/product/related-products-carousel'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -23,7 +21,7 @@ import ProductBreadcrumb from './ProductBreadcrumb'
 import { Check } from 'lucide-react'
 import ProductDescription from './ProductDescription'
 import { ShareButton } from './share-button'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -36,6 +34,7 @@ type ProductPageProp = {
   relatedProducts: RelatedProduct[] | null
   isInWishList: boolean
 }
+
 const ProductPage: FC<ProductPageProp> = ({
   data,
   userId,
@@ -43,22 +42,18 @@ const ProductPage: FC<ProductPageProp> = ({
   productAverageRating,
   userReview,
   relatedProducts,
-
   selectedColorId,
   selectedSizeId,
   isInWishList,
 }) => {
   const t = useTranslations('product')
+  const locale = useLocale()
 
   const {
     description,
     sku,
     images,
-    // variantImages,
-    // sizes,
-    // colors,
     variants,
-
     brand,
     subCategory,
     id,
@@ -70,20 +65,13 @@ const ProductPage: FC<ProductPageProp> = ({
     keywords,
     isSale,
     saleEndDate,
-    // rating,
-    // sales,
     views,
-    // isFeatured,
-    // createdAt,
-    // updatedAt,
-    // category,
-    // offerTag,
-    // freeShipping,
   } = data
 
   const currentVariant = variants.find(
     (v) => v.size?.id === selectedSizeId && v.color?.id === selectedColorId
   )
+
   const uniqueSizes = useMemo(() => {
     const seen = new Set()
     return variants
@@ -110,23 +98,22 @@ const ProductPage: FC<ProductPageProp> = ({
     <section className="pb-24 w-full h-full">
       <ProductBreadcrumb
         links={[
-          { id: '1', label: t('breadcrumb.home'), href: '/' },
+          { id: '1', label: t('breadcrumb.home'), href: `/${locale}` },
           {
             id: '2',
             label: subCategory.name,
-            href: `/sub-categories/${subCategory.url}`,
+            href: `/${locale}/sub-categories/${subCategory.url}`,
           },
-          { id: '3', label: name, href: slug },
+          { id: '3', label: name, href: `/${locale}/products/${slug}` },
         ]}
       />
-      <div className="max-w-2xl px-4 mx-auto  flex flex-col gap-4">
-        <article className=" ">
+      <div className="max-w-2xl px-4 mx-auto flex flex-col gap-4">
+        <article className="">
           <ProductDetailCarousel
             images={[...variants?.flatMap((vr) => vr?.images ?? []), ...images]}
           />
         </article>
 
-        {/* <ProductDetails /> */}
         <article className="grid grid-row-5 gap-4">
           <div className="flex items-center justify-between gap-2">
             {productAverageRating && (
@@ -144,16 +131,13 @@ const ProductPage: FC<ProductPageProp> = ({
             <ShareButton />
           </div>
           <p className="text-sm font-semibold">{brand}</p>
-          <p className="text-base font-bold">
-            {/* medium handbag with double flap in grained leather */}
-            {name}
-          </p>
+          <p className="text-base font-bold">{name}</p>
 
           <Separator />
           <article className="flex items-center justify-evenly">
             {/* === COLOR SELECTION === */}
-            <div className=" flex-1 flex flex-col  gap-4 items-start">
-              <p className="text-base font-semibold flex items-center gap-x-1 ">
+            <div className="flex-1 flex flex-col gap-4 items-start">
+              <p className="text-base font-semibold flex items-center gap-x-1">
                 {t('size.selected')}:
                 <Badge className="text-indigo-500 bg-indigo-500/35 inline text-base font-semibold py-0.5 px-1">
                   {currentVariant?.size.name}
@@ -169,7 +153,7 @@ const ProductPage: FC<ProductPageProp> = ({
                     <li key={size.id}>
                       <Link
                         href={{
-                          pathname: `/products/${slug}`,
+                          pathname: `/${locale}/products/${slug}`,
                           query: { size: size.id, color: selectedColorId },
                         }}
                         replace
@@ -192,7 +176,7 @@ const ProductPage: FC<ProductPageProp> = ({
             </div>
             <Separator orientation="vertical" />
             <div className="pr-2 flex-1 flex flex-col gap-4 items-start">
-              <p className="text-base font-semibold flex  items-center gap-x-1">
+              <p className="text-base font-semibold flex items-center gap-x-1">
                 {t('color.selected')}:{' '}
                 <Badge className="text-indigo-500 bg-indigo-500/35 inline text-base font-semibold py-0.5 px-1">
                   {currentVariant?.color.name}
@@ -208,15 +192,15 @@ const ProductPage: FC<ProductPageProp> = ({
                     <Link
                       key={color.id}
                       href={{
-                        pathname: `/products/${slug}`,
+                        pathname: `/${locale}/products/${slug}`,
                         query: { size: selectedSizeId, color: color.id },
                       }}
                       replace
                       scroll={false}
                       className={cn(
-                        'relative rounded-none  m-2 transition-all',
+                        'relative rounded-none m-2 transition-all',
                         selectedColorId === color.id
-                          ? 'ring-4   ring-indigo-500'
+                          ? 'ring-4 ring-indigo-500'
                           : '',
                         !isAvailable &&
                           'opacity-50 cursor-not-allowed pointer-events-none grayscale-75'
@@ -297,9 +281,9 @@ const ProductPage: FC<ProductPageProp> = ({
         <Link
           className={cn(
             buttonVariants({ variant: 'outline' }),
-            'max-w-sm mx-auto '
+            'max-w-sm mx-auto'
           )}
-          href={'/cart'}
+          href={`/${locale}/cart`}
         >
           {t('cart.viewCart')}
         </Link>
@@ -316,7 +300,7 @@ const ProductPage: FC<ProductPageProp> = ({
 
             {!!keywords && (
               <div className="flex gap-3">
-                <h1 className="font-semibold ">{t('keywords')}:</h1>
+                <h1 className="font-semibold">{t('keywords')}:</h1>
                 {keywords.split(',').map((k, i) => (
                   <Badge key={i} variant={'outline'}>
                     #{k}
@@ -326,7 +310,7 @@ const ProductPage: FC<ProductPageProp> = ({
             )}
           </div>
           <Separator />
-          <div className="w-full h-full flex  flex-col gap-4  ">
+          <div className="w-full h-full flex flex-col gap-4">
             <h1 className="font-semibold">{t('specifications')}:</h1>
 
             {currentVariant && currentVariant.size && (
@@ -365,7 +349,6 @@ const ProductPage: FC<ProductPageProp> = ({
           productId={id}
           userId={userId}
           productSlug={slug}
-          // numReviews={numReviews}
           userReview={userReview}
         />
 
@@ -373,8 +356,8 @@ const ProductPage: FC<ProductPageProp> = ({
       </div>
       <Separator />
       {!!relatedProducts?.length && (
-        <section className="  flex gap-6 flex-col justify-center items-center py-8">
-          <h2 className="font-bold text-2xl ">{t('relatedProducts')}</h2>
+        <section className="flex gap-6 flex-col justify-center items-center py-8">
+          <h2 className="font-bold text-2xl">{t('relatedProducts')}</h2>
           <RelatedProductCarousel items={relatedProducts} />
         </section>
       )}

@@ -23,7 +23,7 @@ import {
   transformSpecs,
   transformQuestions,
 } from '@/lib/types/home'
-import { getTranslationField } from '@/lib/translation-utils'
+import { getTranslation, getTranslationField } from '@/lib/translation-utils'
 import { getIsWhishedByUser } from '@/lib/home/queries/user'
 
 interface ProductDetailsPageProps {
@@ -49,7 +49,6 @@ export async function generateMetadata({
       robots: 'noindex, nofollow',
     }
   }
-
   // Transform product with translations
   const displayProduct = transformProduct(product)
 
@@ -171,7 +170,6 @@ export async function generateMetadata({
     },
   }
 }
-
 const ProductDetailsPage = async ({
   params,
   searchParams,
@@ -229,8 +227,8 @@ const ProductDetailsPage = async ({
   // Transform related products using our utility function
   const displayRelatedProducts = relatedProducts?.map((rp) => ({
     ...rp,
-    name: getTranslationField(rp.translations, locale, 'name'),
-    description: getTranslationField(rp.translations, locale, 'description'),
+    name: getTranslation(rp.translations, 'name'),
+    description: getTranslationField(rp.translations, 'description'),
   }))
 
   const urlMatchVariant = product.variants.find(

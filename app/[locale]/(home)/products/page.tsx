@@ -11,6 +11,8 @@ import { parseSearchParams } from '../search/components/utils'
 import SearchPageClient from '../search/components/SearchPageClient'
 // import { STORE_NAME } from '@/constants/store'
 import { generateSearchMetadata } from '@/lib/utils'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -30,10 +32,18 @@ export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
   const params = await searchParams
-  return generateSearchMetadata(params)
+  const locale = await getLocale()
+  const t = await getTranslations('products')
+
+  return generateSearchMetadata(params, locale, t)
 }
 async function SearchPageContent({ searchParams }: SearchPageProps) {
   const params = await searchParams
+
+  const locale = await getLocale()
+  const t = await getTranslations('products')
+  const tHome = await getTranslations('home')
+
   const filters = parseSearchParams(params)
   try {
     // Fetch data in parallel for better performance
@@ -50,14 +60,14 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'خانه',
-          item: process.env.NEXT_PUBLIC_SITE_URL,
+          name: tHome('breadcrumb.home'),
+          item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
         },
         {
           '@type': 'ListItem',
           position: 2,
-          name: params.q ? 'جستجو' : 'محصولات',
-          item: `${process.env.NEXT_PUBLIC_SITE_URL}/products`,
+          name: params.q ? t('searchResults') : t('allProducts'),
+          item: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products`,
         },
         ...(params.q
           ? [
@@ -67,7 +77,7 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
                 name: `"${params.q}"`,
                 item: `${
                   process.env.NEXT_PUBLIC_SITE_URL
-                }/products?q=${encodeURIComponent(params.q)}`,
+                }/${locale}/products?q=${encodeURIComponent(params.q)}`,
               },
             ]
           : []),
@@ -76,11 +86,18 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': params.q ? 'SearchResultsPage' : 'CollectionPage',
-      name: params.q ? `"${params.q} نتایج جست‌وجو برای"` : 'همه محصولات',
+      name: params.q
+        ? t('searchResultsFor', { query: params.q })
+        : t('allProducts'),
       description: params.q
-        ? ` "${params.q}" جست‌وجو برای - محصول پیدا نشد ${searchResults.products.length}`
-        : `جست‌وجوی همه محصولات - محصول یافت شد. ${searchResults.products.length} `,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/products${
+        ? t('searchResultsDescription', {
+            query: params.q,
+            count: searchResults.products.length,
+          })
+        : t('allProductsDescription', {
+            count: searchResults.products.length,
+          }),
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products${
         params.q ? `?q=${encodeURIComponent(params.q)}` : ''
       }`,
       mainEntity: {
@@ -96,7 +113,7 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
               name: product.name,
               description: product.brand,
               image: product.images?.[0]?.url,
-              url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.slug}`,
+              url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products/${product.slug}`,
               offers: {
                 '@type': 'Offer',
                 price: product.variants[0]
@@ -144,14 +161,14 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
 }
 
 function SearchError() {
+  const t = useTranslations('products')
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardContent className="py-12 text-center">
-          <div className="text-lg font-medium mb-2">خطا در بارگذاری</div>
-          <div className="text-muted-foreground">
-            مشکلی در بارگذاری نتایج جستجو رخ داده است. لطفاً دوباره تلاش کنید.
-          </div>
+          <div className="text-lg font-medium mb-2">{t('error.title')}</div>
+          <div className="text-muted-foreground">{t('error.description')}</div>
         </CardContent>
       </Card>
     </div>

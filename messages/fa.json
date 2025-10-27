@@ -86,6 +86,17 @@
     "specifications": "مشخصات و ابعاد",
     "relatedProducts": "محصولات مرتبط"
   },
+   "products": {
+    "allProducts": "همه محصولات",
+    "searchResults": "نتایج جستجو",
+    "searchResultsFor": "نتایج جستجو برای {query}",
+    "searchResultsDescription": "جستجو برای \"{query}\" - {count, plural, =0 {هیچ محصولی یافت نشد} one {# محصول یافت شد} other {# محصول یافت شد}}",
+    "allProductsDescription": "همه محصولات - {count, plural, =0 {هیچ محصولی یافت نشد} one {# محصول یافت شد} other {# محصول یافت شد}}",
+    "error": {
+      "title": "خطا در بارگذاری",
+      "description": "مشکلی در بارگذاری نتایج جستجو رخ داده است. لطفاً دوباره تلاش کنید."
+    }
+  },
   "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCurrentUser } from '../auth-helpers'
-import { Prisma, SubCategory } from '../generated/prisma'
+import { Prisma } from '../generated/prisma'
 
 // Base types for common structures
 export type ProductImage = {
