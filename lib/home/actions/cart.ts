@@ -7,6 +7,7 @@ import { calculateShippingCost } from '@/lib/shipping-price'
 
 import { CartProductType } from '@/lib/types/home'
 import { revalidatePath } from 'next/cache'
+import { getCurrentLocale } from './locale'
 
 export interface SaveCartResult {
   success: boolean
@@ -47,6 +48,9 @@ export async function saveAllToCart(
       message: 'محصولی برای خرید انتخاب نشده است.',
     }
   }
+
+  const locale = await getCurrentLocale()
+
   try {
     // 3. Start database transaction for atomicity
     const result = await prisma.$transaction(async (tx) => {
@@ -86,7 +90,14 @@ export async function saveAllToCart(
           where: { id: variantId },
           include: {
             product: {
-              include: { images: { take: 1, orderBy: { created_at: 'asc' } } },
+              include: {
+                images: { take: 1, orderBy: { created_at: 'asc' } },
+                translations: {
+                  where: { language: locale },
+                  select: { name: true },
+                  take: 1,
+                },
+              },
             },
             size: true,
             color: true,
@@ -137,7 +148,7 @@ export async function saveAllToCart(
           productSlug: variant.product.slug,
           productId: variant.product.id,
           sku: variant.sku || '',
-          name: variant.product.name,
+          name: variant.product.translations[0]?.name || 'Unknown Product',
           image: variant.product.images[0]?.url || '',
           size: variant.size.name,
           color: variant.color.name,

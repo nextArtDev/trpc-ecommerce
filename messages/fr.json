@@ -162,6 +162,24 @@
       "sizePrefix": "taille"
     }
   },
+  "cart": {
+    "title": "Panier",
+    "itemsInCart": "Articles dans votre panier",
+    "emptyCart": "Votre panier est vide!",
+    "continueShopping": "Continuer vos achats",
+    "checkout": "Commander",
+    "or": "ou",
+    "orderSummary": "Résumé de la commande",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "calculatedNextStep": "Calculé à l'étape suivante",
+    "currency": "EUR",
+    "size": "Taille",
+    "color": "Couleur",
+    "quantity": "Quantité",
+    "unitPrice": "Prix unitaire",
+    "totalPrice": "Prix total"
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

@@ -162,6 +162,24 @@
       "sizePrefix": "سایز"
     }
   },
+  "cart": {
+    "title": "لیست خرید",
+    "itemsInCart": "آیتم‌های در سبد خرید شما",
+    "emptyCart": "سبد شما خالی است!",
+    "continueShopping": "ادامه خرید",
+    "checkout": "تسویه",
+    "or": "یا",
+    "orderSummary": "خلاصه سفارش",
+    "subtotal": "مجموع قیمت سفارش",
+    "shipping": "هزینه ارسال",
+    "calculatedNextStep": "مرحله بعد",
+    "currency": "تومان",
+    "size": "سایز",
+    "color": "رنگ",
+    "quantity": "تعداد",
+    "unitPrice": "قیمت واحد",
+    "totalPrice": "قیمت مجموع"
+  },
   "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",

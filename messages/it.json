@@ -162,6 +162,24 @@
       "sizePrefix": "taglia"
     }
   },
+  "cart": {
+    "title": "Carrello",
+    "itemsInCart": "Articoli nel tuo carrello",
+    "emptyCart": "Il tuo carrello è vuoto!",
+    "continueShopping": "Continua lo shopping",
+    "checkout": "Cassa",
+    "or": "o",
+    "orderSummary": "Riepilogo ordine",
+    "subtotal": "Subtotale",
+    "shipping": "Spedizione",
+    "calculatedNextStep": "Calcolato al passaggio successivo",
+    "currency": "EUR",
+    "size": "Taglia",
+    "color": "Colore",
+    "quantity": "Quantità",
+    "unitPrice": "Prezzo unitario",
+    "totalPrice": "Prezzo totale"
+  },
   "metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",

@@ -162,6 +162,24 @@
       "sizePrefix": "size"
     }
   },
+  "cart": {
+    "title": "Shopping Cart",
+    "itemsInCart": "Items in your shopping cart",
+    "emptyCart": "Your cart is empty!",
+    "continueShopping": "Continue Shopping",
+    "checkout": "Checkout",
+    "or": "or",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "calculatedNextStep": "Calculated at next step",
+    "currency": "$",
+    "size": "Size",
+    "color": "Color",
+    "quantity": "Quantity",
+    "unitPrice": "Unit Price",
+    "totalPrice": "Total Price"
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",

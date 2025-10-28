@@ -162,6 +162,24 @@
       "sizePrefix": "Größe"
     }
   },
+  "cart": {
+    "title": "Warenkorb",
+    "itemsInCart": "Artikel in Ihrem Warenkorb",
+    "emptyCart": "Ihr Warenkorb ist leer!",
+    "continueShopping": "Weiter einkaufen",
+    "checkout": "Kasse",
+    "or": "oder",
+    "orderSummary": "Bestellübersicht",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "calculatedNextStep": "Im nächsten Schritt berechnet",
+    "currency": "EUR",
+    "size": "Größe",
+    "color": "Farbe",
+    "quantity": "Menge",
+    "unitPrice": "Einzelpreis",
+    "totalPrice": "Gesamtpreis"
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",
