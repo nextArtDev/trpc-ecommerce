@@ -1,8 +1,10 @@
+'use client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
 import { SearchFilters } from '@/lib/types/home'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface SearchHeaderProps {
   filters: SearchFilters
@@ -15,29 +17,39 @@ export default function SearchHeader({
   totalResults,
   onClearFilters,
 }: SearchHeaderProps) {
+  const t = useTranslations('search')
+  const locale = useLocale()
+
   const activeFilters = []
 
   if (filters.search)
-    activeFilters.push({ key: 'search', label: `جستجو: ${filters.search}` })
+    activeFilters.push({
+      key: 'search',
+      label: t('filters.search', { query: filters.search }),
+    })
   if (filters.minPrice)
     activeFilters.push({
       key: 'minPrice',
-      label: `حداقل: ${filters.minPrice.toLocaleString()}`,
+      label: t('filters.minPrice', {
+        price: filters.minPrice.toLocaleString(locale),
+      }),
     })
   if (filters.maxPrice)
     activeFilters.push({
       key: 'maxPrice',
-      label: `حداکثر: ${filters.maxPrice.toLocaleString()}`,
+      label: t('filters.maxPrice', {
+        price: filters.maxPrice.toLocaleString(locale),
+      }),
     })
   if (filters.colors?.length)
     activeFilters.push({
       key: 'colors',
-      label: `رنگ: ${filters.colors.join(', ')}`,
+      label: t('filters.colors', { colors: filters.colors.join(', ') }),
     })
   if (filters.sizes?.length)
     activeFilters.push({
       key: 'sizes',
-      label: `سایز: ${filters.sizes.join(', ')}`,
+      label: t('filters.sizes', { sizes: filters.sizes.join(', ') }),
     })
 
   const hasActiveFilters = activeFilters.length > 0
@@ -50,14 +62,14 @@ export default function SearchHeader({
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              {totalResults} محصول یافت شد
+              {t('results.count', { count: totalResults })}
             </span>
           </div>
 
           {hasActiveFilters && (
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm text-muted-foreground">
-                فیلترهای فعال:
+                {t('filters.active')}:
               </span>
               {activeFilters.map((filter) => (
                 <Badge key={filter.key} variant="secondary" className="text-xs">
@@ -70,8 +82,8 @@ export default function SearchHeader({
                 onClick={onClearFilters}
                 className="h-6 px-2 text-xs text-red-400"
               >
-                <X className="w-3 h-3 mr-1 " />
-                حذف همه
+                <X className="w-3 h-3 mr-1" />
+                {t('filters.clearAll')}
               </Button>
             </div>
           )}

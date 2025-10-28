@@ -229,7 +229,59 @@
       "onlineShopping": "shopping online",
       "colorPrefix": "prodotti",
       "sizePrefix": "taglia"
-    }
+    },
+    "results": {
+      "title": "Risultati della ricerca per \"{query}\"",
+      "allProducts": "Tutti i prodotti",
+      "count": "{count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}"
+    },
+    "sort": {
+      "title": "Ordina per:",
+      "newest": "Più recenti",
+      "oldest": "Più vecchi",
+      "priceAsc": "Prezzo: Crescente",
+      "priceDesc": "Prezzo: Decrescente",
+      "rating": "Miglior valutati",
+      "sales": "Più venduti"
+    },
+    "filters": {
+      "title": "Filtri e Ordinamento",
+      "active": "Filtri attivi:",
+      "search": "Ricerca: {query}",
+      "minPrice": "Min: {price}",
+      "maxPrice": "Max: {price}",
+      "colors": "Colori: {colors}",
+      "sizes": "Taglie: {sizes}",
+      "clearAll": "Cancella tutto"
+    },
+    "loading": "Caricamento...",
+    "loadMore": "Carica altro"
+  },
+  "filters": {
+    "category": {
+      "title": "Categoria",
+      "all": "Tutte le categorie",
+      "featured": "In evidenza"
+    },
+    "price": {
+      "title": "Fascia di prezzo"
+    },
+    "color": {
+      "title": "Colore"
+    },
+    "size": {
+      "title": "Taglia"
+    },
+    "apply": "Applica",
+    "reset": "Reimposta",
+    "clear": "Cancella",
+    "showMore": "Mostra di più",
+    "showLess": "Mostra meno"
+  },
+  "pagination": {
+    "showing": "Visualizzazione {current} di {total}",
+    "prev": "Precedente",
+    "next": "Successivo"
   },
   "footer": {
     "quickLinks": {

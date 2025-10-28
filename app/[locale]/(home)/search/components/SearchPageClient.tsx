@@ -1,7 +1,5 @@
 'use client'
-
 import { useState, useEffect } from 'react'
-
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Filter } from 'lucide-react'
@@ -18,7 +16,7 @@ import SearchHeader from './SearchHeader'
 import SortMenu from './SortMenu'
 import ProductGrid from './ProductGrid'
 import Pagination from './Pagination'
-// import Pagination from './Pagination'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface SearchPageClientProps {
   initialResults: SearchProductsResult
@@ -26,15 +24,6 @@ interface SearchPageClientProps {
   categories: CategoryData[]
   initialFilters: SearchFilters
 }
-
-const sortOptions: SortOption[] = [
-  { name: 'جدیدترین', value: 'newest' },
-  { name: 'قدیمی‌ترین', value: 'oldest' },
-  { name: 'ارزانترین', value: 'price_asc' },
-  { name: 'گرانترین', value: 'price_desc' },
-  { name: 'بهترین امتیاز', value: 'rating' },
-  { name: 'پرفروش‌ترین', value: 'sales' },
-]
 
 export default function SearchPageClient({
   initialResults,
@@ -45,26 +34,33 @@ export default function SearchPageClient({
   const [results, setResults] = useState(initialResults)
   const [loading, setLoading] = useState(false)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const t = useTranslations('search')
+  const locale = useLocale()
 
-  // Update results when filters change (you might want to implement client-side filtering
-  // or refetch from server depending on your needs)
+  // Create sort options based on locale
+  const sortOptions: SortOption[] = [
+    { name: t('sort.newest'), value: 'newest' },
+    { name: t('sort.oldest'), value: 'oldest' },
+    { name: t('sort.priceAsc'), value: 'price_asc' },
+    { name: t('sort.priceDesc'), value: 'price_desc' },
+    { name: t('sort.rating'), value: 'rating' },
+    { name: t('sort.sales'), value: 'sales' },
+  ]
+
+  // Update results when filters change
   useEffect(() => {
-    // You can implement client-side filtering here or trigger a server refetch
-    // For now, we'll keep the initial results
     setResults(initialResults)
   }, [currentFilters, initialResults])
 
   const handleSortChange = (sortBy: SearchFilters['sortBy']) => {
     setLoading(true)
     updateFilters({ sortBy })
-    // Simulate loading delay - in real app, this would be handled by the server refetch
     setTimeout(() => setLoading(false), 500)
   }
 
   const handlePageChange = (page: number) => {
     setLoading(true)
     updateFilters({ page })
-    // Scroll to top when page changes
     window.scrollTo({ top: 0, behavior: 'smooth' })
     setTimeout(() => setLoading(false), 500)
   }
@@ -80,17 +76,14 @@ export default function SearchPageClient({
 
   return (
     <div className="min-h-screen pt-16 overflow-x-hidden">
-      <div className="  mx-auto px-4 py-6">
+      <div className="mx-auto px-4 py-6">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
             {currentFilters.search
-              ? `نتایج جستجو برای "${currentFilters.search}"`
-              : '  محصولات'}
+              ? t('results.title', { query: currentFilters.search })
+              : t('results.allProducts')}
           </h1>
-          {/* <p className="text-muted-foreground">
-            بهترین محصولات را با فیلترهای پیشرفته پیدا کنید
-          </p> */}
         </div>
 
         {/* Search Results Header */}
@@ -110,10 +103,13 @@ export default function SearchPageClient({
               <SheetTrigger asChild>
                 <Button variant="outline" className="w-full mb-6 rounded-none">
                   <Filter className="w-4 h-4 mr-2" />
-                  فیلترها و دسته‌بندی
+                  {t('filters.title')}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80 p-0">
+              <SheetContent
+                side={locale === 'fa' ? 'left' : 'right'}
+                className="w-80 p-0"
+              >
                 <div className="p-6">{sidebarContent}</div>
               </SheetContent>
             </Sheet>
@@ -124,7 +120,10 @@ export default function SearchPageClient({
             {/* Sort Menu */}
             <div className="flex justify-between items-center mb-6">
               <div className="text-sm text-muted-foreground">
-                {results.pagination.current}/{results.pagination.pages}
+                {t('pagination.showing', {
+                  current: results.pagination.current,
+                  total: results.pagination.pages,
+                })}
               </div>
               <SortMenu
                 options={sortOptions}
@@ -146,7 +145,7 @@ export default function SearchPageClient({
               </div>
             )}
 
-            {/* Load More Button for Mobile (Alternative to Pagination) */}
+            {/* Load More Button for Mobile */}
             {results.pagination.hasNext && (
               <div className="mt-8 text-center lg:hidden">
                 <Button
@@ -157,7 +156,7 @@ export default function SearchPageClient({
                   disabled={loading}
                   className="w-full"
                 >
-                  {loading ? 'در حال بارگذاری...' : 'مشاهده بیشتر'}
+                  {loading ? t('loading') : t('loadMore')}
                 </Button>
               </div>
             )}

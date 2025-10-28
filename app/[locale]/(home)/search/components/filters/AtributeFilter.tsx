@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -7,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 interface AttributeFilterProps {
   title: string
@@ -23,8 +23,8 @@ export default function AttributeFilter({
   onSelectionChange,
   maxVisible = 5,
 }: AttributeFilterProps) {
-  // console.log({ items })
   const [isExpanded, setIsExpanded] = useState(false)
+  const t = useTranslations('filters')
   const displayItems = isExpanded ? items : items.slice(0, maxVisible)
   const hasMore = items.length > maxVisible
 
@@ -43,7 +43,7 @@ export default function AttributeFilter({
   if (items.length === 0) return null
 
   return (
-    <Card dir="rtl" className=" rounded-none">
+    <Card dir="rtl" className="rounded-none">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-center">
           <CardTitle className="text-base font-medium">{title}</CardTitle>
@@ -52,29 +52,29 @@ export default function AttributeFilter({
               variant="ghost"
               size="sm"
               onClick={clearAll}
-              className="text-xs h-auto p-1   text-red-500"
+              className="text-xs h-auto p-1 text-red-500"
             >
-              پاک کردن
+              {t('clear')}
             </Button>
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-3   flex flex-col items-center justify-center">
+      <CardContent className="space-y-3 flex flex-col items-center justify-center">
         {/* Selected Items */}
         {selectedItems.length > 0 && (
-          <div className="flex  gap-2">
+          <div className="flex gap-2">
             {selectedItems.map((item) => (
               <Badge
                 key={item}
                 variant="default"
                 className={cn(
                   'text-xs bg-indigo-600 cursor-pointer hover:bg-destructive',
-                  title === 'رنگ' && '  p-2'
+                  title === t('color.title') && 'p-2'
                 )}
-                style={{ background: title === 'رنگ' ? item : '' }}
+                style={{ background: title === t('color.title') ? item : '' }}
                 onClick={() => toggleItem(item)}
               >
-                {title === 'رنگ' ? '' : `${item} ×`}
+                {title === t('color.title') ? '' : `${item} ×`}
               </Badge>
             ))}
           </div>
@@ -87,12 +87,12 @@ export default function AttributeFilter({
               key={item}
               className="flex gap-1 items-center justify-center space-x-2"
             >
-              {title === 'رنگ' ? (
+              {title === t('color.title') ? (
                 <span
                   className={cn(
-                    'size-5 cursor-pointer hover:bg-muted rounded-none ',
+                    'size-5 cursor-pointer hover:bg-muted rounded-none',
                     selectedItems.includes(item) &&
-                      'ring-1 ring-foreground outline-dashed outline-background outline-1  '
+                      'ring-1 ring-foreground outline-dashed outline-background outline-1'
                   )}
                   onClick={() => toggleItem(item)}
                   style={{ background: item }}
@@ -126,12 +126,12 @@ export default function AttributeFilter({
           >
             {isExpanded ? (
               <>
-                کمتر <ChevronUp className="w-4 h-4 " />
+                {t('showLess')} <ChevronUp className="w-4 h-4" />
               </>
             ) : (
               <>
-                بیشتر ({items.length - maxVisible}){' '}
-                <ChevronDown className="w-4 h-4  " />
+                {t('showMore')} ({items.length - maxVisible}){' '}
+                <ChevronDown className="w-4 h-4" />
               </>
             )}
           </Button>

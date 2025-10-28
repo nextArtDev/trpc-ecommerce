@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { SearchPagination } from '@/lib/types/home'
 import {
@@ -6,6 +7,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface PaginationProps {
   pagination: SearchPagination
@@ -16,6 +18,9 @@ export default function Pagination({
   pagination,
   onPageChange,
 }: PaginationProps) {
+  const t = useTranslations('pagination')
+  const locale = useLocale()
+
   if (pagination.pages <= 1) return null
 
   const getPageNumbers = () => {
@@ -58,7 +63,11 @@ export default function Pagination({
         disabled={pagination.current === 1}
         className="hidden sm:flex"
       >
-        <ChevronsRight className="w-4 h-4" />
+        {locale === 'fa' ? (
+          <ChevronsRight className="w-4 h-4" />
+        ) : (
+          <ChevronsLeft className="w-4 h-4" />
+        )}
       </Button>
 
       {/* Previous Page */}
@@ -68,8 +77,17 @@ export default function Pagination({
         onClick={() => onPageChange(pagination.current - 1)}
         disabled={!pagination.hasPrev}
       >
-        <ChevronRight className="w-4 h-4" />
-        <span className="hidden sm:inline mr-1">قبلی</span>
+        {locale === 'fa' ? (
+          <>
+            <ChevronRight className="w-4 h-4" />
+            <span className="hidden sm:inline mr-1">{t('prev')}</span>
+          </>
+        ) : (
+          <>
+            <span className="hidden sm:inline mr-1">{t('prev')}</span>
+            <ChevronLeft className="w-4 h-4" />
+          </>
+        )}
       </Button>
 
       {/* Page Numbers */}
@@ -95,8 +113,17 @@ export default function Pagination({
         onClick={() => onPageChange(pagination.current + 1)}
         disabled={!pagination.hasNext}
       >
-        <span className="hidden sm:inline ml-1">بعدی</span>
-        <ChevronLeft className="w-4 h-4" />
+        {locale === 'fa' ? (
+          <>
+            <span className="hidden sm:inline ml-1">{t('next')}</span>
+            <ChevronLeft className="w-4 h-4" />
+          </>
+        ) : (
+          <>
+            <span className="hidden sm:inline ml-1">{t('next')}</span>
+            <ChevronRight className="w-4 h-4" />
+          </>
+        )}
       </Button>
 
       {/* Last Page */}
@@ -107,7 +134,11 @@ export default function Pagination({
         disabled={pagination.current === pagination.pages}
         className="hidden sm:flex"
       >
-        <ChevronsLeft className="w-4 h-4" />
+        {locale === 'fa' ? (
+          <ChevronsLeft className="w-4 h-4" />
+        ) : (
+          <ChevronsRight className="w-4 h-4" />
+        )}
       </Button>
     </div>
   )

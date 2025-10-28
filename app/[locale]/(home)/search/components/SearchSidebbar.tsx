@@ -1,9 +1,9 @@
 'use client'
-
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CategoryData, FiltersData, SearchFilters } from '@/lib/types/home'
 import CategoryFilter from './filters/CategoryFilter'
 import PriceFilter from './filters/PriceFilter'
+import { useTranslations } from 'next-intl'
 import AttributeFilter from './filters/AtributeFilter'
 
 interface SearchSidebarProps {
@@ -19,6 +19,8 @@ export default function SearchSidebar({
   currentFilters,
   onFiltersChange,
 }: SearchSidebarProps) {
+  const t = useTranslations('filters')
+
   return (
     <div className="w-full lg:w-80">
       <ScrollArea className="h-[calc(100vh-10px)]">
@@ -44,7 +46,7 @@ export default function SearchSidebar({
 
           {/* Color Filter */}
           <AttributeFilter
-            title="رنگ"
+            title={t('color.title')}
             items={filtersData.colors}
             selectedItems={currentFilters.colors || []}
             onSelectionChange={(colors) => onFiltersChange({ colors, page: 1 })}
@@ -52,19 +54,11 @@ export default function SearchSidebar({
 
           {/* Size Filter */}
           <AttributeFilter
-            title="سایز"
+            title={t('size.title')}
             items={filtersData.sizes}
             selectedItems={currentFilters.sizes || []}
             onSelectionChange={(sizes) => onFiltersChange({ sizes, page: 1 })}
           />
-
-          {/* Brand Filter */}
-          {/* <AttributeFilter
-            title="برند"
-            items={filtersData.brands}
-            selectedItems={[]} // Add brand filter to SearchFilters type if needed
-            onSelectionChange={() => {}} // Implement brand filtering
-          /> */}
         </div>
       </ScrollArea>
     </div>

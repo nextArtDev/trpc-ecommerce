@@ -1,11 +1,11 @@
 'use client'
-
 import { Button } from '@/components/ui/button'
 import { CategoryData } from '@/lib/types/home'
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface CategoryFilterProps {
   categories: CategoryData[]
@@ -19,6 +19,7 @@ export default function CategoryFilter({
   onCategoryChange,
 }: CategoryFilterProps) {
   const [isExpanded, setIsExpanded] = useState(true)
+  const t = useTranslations('filters')
   const featuredCategories = categories
     .filter((cat) => cat.featured)
     .slice(0, 5)
@@ -26,9 +27,11 @@ export default function CategoryFilter({
   const displayCategories = showFeaturedOnly ? featuredCategories : categories
 
   return (
-    <Card dir="rtl" className=" rounded-none">
+    <Card dir="rtl" className="rounded-none">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-medium">دسته‌بندی</CardTitle>
+        <CardTitle className="text-base font-medium">
+          {t('category.title')}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         <Button
@@ -37,7 +40,7 @@ export default function CategoryFilter({
           onClick={() => onCategoryChange(undefined)}
           className="w-full justify-start"
         >
-          همه دسته‌ها
+          {t('category.all')}
         </Button>
 
         {displayCategories.map((category) => (
@@ -47,7 +50,7 @@ export default function CategoryFilter({
                 variant="outline"
                 className="text-xs rounded-xs border-none"
               >
-                پیشنهادی:
+                {t('category.featured')}
               </Badge>
             )}
             <Button
@@ -70,11 +73,12 @@ export default function CategoryFilter({
           >
             {isExpanded ? (
               <>
-                کمتر <ChevronUp className="w-4 h-4 mr-1" />
+                {t('showLess')} <ChevronUp className="w-4 h-4 mr-1" />
               </>
             ) : (
               <>
-                بیشتر <ChevronDown className="w-4 h-4 mr-1" />
+                {t('showMore')} ({categories.length - 5}){' '}
+                <ChevronDown className="w-4 h-4 mr-1" />
               </>
             )}
           </Button>

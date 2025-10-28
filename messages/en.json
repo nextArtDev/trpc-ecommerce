@@ -240,7 +240,59 @@
       "onlineShopping": "online shopping",
       "colorPrefix": "products",
       "sizePrefix": "size"
-    }
+    },
+    "results": {
+      "title": "Search Results for \"{query}\"",
+      "allProducts": "All Products",
+      "count": "{count, plural, =0 {No products found} one {# product found} other {# products found}}"
+    },
+    "sort": {
+      "title": "Sort by:",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "rating": "Top Rated",
+      "sales": "Best Sellers"
+    },
+    "filters": {
+      "title": "Filters & Sorting",
+      "active": "Active filters:",
+      "search": "Search: {query}",
+      "minPrice": "Min: {price}",
+      "maxPrice": "Max: {price}",
+      "colors": "Colors: {colors}",
+      "sizes": "Sizes: {sizes}",
+      "clearAll": "Clear all"
+    },
+    "loading": "Loading...",
+    "loadMore": "Load More"
+  },
+  "filters": {
+    "category": {
+      "title": "Category",
+      "all": "All Categories",
+      "featured": "Featured"
+    },
+    "price": {
+      "title": "Price Range"
+    },
+    "color": {
+      "title": "Color"
+    },
+    "size": {
+      "title": "Size"
+    },
+    "apply": "Apply",
+    "reset": "Reset",
+    "clear": "Clear",
+    "showMore": "Show More",
+    "showLess": "Show Less"
+  },
+  "pagination": {
+    "showing": "Showing {current} of {total}",
+    "prev": "Previous",
+    "next": "Next"
   },
   "footer": {
     "quickLinks": {

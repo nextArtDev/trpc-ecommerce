@@ -229,9 +229,62 @@
       "onlineShopping": "achat en ligne",
       "colorPrefix": "produits",
       "sizePrefix": "taille"
-    }
+    },
+    "results": {
+      "title": "Résultats de recherche pour \"{query}\"",
+      "allProducts": "Tous les produits",
+      "count": "{count, plural, =0 {Aucun produit trouvé} one {# produit trouvé} other {# produits trouvés}}"
+    },
+    "sort": {
+      "title": "Trier par:",
+      "newest": "Plus récents",
+      "oldest": "Plus anciens",
+      "priceAsc": "Prix: Croissant",
+      "priceDesc": "Prix: Décroissant",
+      "rating": "Mieux notés",
+      "sales": "Meilleures ventes"
+    },
+    "filters": {
+      "title": "Filtres & Tri",
+      "active": "Filtres actifs:",
+      "search": "Recherche: {query}",
+      "minPrice": "Min: {price}",
+      "maxPrice": "Max: {price}",
+      "colors": "Couleurs: {colors}",
+      "sizes": "Tailles: {sizes}",
+      "clearAll": "Tout effacer"
+    },
+    "loading": "Chargement...",
+    "loadMore": "Charger plus"
   },
-  "footer": {
+ 
+  "filters": {
+    "category": {
+      "title": "Catégorie",
+      "all": "Toutes les catégories",
+      "featured": "En vedette"
+    },
+    "price": {
+      "title": "Gamme de prix"
+    },
+    "color": {
+      "title": "Couleur"
+    },
+    "size": {
+      "title": "Taille"
+    },
+    "apply": "Appliquer",
+    "reset": "Réinitialiser",
+    "clear": "Effacer",
+    "showMore": "Afficher plus",
+    "showLess": "Afficher moins"
+  },
+  "pagination": {
+    "showing": "Affichage {current} sur {total}",
+    "prev": "Précédent",
+    "next": "Suivant"
+  },
+   "footer": {
     "quickLinks": {
       "title": "Liens Rapides",
       "home": "Accueil",
