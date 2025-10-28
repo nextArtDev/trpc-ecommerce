@@ -134,6 +134,28 @@
     "noProducts": {
       "title": "محصولی یافت نشد!",
       "description": "لطفاً فیلترها را تغییر دهید یا عبارت دیگری جستجو کنید"
+    },
+    "meta": {
+      "title": "نتایج جستجو برای \"{query}\"{page}",
+      "page": " - صفحه {page}",
+      "description": "بهترین نتایج را برای \"{query}\" پیدا کنید.",
+      "allProductsTitle": "محصولات{page}",
+      "allProductsDescription": "مجموعه کامل محصولات ما را کاوش کنید. بر اساس دسته، قیمت، رنگ و اندازه فیلتر کنید تا دقیقاً همان چیزی را که نیاز دارید پیدا کنید."
+    },
+    "og": {
+      "searchTitle": "جستجو: {query}",
+      "allProductsTitle": "محصولات"
+    },
+    "keywords": {
+      "search": "جستجو",
+      "products": "محصولات",
+      "leatherStore": "فروشگاه چرم",
+      "store": "فروشگاه",
+      "naturalLeather": "چرم طبیعی",
+      "leatherBag": "کیف چرمی",
+      "onlineShopping": "خرید آنلاین",
+      "colorPrefix": "محصولات",
+      "sizePrefix": "سایز"
     }
   },
   "metadata": {

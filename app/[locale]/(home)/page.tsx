@@ -231,8 +231,8 @@ export default async function Home() {
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: t('newestSellers.title'),
-          description: t('newestSellers.description'),
+          name: tNewestSellers('title'),
+          description: tNewestSellers('description'),
           numberOfItems: products.length,
           itemListElement: products.slice(0, 10)?.map((product, index) => ({
             '@type': 'ListItem',

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Type for any entity that has translations
-type TranslatableEntity<T> = {
+export type TranslatableEntity<T> = {
   translations: T[]
 }
 
 // Type for translation objects
-type TranslationFields = {
+export type TranslationFields = {
   name: string
   description?: string
 }
 
-type ProductTranslationFields = {
+export type ProductTranslationFields = {
   name: string
   description: string
   keywords?: string

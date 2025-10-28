@@ -1,96 +1,96 @@
 {
   "Hero": {
-    "title": "Laboratorio Pelle Sarina",
-    "description": "I nostri prodotti sono progettati per donne che cercano di esprimere la loro personalità autentica, non solo mostrarla. Ogni borsa è una manifestazione di bellezza grezza, naturale e di artigianato fatto a mano, creato con amore.",
+    "title": "Laboratorio di Pelle Sarina",
+    "description": "I nostri prodotti sono progettati per donne che cercano di esprimere la loro vera personalità, non solo mostrarla. Ogni borsa è un simbolo di bellezza grezza, naturale e di artigianato fatto a mano, creato con amore.",
     "linkTitle": "Prodotti"
   },
   "StoreStatements": {
-    "title": "L'Inizio della Nostra Storia",
-    "description": "Il nostro piccolo laboratorio è dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con immensa passione e una visione per un futuro luminoso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il nucleo della creazione di prodotti destinati a essere compagni per tutta la vita."
+    "title": "La nostra storia inizia",
+    "description": "Il nostro piccolo laboratorio è il luogo dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con un amore immenso e una visione per un futuro radioso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il cuore della creazione di prodotti destinati a essere i tuoi compagni per tutta la vita."
   },
   "bestSellers": {
-    "title": "Bestseller",
+    "title": "Best Seller",
     "description": "I nostri prodotti popolari"
   },
   "newestSellers": {
     "title": "Nuovi Arrivi",
-    "description": "Ultimi prodotti nella nostra collezione"
+    "description": "Nuovi prodotti nella nostra collezione"
   },
   "workVideo": {
-    "title": "L'Arte dell'Artigianato: Autenticità in Ogni Punto",
-    "description": "Ci specializziamo nella creazione di articoli in pelle che richiedono una finezza squisita, con un'attenzione particolare alla nostra selezione di materiali. Tutte le nostre collezioni sono fatte esclusivamente in pelle pieno fiore—il tipo più autentico e premium di pelle naturale."
+    "title": "L'Arte dell'Artigianato: Autenticità in ogni punto",
+    "description": "Ci specializziamo nella creazione di prodotti in pelle che richiedono una finezza straordinaria, con particolare attenzione alla nostra selezione di materiali. Tutte le nostre collezioni sono realizzate esclusivamente in pelle pieno fiore - il tipo di pelle naturale più autentico e premium."
   },
   "commitments": {
-    "title": "I Nostri Impegni",
+    "title": "I nostri impegni",
     "description": [
       {
         "id": "1",
-        "title": "Amore per la Pelle Autentica",
-        "description": "Usiamo solo le migliori pelli naturali pieno fiore. Con cuciture meticolose e artistiche, queste pelli diventano prodotti durevoli e unici che diventano più belli e autentici con il tempo. Garantiamo che nessuno dei nostri prodotti sia fatto di pelle artificiale (plastica).",
+        "title": "Amore per la pelle autentica",
+        "description": "Utilizziamo solo le migliori pelli naturali pieno fiore. Con cuciture meticolose e artistiche, queste pelli si trasformano in prodotti durevoli e unici che diventano più belli e autentici con il tempo. Garantiamo che nessuno dei nostri prodotti sia realizzato in pelle artificiale (plastica).",
         "url": "/images/commit1.webp"
       },
       {
         "id": "2", 
-        "title": "Etica e Responsabilità",
-        "description": "La produzione avviene nel nostro laboratorio in condizioni eque e rispettose. Rispettiamo l'ambiente e i diritti umani, usando materie prime riciclate e a basso consumo d'acqua quando possibile ed evitando inquinanti nel nostro processo di produzione. I nostri piccoli passi verso un futuro più verde.",
+        "title": "Etica e responsabilità",
+        "description": "La produzione nel nostro laboratorio avviene in condizioni eque e rispettose. Rispettiamo l'ambiente e i diritti umani, utilizzando materiali riciclati dove possibile e basso consumo d'acqua, evitando inquinanti nel nostro processo di produzione. I nostri piccoli passi verso un futuro più verde.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
-        "title": "Attenzione Meticolosa ai Dettagli",
-        "description": "Non accontentiamoci di meno della perfezione. Dalla selezione di un pezzo di pelle all'ultima cucitura e all'installazione di una chiusura, ogni passaggio è eseguito con precisione meticolosa e amore artistico. Ogni borsa non è solo un articolo, ma un'opera d'arte che porta il tuo nome.",
+        "title": "Attenzione ai dettagli",
+        "description": "Non ci accontentiamo di meno della perfezione. Dalla selezione di un pezzo di pelle all'ultima cucitura e all'installazione di una chiusura, ogni passaggio viene eseguito con cura precisa e amore artistico. Ogni borsa non è solo un articolo, ma un'opera d'arte che porta il tuo nome.",
         "url": "/images/commit3.jpg"
       }
     ]
   }, 
   "product": {
     "notFound": {
-      "title": "Prodotto Non Trovato!",
+      "title": "Prodotto non trovato!",
       "description": "Il prodotto che stavi cercando non è stato trovato."
     },
-    "specialBrand": "Marchio Speciale",
-    "productImage": "Immagine Prodotto",
-    "currency": "$",
+    "specialBrand": "Marchio speciale",
+    "productImage": "Immagine del prodotto",
     "inStock": "Disponibile",
+    "currency": "Toman",
     "outOfStock": "Esaurito",
-    "qualityProduct": "Prodotto di Qualità",
-    "from": "da",
-    "customer": "Gentile Cliente",
+    "qualityProduct": "Prodotto di qualità",
+    "from": "Da",
+    "customer": "Gentile cliente",
     "home": "Home",
     "breadcrumb": {
       "home": "Sarina"
     },
     "rating": {
-      "from": "su",
+      "from": "da",
       "people": "persone"
     },
     "size": {
-      "selected": "Taglia Selezionata"
+      "selected": "Taglia selezionata"
     },
     "color": {
-      "selected": "Colore Selezionato"
+      "selected": "Colore selezionato"
     },
     "stock": {
       "available": "Disponibile",
       "outOfStock": "Esaurito",
-      "remaining": "articoli rimasti"
+      "remaining": "articoli rimanenti"
     },
     "variant": {
       "unavailable": "Questa combinazione di colore e taglia non è disponibile!",
       "selectAnother": "Seleziona un'altra combinazione di taglia e colore."
     },
     "cart": {
-      "viewCart": "Vedi Carrello"
+      "viewCart": "Visualizza carrello"
     },
-    "keywords": "Parole Chiave",
-    "specifications": "Specifiche e Dimensioni",
-    "relatedProducts": "Prodotti Correlati",
+    "keywords": "Parole chiave",
+    "specifications": "Specifiche & Dimensioni",
+    "relatedProducts": "Prodotti correlati",
     "bookmark": {
-      "addToWishlist": "Aggiungi alla lista dei desideri",
-      "removeFromWishlist": "Rimuovi dalla lista dei desideri"
+      "addToWishlist": "Aggiungi alla wishlist",
+      "removeFromWishlist": "Rimuovi dalla wishlist"
     },
     "countdown": {
-      "title": "Fine dell'offerta speciale"
+      "title": "Fine della vendita speciale"
     },
     "description": {
       "title": "Descrizione"
@@ -106,83 +106,97 @@
       }
     },
     "reviews": {
-      "beFirst": "Sii il primo a lasciare una recensione!",
+      "beFirst": "Sii il primo a recensire!",
       "signInPrompt": "Per favore",
       "signInLink": "accedi al tuo account"
     },
     "share": {
-      "title": "Scopri questo prodotto",
-      "text": "Ho trovato questo prodotto fantastico che potrebbe piacerti!",
+      "title": "Dai un'occhiata a questo prodotto",
+      "text": "Ho trovato questo prodotto incredibile che potrebbe piacerti!",
       "copyLink": "Copia link",
       "copySuccess": "Link copiato!",
       "copyError": "Errore nella copia del link"
     },
-    "noImage": "Nessuna Immagine", 
-    "goToSlide": "Vai alla slide {slide}",
-    "views": "Visualizzazioni"
+    "views": "Visualizzazioni",
+    "noImage": "Nessuna immagine", 
+    "goToSlide": "Vai alla slide {slide}"
   },
-  "products": {
-    "allProducts": "Tutti i Prodotti",
-    "searchResults": "Risultati della Ricerca",
-    "searchResultsFor": "Risultati della Ricerca per {query}",
+   "products": {
+    "allProducts": "Tutti i prodotti",
+    "searchResults": "Risultati della ricerca",
+    "searchResultsFor": "Risultati della ricerca per {query}",
     "searchResultsDescription": "Ricerca di \"{query}\" - {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}",
-    "allProductsDescription": "Tutti i Prodotti - {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}",
+    "allProductsDescription": "Tutti i prodotti - {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}",
     "error": {
-      "title": "Errore di Caricamento",
+      "title": "Errore di caricamento",
       "description": "Si è verificato un problema durante il caricamento dei risultati della ricerca. Riprova."
     },
     "noProducts": {
-      "title": "Nessun Prodotto Trovato!",
-      "description": "Si prega di regolare i filtri o cercare qualcos'altro"
+      "title": "Nessun prodotto trovato!",
+      "description": "Cambia i filtri o cerca un altro termine"
+    },
+    "meta": {
+      "title": "Risultati della ricerca per \"{query}\"{page}",
+      "page": " - Pagina {page}",
+      "description": "Trova i migliori risultati per \"{query}\".",
+      "allProductsTitle": "Prodotti{page}",
+      "allProductsDescription": "Esplora la nostra collezione completa di prodotti. Filtra per categoria, prezzo, colore e taglia per trovare esattamente ciò di cui hai bisogno."
+    },
+    "og": {
+      "searchTitle": "Ricerca: {query}",
+      "allProductsTitle": "Prodotti"
+    },
+    "keywords": {
+      "search": "ricerca",
+      "products": "prodotti",
+      "leatherStore": "negozio di pelle",
+      "store": "negozio",
+      "naturalLeather": "pelle naturale",
+      "leatherBag": "borsetta in pelle",
+      "onlineShopping": "shopping online",
+      "colorPrefix": "prodotti",
+      "sizePrefix": "taglia"
     }
   },
   "metadata": {
     "home": {
-      "title": "Laboratorio Pelle Sarina",
-      "description": "Laboratorio per la creazione di borse e prodotti in pelle naturale. {categories} {rating} Spedizione veloce, prodotti di alta qualità e garanzia di utilizzo di pelle naturale."
+      "title": "Laboratorio di Pelle Sarina",
+      "description": "Laboratorio per la produzione di borse e prodotti in pelle naturale. {categories} {rating} Spedizione veloce, prodotti di alta qualità e uso garantito di pelle naturale."
     },
-    "siteName": "Laboratorio Pelle Sarina",
+    "siteName": "Laboratorio di Pelle Sarina",
     "keywords": {
       "naturalLeather": "pelle naturale",
-      "womenLeatherBag": "borsa in pelle donna",
-      "common": "pelle naturale, borsa in pelle donna, borsa in pelle donna, pelle naturale garantita, negozio online, laboratorio pelle fatto a mano, negozio di pelle"
+      "womenLeatherBag": "borsetta in pelle donna",
+      "common": "pelle naturale, borsetta in pelle naturale donna, borsetta in pelle donna, pelle naturale garantita, negozio online, laboratorio di pelle fatto a mano, negozio di pelle"
     }
   },
   "home": {
-    "siteName": "Laboratorio Pelle Sarina",
-    "discoverMore": "Scopri di Più",
+    "siteName": "Laboratorio di Pelle Sarina",
+    "discoverMore": "Scopri di più",
     "breadcrumb": {
       "home": "Home",
       "products": "Prodotti",
-      "about": "Chi Siamo",
+      "about": "Chi siamo",
       "contact": "Contatti"
     },
     "organization": {
-      "description": "Negozio online premium che offre prodotti di qualità con spedizione veloce e eccellente servizio clienti"
-    },
-    "bestSellers": {
-      "title": "Bestseller",
-      "description": "I nostri prodotti popolari"
-    },
-    "newestSellers": {
-      "title": "Nuovi Arrivi",
-      "description": "Ultimi prodotti nella nostra collezione"
+      "description": "Negozio online leader che offre prodotti di qualità con spedizione veloce e eccellente servizio clienti"
     }
   },
-  "discoverMore": {
-    "title": "Scopri di Più",
+   "discoverMore": {
+    "title": "Altro",
     "viewCategory": "Vedi {name}"
   },
-   "navigation": {
+  "navigation": {
     "home": "Home",
-    "about": "Chi Siamo",
+    "about": "Chi siamo",
     "contact": "Contatti",
     "faq": "FAQ",
-    "view": "Vedi",
+    "view": "Visualizza",
     "closeMenu": "Chiudi menu di navigazione",
     "openMenu": "Apri menu di navigazione",
-    "expanded": "espanso",
-    "collapsed": "compresso",
+    "expanded": "Espanso",
+    "collapsed": "Ridotto",
     "signIn": "Accedi/Registrati",
     "profile": "Profilo",
     "dashboard": "Dashboard"
@@ -191,15 +205,15 @@
     "message1": "Tutti i prodotti sono in pelle naturale e fatti a mano.",
     "message2": "Acquista ora!"
   },
- "subcategory": {
+   "subcategory": {
     "notFound": {
-      "title": "Sottocategoria Non Trovata",
+      "title": "Sottocategoria non trovata",
       "description": "La sottocategoria che stavi cercando non è stata trovata."
     },
-    "metaDescription": "Esplora {subcategoryName} di {categoryName}. {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}.",
+    "metaDescription": "{subcategoryName} da {categoryName}. {count, plural, =0 {Nessun prodotto trovato} one {# prodotto trovato} other {# prodotti trovati}}.",
     "collectionImage": "Collezione {name}",
     "defaultDescription": "Esplora la collezione {name}.",
-    "heroImageAlt": "Immagine di {name}"
+    "heroImageAlt": "Immagine {name}"
   },
   "keywords": {
     "shop": "negozio",
@@ -207,13 +221,13 @@
     "premiumQuality": "qualità premium",
     "fastShipping": "spedizione veloce"
   },
-  "search": {
+   "search": {
     "meta": {
       "title": "Risultati della ricerca per \"{query}\"{page}",
       "page": " - Pagina {page}",
       "description": "Trova i migliori risultati per \"{query}\".",
       "allProductsTitle": "Prodotti{page}",
-      "allProductsDescription": "Scopri la nostra collezione completa di prodotti. Filtra per categoria, prezzo, colore e taglia per trovare esattamente ciò di cui hai bisogno."
+      "allProductsDescription": "Esplora la nostra collezione completa di prodotti. Filtra per categoria, prezzo, colore e taglia per trovare esattamente ciò di cui hai bisogno."
     },
     "og": {
       "searchTitle": "Ricerca: {query}",
@@ -239,13 +253,13 @@
       "title": "Ordina per:",
       "newest": "Più recenti",
       "oldest": "Più vecchi",
-      "priceAsc": "Prezzo: Crescente",
-      "priceDesc": "Prezzo: Decrescente",
-      "rating": "Miglior valutati",
+      "priceAsc": "Prezzo crescente",
+      "priceDesc": "Prezzo decrescente",
+      "rating": "Miglior valutazione",
       "sales": "Più venduti"
     },
     "filters": {
-      "title": "Filtri e Ordinamento",
+      "title": "Filtri & Categorie",
       "active": "Filtri attivi:",
       "search": "Ricerca: {query}",
       "minPrice": "Min: {price}",
@@ -272,30 +286,30 @@
     "size": {
       "title": "Taglia"
     },
-    "apply": "Applica",
+    "apply": "Applica filtri",
     "reset": "Reimposta",
     "clear": "Cancella",
     "showMore": "Mostra di più",
     "showLess": "Mostra meno"
   },
   "pagination": {
-    "showing": "Visualizzazione {current} di {total}",
+    "showing": "Mostrando {current} di {total}",
     "prev": "Precedente",
     "next": "Successivo"
   },
   "footer": {
     "quickLinks": {
-      "title": "Link Rapidi",
+      "title": "Link rapidi",
       "home": "Home",
       "products": "Prodotti",
-      "about": "Chi Siamo",
+      "about": "Chi siamo",
       "contact": "Contatti",
       "faq": "FAQ"
     },
     "contact": {
       "title": "Contattaci",
-     "address": "Iran - Khouzestan",
-      "city": "Deezful",
+      "address": "Khuzestan",
+      "city": "Dezful",
       "phone": "",
       "email": ""
     },
@@ -310,17 +324,17 @@
       "linkedin": "LinkedIn",
       "linkedinTooltip": "Connettiti con noi su LinkedIn"
     },
-    "copyright": "Saeid",
+    "copyright": "Saeed",
     "allRightsReserved": "Tutti i diritti riservati",
     "legal": {
-      "privacyPolicy": "Politica sulla Privacy",
-      "termsOfService": "Termini di Servizio",
-      "cookieSettings": "Impostazioni Cookie"
+      "privacyPolicy": "Informativa sulla privacy",
+      "termsOfService": "Termini di servizio",
+      "cookieSettings": "Impostazioni cookie"
     },
     "chat": {
-      "title": "Chat Live",
+      "title": "Chat live",
       "support": "Supporto",
-      "welcomeMessage": "Ciao! Come posso aiutarti oggi?",
+      "welcomeMessage": "Ciao! Come posso aiutarti?",
       "placeholder": "Digita il tuo messaggio...",
       "send": "Invia messaggio"
     }

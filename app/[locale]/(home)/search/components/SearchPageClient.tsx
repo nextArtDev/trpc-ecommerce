@@ -35,6 +35,7 @@ export default function SearchPageClient({
   const [loading, setLoading] = useState(false)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const t = useTranslations('search')
+  const tPagination = useTranslations('pagination')
   const locale = useLocale()
 
   // Create sort options based on locale
@@ -120,7 +121,7 @@ export default function SearchPageClient({
             {/* Sort Menu */}
             <div className="flex justify-between items-center mb-6">
               <div className="text-sm text-muted-foreground">
-                {t('pagination.showing', {
+                {tPagination('showing', {
                   current: results.pagination.current,
                   total: results.pagination.pages,
                 })}

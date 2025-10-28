@@ -58,15 +58,13 @@ export function createMetaDescription({
   reviewCount?: number
   availableVariants?: number
   maxLength?: number
-  t?: any // Translation function (optional for backwards compatibility)
+  t?: any
 }): string {
   let cleanDescription = ''
 
   if (description) {
-    // Strip HTML tags and clean the description
     const strippedDescription = stripHtmlTags(description)
 
-    // Create a more SEO-friendly description
     if (t) {
       cleanDescription =
         t('metaDescription.buy', {
@@ -76,7 +74,6 @@ export function createMetaDescription({
         '. ' +
         strippedDescription
 
-      // Add rating info if available
       if (reviewCount && reviewCount > 0 && avgRating) {
         cleanDescription +=
           ' | ' +
@@ -86,7 +83,6 @@ export function createMetaDescription({
           })
       }
 
-      // Add availability info
       if (availableVariants && availableVariants > 0) {
         cleanDescription +=
           ' | ' +
@@ -97,7 +93,6 @@ export function createMetaDescription({
 
       cleanDescription += ' | ' + t('metaDescription.shipping')
     } else {
-      // Fallback to Persian (for backwards compatibility)
       cleanDescription = `خرید ${productName} از ${brandName}. ${strippedDescription}`
 
       if (reviewCount && reviewCount > 0 && avgRating) {
@@ -115,7 +110,6 @@ export function createMetaDescription({
 
     cleanDescription = truncateText(cleanDescription, maxLength)
   } else {
-    // Fallback description if no product description exists
     if (t) {
       cleanDescription =
         t('metaDescription.buy', { productName, brandName }) + '.'
@@ -141,7 +135,6 @@ export function createMetaDescription({
 
       cleanDescription += ' ' + t('metaDescription.shipping') + '.'
     } else {
-      // Fallback to Persian
       cleanDescription = `خرید ${productName} از ${brandName}.`
 
       if (reviewCount && reviewCount > 0 && avgRating) {

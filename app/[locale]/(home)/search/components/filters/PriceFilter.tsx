@@ -26,6 +26,7 @@ export default function PriceFilter({
     selectedMaxPrice || filtersData.priceRange.max
   )
   const t = useTranslations('filters')
+  const tProduct = useTranslations('product')
   const locale = useLocale()
 
   useEffect(() => {
@@ -79,10 +80,10 @@ export default function PriceFilter({
         {/* Price Display */}
         <div className="flex justify-between text-sm text-muted-foreground">
           <span>
-            {localMin.toLocaleString(locale)} {t('currency')}
+            {localMin.toLocaleString(locale)} {tProduct('currency')}
           </span>
           <span>
-            {localMax.toLocaleString(locale)} {t('currency')}
+            {localMax.toLocaleString(locale)} {tProduct('currency')}
           </span>
         </div>
 

@@ -1,24 +1,24 @@
 {
   "Hero": {
     "title": "Sarina Lederwerkstatt",
-    "description": "Unsere Produkte sind für Frauen konzipiert, die ihren authentischen Charakter zum Ausdruck bringen wollen, nicht nur zur Schau stellen. Jede Tasche ist ein Manifestation von roher, natürlicher Schönheit und handgefertigter Kunst, mit Liebe hergestellt.",
+    "description": "Unsere Produkte sind für Frauen konzipiert, die ihre wahre Persönlichkeit ausdrücken möchten, nicht nur zur Schau stellen. Jede Tasche ist ein Symbol für rohe, natürliche Schönheit und handgefertigte Kunstfertigkeit, mit Liebe hergestellt.",
     "linkTitle": "Produkte"
   },
   "StoreStatements": {
-    "title": "Der Anfang unserer Geschichte",
-    "description": "Unsere kleine Werkstatt ist der Ort, an dem Lederträume Wirklichkeit werden. Wir begannen unsere Reise mit großer Leidenschaft und einer Vision für eine strahlende Zukunft und entwarfen und fertigten Taschen und Accessoires. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern der Schaffung von Produkten sind, die dazu bestimmt sind, Ihre lebenslangen Begleiter zu sein."
+    "title": "Unsere Geschichte beginnt",
+    "description": "Unsere kleine Werkstatt ist der Ort, wo Lederträume Wirklichkeit werden. Wir begannen unsere Reise mit immenser Liebe und einer Vision für eine strahlende Zukunft und entwarfen und fertigten Taschen und Accessoires. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern für die Herstellung von Produkten sind, die Ihr lebenslanger Begleiter sein sollen."
   },
   "bestSellers": {
     "title": "Bestseller",
-    "description": "Unsere beliebtesten Produkte"
+    "description": "Unsere beliebten Produkte"
   },
   "newestSellers": {
-    "title": "Neuankömmlinge",
+    "title": "Neue Ankünfte",
     "description": "Neueste Produkte in unserer Kollektion"
   },
   "workVideo": {
-    "title": "Die Kunst des Handwerks: Authentizität in jedem Stich",
-    "description": "Wir spezialisieren uns auf die Herstellung von Lederwaren, die exzellente Finesse erfordern, mit besonderem Augenmerk auf unsere Materialauswahl. Alle unsere Kollektionen werden ausschließlich aus Vollgrainleder hergestellt - dem authentischsten und hochwertigsten Typ von Naturleder."
+    "title": "Die Kunst des Handwerks: Authentizität in jeder Naht",
+    "description": "Wir sind auf die Herstellung von Lederprodukten spezialisiert, die außergewöhnliche Finesse erfordern, mit besonderer Aufmerksamkeit auf unsere Materialauswahl. Alle unsere Kollektionen werden ausschließlich aus Vollkornleder hergestellt - dem authentischsten und hochwertigsten Naturleder."
   },
   "commitments": {
     "title": "Unsere Verpflichtungen",
@@ -26,19 +26,19 @@
       {
         "id": "1",
         "title": "Liebe zu authentischem Leder",
-        "description": "Wir verwenden nur die feinsten Vollgrannaturleder. Mit sorgfältiger und künstlerischer Naht werden diese Leder zu langlebigen, einzigartigen Produkten, die mit der Zeit schöner und authentischer werden. Wir garantieren, dass keine unserer Produkte aus künstlichem (Kunststoff-)Leder hergestellt sind.",
+        "description": "Wir verwenden nur die feinsten natürlichen Vollkornleder. Mit sorgfältiger und künstlerischer Naht verwandeln sich diese Leder in haltbare und einzigartige Produkte, die mit der Zeit schöner und authentischer werden. Wir garantieren, dass keines unserer Produkte aus künstlichem (Kunststoff-)Leder hergestellt ist.",
         "url": "/images/commit1.webp"
       },
       {
         "id": "2", 
         "title": "Ethik und Verantwortlichkeiten",
-        "description": "Die Produktion findet in unserer eigenen Werkstatt unter fairen und respektvollen Bedingungen statt. Wir respektieren die Umwelt und die Menschenrechte, verwenden nach Möglichkeit recycelte und wassersparende Rohstoffe und vermeiden Schadstoffe in unserem Produktionsprozess. Unsere kleinen Schritte zu einer grüneren Zukunft.",
+        "description": "Die Produktion in unserer eigenen Werkstatt erfolgt unter fairen und respektvollen Bedingungen. Wir respektieren Umwelt und Menschenrechte, verwenden wo möglich recycelte Materialien und geringen Wasserverbrauch und vermeiden Schadstoffe in unserem Produktionsprozess. Unsere kleinen Schritte zu einer grüneren Zukunft.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
-        "title": "Sorgfältige Aufmerksamkeit auf Details",
-        "description": "Wir akzeptieren nichts weniger als Perfektion. Von der Auswahl eines Lederteils bis zum letzten Stich und der Installation einer Verschluss - jeder Schritt wird mit sorgfältiger Präzision und künstlerischer Liebe ausgeführt. Jede Tasche ist nicht nur ein Artikel, sondern ein Kunstwerk, das Ihren Namen trägt.",
+        "title": "Aufmerksamkeit für Details",
+        "description": "Wir geben uns mit weniger als Perfektion nicht zufrieden. Von der Auswahl eines Lederteils bis zum letzten Stich und der Installation eines Verschlusses wird jeder Schritt mit präziser Sorgfalt und künstlerischer Liebe ausgeführt. Jede Tasche ist nicht nur ein Artikel, sondern ein Kunstwerk, das Ihren Namen trägt.",
         "url": "/images/commit3.jpg"
       }
     ]
@@ -46,16 +46,16 @@
   "product": {
     "notFound": {
       "title": "Produkt nicht gefunden!",
-      "description": "Das gesuchte Produkt konnte nicht gefunden werden."
+      "description": "Das gesuchte Produkt wurde nicht gefunden."
     },
-    "specialBrand": "Spezialmarke",
+    "specialBrand": "Besondere Marke",
     "productImage": "Produktbild",
     "inStock": "Auf Lager",
+    "currency": "Toman",
     "outOfStock": "Nicht auf Lager",
-    "currency": "$",
     "qualityProduct": "Qualitätsprodukt",
-    "from": "ab",
-    "customer": "Geschätzter Kunde",
+    "from": "Ab",
+    "customer": "Sehr geehrte Kundin",
     "home": "Startseite",
     "breadcrumb": {
       "home": "Sarina"
@@ -65,15 +65,15 @@
       "people": "Personen"
     },
     "size": {
-      "selected": "Ausgewählte Größe"
+      "selected": "Gewählte Größe"
     },
     "color": {
-      "selected": "Ausgewählte Farbe"
+      "selected": "Gewählte Farbe"
     },
     "stock": {
       "available": "Verfügbar",
-      "outOfStock": "Nicht verfügbar",
-      "remaining": "Artikel übrig"
+      "outOfStock": "Nicht auf Lager",
+      "remaining": "verbleibende Artikel"
     },
     "variant": {
       "unavailable": "Diese Farb- und Größenkombination ist nicht verfügbar!",
@@ -111,17 +111,17 @@
       "signInLink": "melden Sie sich in Ihrem Konto an"
     },
     "share": {
-      "title": "Dieses Produkt ansehen",
+      "title": "Schauen Sie sich dieses Produkt an",
       "text": "Ich habe dieses erstaunliche Produkt gefunden, das Ihnen gefallen könnte!",
       "copyLink": "Link kopieren",
       "copySuccess": "Link kopiert!",
       "copyError": "Fehler beim Kopieren des Links"
     },
+    "views": "Ansichten",
     "noImage": "Kein Bild", 
-    "goToSlide": "Gehe zu Folie {slide}",
-    "views": "Ansichten"
+    "goToSlide": "Gehe zu Folie {slide}"
   },
-  "products": {
+   "products": {
     "allProducts": "Alle Produkte",
     "searchResults": "Suchergebnisse",
     "searchResultsFor": "Suchergebnisse für {query}",
@@ -129,23 +129,45 @@
     "allProductsDescription": "Alle Produkte - {count, plural, =0 {Keine Produkte gefunden} one {# Produkt gefunden} other {# Produkte gefunden}}",
     "error": {
       "title": "Ladefehler",
-      "description": "Beim Laden der Suchergebnisse ist ein Problem aufgetreten. Bitte versuchen Sie es erneut."
+      "description": "Es gab ein Problem beim Laden der Suchergebnisse. Bitte versuchen Sie es erneut."
     },
     "noProducts": {
-      "title": "Keine Produkte Gefunden!",
-      "description": "Bitte passen Sie Ihre Filter an oder suchen Sie nach etwas anderem"
+      "title": "Keine Produkte gefunden!",
+      "description": "Bitte ändern Sie die Filter oder suchen Sie nach einem anderen Begriff"
+    },
+    "meta": {
+      "title": "Suchergebnisse für \"{query}\"{page}",
+      "page": " - Seite {page}",
+      "description": "Finden Sie die besten Ergebnisse für \"{query}\".",
+      "allProductsTitle": "Produkte{page}",
+      "allProductsDescription": "Erkunden Sie unsere vollständige Produktsammlung. Filtern Sie nach Kategorie, Preis, Farbe und Größe, um genau das zu finden, was Sie benötigen."
+    },
+    "og": {
+      "searchTitle": "Suche: {query}",
+      "allProductsTitle": "Produkte"
+    },
+    "keywords": {
+      "search": "Suche",
+      "products": "Produkte",
+      "leatherStore": "Ledergeschäft",
+      "store": "Geschäft",
+      "naturalLeather": "Naturleder",
+      "leatherBag": "Ledertasche",
+      "onlineShopping": "Online-Shopping",
+      "colorPrefix": "Produkte",
+      "sizePrefix": "Größe"
     }
   },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",
-      "description": "Werkstatt für die Herstellung von Taschen und Naturlederprodukten. {categories} {rating} Schneller Versand, hochwertige Produkte und Garantie für die Verwendung von Naturleder."
+      "description": "Werkstatt zur Herstellung von Taschen und Naturlederprodukten. {categories} {rating} Schneller Versand, hochwertige Produkte und garantierte Verwendung von Naturleder."
     },
     "siteName": "Sarina Lederwerkstatt",
     "keywords": {
       "naturalLeather": "Naturleder",
       "womenLeatherBag": "Damenledertasche",
-      "common": "Naturleder, Damenledertasche, Damenledertasche, garantiertes Naturleder, Online-Shop, Leder-Nähwerkstatt, Lederladen"
+      "common": "Naturleder, Damen Naturledertasche, Damenledertasche, garantiertes Naturleder, Online-Shop, handgefertigte Lederwerkstatt, Ledergeschäft"
     }
   },
   "home": {
@@ -158,20 +180,12 @@
       "contact": "Kontakt"
     },
     "organization": {
-      "description": "Premium-Online-Shop, der qualitativ hochwertige Produkte mit schnellem Versand und exzellentem Kundenservice anbietet"
-    },
-    "bestSellers": {
-      "title": "Bestseller",
-      "description": "Unsere beliebtesten Produkte"
-    },
-    "newestSellers": {
-      "title": "Neuankömmlinge",
-      "description": "Neueste Produkte in unserer Kollektion"
+      "description": "Führender Online-Shop, der qualitativ hochwertige Produkte mit schnellem Versand und exzellentem Kundenservice anbietet"
     }
   },
-  "discoverMore": {
-    "title": "Mehr Entdecken",
-    "viewCategory": "{name} Ansehen"
+   "discoverMore": {
+    "title": "Mehr",
+    "viewCategory": "{name} ansehen"
   },
   "navigation": {
     "home": "Startseite",
@@ -181,8 +195,8 @@
     "view": "Ansehen",
     "closeMenu": "Navigationsmenü schließen",
     "openMenu": "Navigationsmenü öffnen",
-    "expanded": "erweitert",
-    "collapsed": "zusammengeklappt",
+    "expanded": "Erweitert",
+    "collapsed": "Reduziert",
     "signIn": "Anmelden/Registrieren",
     "profile": "Profil",
     "dashboard": "Dashboard"
@@ -191,46 +205,46 @@
     "message1": "Alle Produkte sind aus Naturleder und von Hand gefertigt.",
     "message2": "Jetzt einkaufen!"
   },
-    "subcategory": {
+   "subcategory": {
     "notFound": {
-      "title": "Unterkategorie Nicht Gefunden",
-      "description": "Die Unterkategorie, die Sie gesucht haben, konnte nicht gefunden werden."
+      "title": "Unterkategorie nicht gefunden",
+      "description": "Die gesuchte Unterkategorie wurde nicht gefunden."
     },
-    "metaDescription": "Entdecken Sie {subcategoryName} von {categoryName}. {count, plural, =0 {Keine Produkte gefunden} one {# Produkt gefunden} other {# Produkte gefunden}}.",
+    "metaDescription": "{subcategoryName} aus {categoryName}. {count, plural, =0 {Keine Produkte gefunden} one {# Produkt gefunden} other {# Produkte gefunden}}.",
     "collectionImage": "{name} Kollektion",
-    "defaultDescription": "Entdecken Sie die {name} Kollektion.",
-    "heroImageAlt": "Bild von {name}"
+    "defaultDescription": "Erkunden Sie die {name} Kollektion.",
+    "heroImageAlt": "{name} Bild"
   },
   "keywords": {
-    "shop": "einkaufen",
-    "buyOnline": "online kaufen",
+    "shop": "Einkaufen",
+    "buyOnline": "Online kaufen",
     "premiumQuality": "Premium-Qualität",
-    "fastShipping": "schneller Versand"
+    "fastShipping": "Schneller Versand"
   },
-  "search": {
+   "search": {
     "meta": {
       "title": "Suchergebnisse für \"{query}\"{page}",
       "page": " - Seite {page}",
       "description": "Finden Sie die besten Ergebnisse für \"{query}\".",
       "allProductsTitle": "Produkte{page}",
-      "allProductsDescription": "Entdecken Sie unsere komplette Produktsammlung. Filtern Sie nach Kategorie, Preis, Farbe und Größe, um genau das zu finden, was Sie benötigen."
+      "allProductsDescription": "Erkunden Sie unsere vollständige Produktsammlung. Filtern Sie nach Kategorie, Preis, Farbe und Größe, um genau das zu finden, was Sie benötigen."
     },
     "og": {
       "searchTitle": "Suche: {query}",
       "allProductsTitle": "Produkte"
     },
     "keywords": {
-      "search": "suche",
-      "products": "produkte",
-      "leatherStore": "ledergeschäft",
-      "store": "geschäft",
-      "naturalLeather": "echtes leder",
-      "leatherBag": "ledertasche",
-      "onlineShopping": "online-shopping",
-      "colorPrefix": "produkte",
-      "sizePrefix": "größe"
+      "search": "Suche",
+      "products": "Produkte",
+      "leatherStore": "Ledergeschäft",
+      "store": "Geschäft",
+      "naturalLeather": "Naturleder",
+      "leatherBag": "Ledertasche",
+      "onlineShopping": "Online-Shopping",
+      "colorPrefix": "Produkte",
+      "sizePrefix": "Größe"
     },
-     "results": {
+    "results": {
       "title": "Suchergebnisse für \"{query}\"",
       "allProducts": "Alle Produkte",
       "count": "{count, plural, =0 {Keine Produkte gefunden} one {# Produkt gefunden} other {# Produkte gefunden}}"
@@ -239,13 +253,13 @@
       "title": "Sortieren nach:",
       "newest": "Neueste",
       "oldest": "Älteste",
-      "priceAsc": "Preis: Niedrig bis Hoch",
-      "priceDesc": "Preis: Hoch bis Niedrig",
-      "rating": "Bestbewertet",
+      "priceAsc": "Niedrigster Preis",
+      "priceDesc": "Höchster Preis",
+      "rating": "Beste Bewertung",
       "sales": "Meistverkauft"
     },
     "filters": {
-      "title": "Filter & Sortierung",
+      "title": "Filter & Kategorien",
       "active": "Aktive Filter:",
       "search": "Suche: {query}",
       "minPrice": "Min: {price}",
@@ -257,7 +271,7 @@
     "loading": "Wird geladen...",
     "loadMore": "Mehr laden"
   },
-   "filters": {
+  "filters": {
     "category": {
       "title": "Kategorie",
       "all": "Alle Kategorien",
@@ -272,7 +286,7 @@
     "size": {
       "title": "Größe"
     },
-    "apply": "Anwenden",
+    "apply": "Filter anwenden",
     "reset": "Zurücksetzen",
     "clear": "Löschen",
     "showMore": "Mehr anzeigen",
@@ -280,8 +294,8 @@
   },
   "pagination": {
     "showing": "Zeige {current} von {total}",
-    "prev": "Zurück",
-    "next": "Weiter"
+    "prev": "Vorherige",
+    "next": "Nächste"
   },
   "footer": {
     "quickLinks": {
@@ -294,8 +308,8 @@
     },
     "contact": {
       "title": "Kontakt",
-     "address": "Iran - Khouzestan",
-      "city": "Deezful",
+      "address": "Khuzestan",
+      "city": "Dezful",
       "phone": "",
       "email": ""
     },
@@ -310,7 +324,7 @@
       "linkedin": "LinkedIn",
       "linkedinTooltip": "Verbinden Sie sich mit uns auf LinkedIn"
     },
-    "copyright": "Saeid",
+    "copyright": "Saeed",
     "allRightsReserved": "Alle Rechte vorbehalten",
     "legal": {
       "privacyPolicy": "Datenschutzerklärung",
@@ -320,7 +334,7 @@
     "chat": {
       "title": "Live-Chat",
       "support": "Support",
-      "welcomeMessage": "Hallo! Wie kann ich Ihnen heute helfen?",
+      "welcomeMessage": "Hallo! Wie kann ich Ihnen helfen?",
       "placeholder": "Nachricht eingeben...",
       "send": "Nachricht senden"
     }

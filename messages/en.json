@@ -1,24 +1,24 @@
 {
   "Hero": {
     "title": "Sarina Leather Workshop",
-    "description": "Our products are designed for women seeking to express their authentic personality, not just show it off. Each bag is a manifestation of raw, natural beauty and handcrafted art, made with love.",
+    "description": "Our products are designed for women who seek to express their true personality, not just display it. Each bag is a symbol of raw, natural beauty and handmade artistry, crafted with love.",
     "linkTitle": "Products"
   },
   "StoreStatements": {
-    "title": "The Beginning of Our Story",
-    "description": "Our small workshop is where leather dreams become reality. We began our journey with immense passion and a vision for a bright future, designing and crafting bags and accessories. We believe that timeless design and exceptional quality are the core of creating products destined to be your lifelong companions."
+    "title": "Our Story Begins",
+    "description": "Our small workshop is where leather dreams become reality. We started our journey with immense love and a vision for a bright future, designing and crafting bags and accessories. We believe that timeless design and exceptional quality are the core of creating products that are meant to be your lifelong companions."
   },
   "bestSellers": {
-    "title": "Bestsellers",
+    "title": "Best Sellers",
     "description": "Our popular products"
   },
   "newestSellers": {
     "title": "New Arrivals",
-    "description": "Latest products in our collection"
+    "description": "Newest products in our collection"
   },
   "workVideo": {
     "title": "The Art of Craftsmanship: Authenticity in Every Stitch",
-    "description": "We specialize in crafting leather goods that demand exquisite finesse, with a special focus on our material selection. All our collections are made exclusively from full-grain leather—the most authentic and premium type of natural leather."
+    "description": "We specialize in crafting leather products that demand extraordinary finesse, with special attention to our material selection. All our collections are exclusively made from full-grain leather - the most authentic and premium type of natural leather."
   },
   "commitments": {
     "title": "Our Commitments",
@@ -26,19 +26,19 @@
       {
         "id": "1",
         "title": "Love for Authentic Leather",
-        "description": "We use only the finest full-grain natural leathers. With meticulous and artistic stitching, these leathers become durable, unique products that grow more beautiful and authentic with time. We guarantee that none of our products are made from artificial (plastic) leather.",
+        "description": "We use only the finest natural full-grain leathers. With meticulous and artistic stitching, these leathers transform into durable and unique products that become more beautiful and authentic with time. We guarantee that none of our products are made from artificial (plastic) leather.",
         "url": "/images/commit1.webp"
       },
       {
         "id": "2", 
         "title": "Ethics and Responsibilities",
-        "description": "Production takes place in our own workshop under fair and respectful conditions. We respect the environment and human rights, using recycled and low-water-consumption raw materials whenever possible and avoiding pollutants in our production process. Our small steps towards a greener future.",
+        "description": "Production in our own workshop is carried out under fair and respectful conditions. We respect the environment and human rights, using recycled materials where possible and low water consumption, avoiding pollutants in our production process. Our small steps towards a greener future.",
         "url": "/images/commit2.webp"
       },
       {
         "id": "3",
-        "title": "Meticulous Attention to Detail",
-        "description": "We settle for nothing less than perfection. From selecting a piece of leather to the final stitch and installing a clasp, every step is carried out with meticulous precision and artistic love. Each bag is not just an item, but a work of art that carries your name.",
+        "title": "Attention to Detail",
+        "description": "We settle for nothing less than perfection. From selecting a piece of leather to the final stitch and installing a clasp, every step is performed with precise care and artistic love. Each bag is not just an item, but a work of art that carries your name with it.",
         "url": "/images/commit3.jpg"
       }
     ]
@@ -46,16 +46,16 @@
   "product": {
     "notFound": {
       "title": "Product Not Found!",
-      "description": "The product you were looking for could not be found."
+      "description": "The product you were looking for was not found."
     },
     "specialBrand": "Special Brand",
     "productImage": "Product Image",
-    "currency": "$", 
     "inStock": "In Stock",
+    "currency": "Toman",
     "outOfStock": "Out of Stock",
     "qualityProduct": "Quality Product",
-    "from": "from",
-    "customer": "Valued Customer",
+    "from": "From",
+    "customer": "Dear Customer",
     "home": "Home",
     "breadcrumb": {
       "home": "Sarina"
@@ -73,7 +73,7 @@
     "stock": {
       "available": "Available",
       "outOfStock": "Out of Stock",
-      "remaining": "items left"
+      "remaining": "items remaining"
     },
     "variant": {
       "unavailable": "This color and size combination is not available!",
@@ -82,19 +82,8 @@
     "cart": {
       "viewCart": "View Cart"
     },
-    "specifications": "Specifications & Dimensions",
     "keywords": "Keywords",
-    "specificationsList": {
-      "title": "Specifications",
-      "value": "Value",
-      "dimensions": "Dimensions (L×W×H)",
-      "weight": "Weight",
-      "unit": {
-        "cm": "cm",
-        "g": "g"
-      }
-    }
-   ,
+    "specifications": "Specifications & Dimensions",
     "relatedProducts": "Related Products",
     "bookmark": {
       "addToWishlist": "Add to Wishlist",
@@ -117,46 +106,68 @@
       }
     },
     "reviews": {
-      "beFirst": "Be the first to leave a review!",
+      "beFirst": "Be the first to review!",
       "signInPrompt": "Please",
       "signInLink": "sign in to your account"
     },
     "share": {
       "title": "Check out this product",
-      "text": "I found this amazing product you might like!",
+      "text": "I found this amazing product that you might like!",
       "copyLink": "Copy Link",
       "copySuccess": "Link copied!",
-      "copyError": "Failed to copy link"
+      "copyError": "Error copying link"
     },
+    "views": "Views",
     "noImage": "No Image", 
-    "goToSlide": "Go to slide {slide}",
-    "views": "Views"
+    "goToSlide": "Go to slide {slide}"
   },
-  "products": {
+   "products": {
     "allProducts": "All Products",
     "searchResults": "Search Results",
     "searchResultsFor": "Search Results for {query}",
-    "searchResultsDescription": "Search for \"{query}\" - {count, plural, =0 {No products found} one {# product found} other {# products found}}",
+    "searchResultsDescription": "Searching for \"{query}\" - {count, plural, =0 {No products found} one {# product found} other {# products found}}",
     "allProductsDescription": "All Products - {count, plural, =0 {No products found} one {# product found} other {# products found}}",
     "error": {
       "title": "Loading Error",
-      "description": "There was a problem loading the search results. Please try again."
+      "description": "There was a problem loading search results. Please try again."
     },
     "noProducts": {
       "title": "No Products Found!",
-      "description": "Please adjust your filters or search for something else"
+      "description": "Please change the filters or search for another term"
+    },
+    "meta": {
+      "title": "Search Results for \"{query}\"{page}",
+      "page": " - Page {page}",
+      "description": "Find the best results for \"{query}\".",
+      "allProductsTitle": "Products{page}",
+      "allProductsDescription": "Explore our complete collection of products. Filter by category, price, color, and size to find exactly what you need."
+    },
+    "og": {
+      "searchTitle": "Search: {query}",
+      "allProductsTitle": "Products"
+    },
+    "keywords": {
+      "search": "search",
+      "products": "products",
+      "leatherStore": "leather store",
+      "store": "store",
+      "naturalLeather": "natural leather",
+      "leatherBag": "leather bag",
+      "onlineShopping": "online shopping",
+      "colorPrefix": "products",
+      "sizePrefix": "size"
     }
   },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",
-      "description": "Workshop for crafting bags and natural leather products. {categories} {rating} Fast shipping, high-quality products, and a guarantee of using natural leather."
+      "description": "Workshop for making bags and natural leather products. {categories} {rating} Fast shipping, high-quality products and guaranteed use of natural leather."
     },
     "siteName": "Sarina Leather Workshop",
     "keywords": {
       "naturalLeather": "natural leather",
-      "womenLeatherBag": "women's leather bag",
-      "common": "natural leather, women's leather bag, women's leather bag, guaranteed natural leather, online store, handmade leather workshop, leather store"
+      "womenLeatherBag": "women leather bag",
+      "common": "natural leather, women natural leather bag, women leather bag, guaranteed natural leather, online store, handmade leather workshop, leather store"
     }
   },
   "home": {
@@ -169,19 +180,11 @@
       "contact": "Contact Us"
     },
     "organization": {
-      "description": "Premium online store offering quality products with fast shipping and excellent customer service"
-    },
-    "bestSellers": {
-      "title": "Bestsellers",
-      "description": "Our popular products"
-    },
-    "newestSellers": {
-      "title": "New Arrivals",
-      "description": "Latest products in our collection"
+      "description": "Leading online store offering quality products with fast shipping and excellent customer service"
     }
   },
-  "discoverMore": {
-    "title": "Discover More",
+   "discoverMore": {
+    "title": "More",
     "viewCategory": "View {name}"
   },
   "navigation": {
@@ -192,25 +195,25 @@
     "view": "View",
     "closeMenu": "Close navigation menu",
     "openMenu": "Open navigation menu",
-    "expanded": "expanded",
-    "collapsed": "collapsed",
+    "expanded": "Expanded",
+    "collapsed": "Collapsed",
     "signIn": "Sign In/Register",
     "profile": "Profile",
     "dashboard": "Dashboard"
   },
   "banner": {
-    "message1": "All products are made of natural leather and handmade.",
+    "message1": "All products are made of natural leather and by hand.",
     "message2": "Shop now!"
   },
    "subcategory": {
     "notFound": {
       "title": "Subcategory Not Found",
-      "description": "The subcategory you were looking for could not be found."
+      "description": "The subcategory you were looking for was not found."
     },
-    "metaDescription": "Explore {subcategoryName} from {categoryName}. {count, plural, =0 {No products found} one {# product found} other {# products found}}.",
+    "metaDescription": "{subcategoryName} from {categoryName}. {count, plural, =0 {No products found} one {# product found} other {# products found}}.",
     "collectionImage": "{name} Collection",
     "defaultDescription": "Explore the {name} collection.",
-    "heroImageAlt": "Image of {name}"
+    "heroImageAlt": "{name} Image"
   },
   "keywords": {
     "shop": "shop",
@@ -218,13 +221,13 @@
     "premiumQuality": "premium quality",
     "fastShipping": "fast shipping"
   },
-  "search": {
+   "search": {
     "meta": {
       "title": "Search Results for \"{query}\"{page}",
       "page": " - Page {page}",
       "description": "Find the best results for \"{query}\".",
       "allProductsTitle": "Products{page}",
-      "allProductsDescription": "Discover our complete product collection. Filter by category, price, color, and size to find exactly what you need."
+      "allProductsDescription": "Explore our complete collection of products. Filter by category, price, color, and size to find exactly what you need."
     },
     "og": {
       "searchTitle": "Search: {query}",
@@ -250,20 +253,20 @@
       "title": "Sort by:",
       "newest": "Newest",
       "oldest": "Oldest",
-      "priceAsc": "Price: Low to High",
-      "priceDesc": "Price: High to Low",
-      "rating": "Top Rated",
-      "sales": "Best Sellers"
+      "priceAsc": "Lowest Price",
+      "priceDesc": "Highest Price",
+      "rating": "Best Rating",
+      "sales": "Best Selling"
     },
     "filters": {
-      "title": "Filters & Sorting",
-      "active": "Active filters:",
+      "title": "Filters & Categories",
+      "active": "Active Filters:",
       "search": "Search: {query}",
       "minPrice": "Min: {price}",
       "maxPrice": "Max: {price}",
       "colors": "Colors: {colors}",
       "sizes": "Sizes: {sizes}",
-      "clearAll": "Clear all"
+      "clearAll": "Clear All"
     },
     "loading": "Loading...",
     "loadMore": "Load More"
@@ -283,7 +286,7 @@
     "size": {
       "title": "Size"
     },
-    "apply": "Apply",
+    "apply": "Apply Filters",
     "reset": "Reset",
     "clear": "Clear",
     "showMore": "Show More",
@@ -305,8 +308,8 @@
     },
     "contact": {
       "title": "Contact Us",
-     "address": "Iran - Khouzestan",
-      "city": "Deezful",
+      "address": "Khuzestan",
+      "city": "Dezful",
       "phone": "",
       "email": ""
     },
@@ -321,8 +324,8 @@
       "linkedin": "LinkedIn",
       "linkedinTooltip": "Connect with us on LinkedIn"
     },
-    "copyright": "Saeid",
-    "allRightsReserved": "All rights reserved",
+    "copyright": "Saeed",
+    "allRightsReserved": "All Rights Reserved",
     "legal": {
       "privacyPolicy": "Privacy Policy",
       "termsOfService": "Terms of Service",
@@ -331,9 +334,9 @@
     "chat": {
       "title": "Live Chat",
       "support": "Support",
-      "welcomeMessage": "Hello! How can I assist you today?",
+      "welcomeMessage": "Hello! How can I help you?",
       "placeholder": "Type your message...",
-      "send": "Send message"
+      "send": "Send Message"
     }
   }
 }

@@ -8,6 +8,7 @@ import { CartProductType } from './types/home'
 import { STORE_NAME } from '@/constants/store'
 import { Metadata } from 'next'
 import prisma from './prisma'
+import { getTranslations } from 'next-intl/server'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -273,11 +274,14 @@ export async function generateSearchMetadata(
     sizes?: string | string[]
   },
   locale: string,
-  t: any // Translation function from next-intl
+  translations?: any
 ): Promise<Metadata> {
   const query = params.q || ''
   const page = Number(params.page) || 1
   const isSearch = !!query
+
+  // Get translations if not provided
+  const t = translations || (await getTranslations('products'))
 
   // Build dynamic title and description
   let title = ''
@@ -285,28 +289,29 @@ export async function generateSearchMetadata(
   let keywords: string[] = []
 
   if (isSearch) {
-    title = t('searchResultsTitle', {
+    title = t('meta.title', {
       query,
-      page: page > 1 ? ` - ${t('page')} ${page}` : '',
+      page: page > 1 ? t('meta.page', { page }) : '',
     })
-    description = t('searchResultsDescription', { query })
+    description = t('meta.description', { query })
     keywords = [
       query,
       t('keywords.search'),
       t('keywords.products'),
-      t('keywords.onlineStore'),
       t('keywords.leatherStore'),
+      t('keywords.store'),
     ]
   } else {
-    title = t('allProductsTitle', {
-      page: page > 1 ? ` - ${t('page')} ${page}` : '',
+    title = t('meta.allProductsTitle', {
+      page: page > 1 ? t('meta.page', { page }) : '',
     })
-    description = t('allProductsDescription')
+    description = t('meta.allProductsDescription')
     keywords = [
       t('keywords.naturalLeather'),
       t('keywords.leatherBag'),
       t('keywords.onlineShopping'),
       t('keywords.leatherStore'),
+      t('keywords.store'),
     ]
   }
 
@@ -315,19 +320,17 @@ export async function generateSearchMetadata(
     const colors = Array.isArray(params.colors)
       ? params.colors
       : [params.colors]
-    keywords.push(
-      ...colors.map((c) => t('keywords.colorProduct', { color: c }))
-    )
+    keywords.push(...colors.map((c) => `${t('keywords.colorPrefix')} ${c}`))
   }
 
   if (params.sizes) {
     const sizes = Array.isArray(params.sizes) ? params.sizes : [params.sizes]
-    keywords.push(...sizes.map((s) => t('keywords.size', { size: s })))
+    keywords.push(...sizes.map((s) => `${t('keywords.sizePrefix')} ${s}`))
   }
 
   const currentUrl = new URL(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/products` ||
-      `http://localhost:3000/${locale}/products`
+    `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/search` ||
+      `http://localhost:3000/${locale}/search`
   )
 
   Object.entries(params).forEach(([key, value]) => {
@@ -347,7 +350,9 @@ export async function generateSearchMetadata(
 
     openGraph: {
       type: 'website',
-      title: isSearch ? t('searchTitle', { query }) : t('productsTitle'),
+      title: isSearch
+        ? t('og.searchTitle', { query })
+        : t('og.allProductsTitle'),
       description,
       url: currentUrl.toString(),
       siteName: STORE_NAME,
@@ -376,19 +381,19 @@ export async function generateSearchMetadata(
     alternates: {
       canonical: page === 1 ? currentUrl.toString() : undefined,
       languages: {
-        fa: `${process.env.NEXT_PUBLIC_SITE_URL}/fa/products${
+        fa: `${process.env.NEXT_PUBLIC_SITE_URL}/fa/search${
           params.q ? `?q=${params.q}` : ''
         }`,
-        en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products${
+        en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/search${
           params.q ? `?q=${params.q}` : ''
         }`,
-        de: `${process.env.NEXT_PUBLIC_SITE_URL}/de/products${
+        de: `${process.env.NEXT_PUBLIC_SITE_URL}/de/search${
           params.q ? `?q=${params.q}` : ''
         }`,
-        fr: `${process.env.NEXT_PUBLIC_SITE_URL}/fr/products${
+        fr: `${process.env.NEXT_PUBLIC_SITE_URL}/fr/search${
           params.q ? `?q=${params.q}` : ''
         }`,
-        it: `${process.env.NEXT_PUBLIC_SITE_URL}/it/products${
+        it: `${process.env.NEXT_PUBLIC_SITE_URL}/it/search${
           params.q ? `?q=${params.q}` : ''
         }`,
       },
