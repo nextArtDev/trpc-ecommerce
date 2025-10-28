@@ -68,7 +68,7 @@ const ProductPage: FC<ProductPageProp> = ({
     saleEndDate,
     views,
   } = data
-
+  console.log({ data })
   const currentVariant = variants.find(
     (v) => v.size?.id === selectedSizeId && v.color?.id === selectedColorId
   )

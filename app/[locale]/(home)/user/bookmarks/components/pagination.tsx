@@ -105,7 +105,7 @@ export default function Pagination({
               size="sm"
               onClick={() => isNumber && onPageChange(page)}
               disabled={!isNumber || loading || pageIsLoading}
-              className="min-w-[40px] relative"
+              className="min-w-10 relative"
               title={isNumber ? `صفحه ${page}` : ''}
             >
               {pageIsLoading ? (

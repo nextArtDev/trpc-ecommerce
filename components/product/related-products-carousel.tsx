@@ -13,6 +13,7 @@ import { FadeIn } from '../shared/fade-in'
 import { useInView } from 'framer-motion'
 import Autoplay from 'embla-carousel-autoplay'
 import { TransitionLink } from '../home/shared/TransitionLink'
+import { getName } from '@/lib/translation-utils'
 
 export type item = {
   id: string
@@ -76,7 +77,7 @@ export default function RelatedProductCarousel({
                       '/images/fallback-image.webp'
                     }
                     fill
-                    alt={item.name}
+                    alt={getName(item.translations)}
                     className="object-cover mix-blend-darken" // Uncommented; remove if not needed
                   />
                 </figure>

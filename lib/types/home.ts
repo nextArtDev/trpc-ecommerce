@@ -37,7 +37,7 @@ export type Translation = {
 export type ProductTranslation = {
   name: string
   description: string
-  keywords?: string
+  // keywords?: string
 }
 
 export type SpecTranslation = {

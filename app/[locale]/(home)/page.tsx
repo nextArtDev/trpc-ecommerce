@@ -114,7 +114,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export default async function Home() {
   const t = await getTranslations('home')
-  const tBestSellers = await getTranslations('bestSellers')
+  // const tBestSellers = await getTranslations('bestSellers')
   const tNewestSellers = await getTranslations('newestSellers')
   // await seed()
 

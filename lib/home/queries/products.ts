@@ -269,6 +269,7 @@ export async function getSubCategories() {
     select: {
       id: true,
       url: true,
+      updatedAt: true,
       translations: {
         where: { language: locale },
         select: {
@@ -994,6 +995,7 @@ export async function userBookmarkedProducts({
           product: {
             include: {
               images: { take: 1, orderBy: { created_at: 'asc' } },
+              translations: true,
               variants: {
                 select: {
                   price: true,
