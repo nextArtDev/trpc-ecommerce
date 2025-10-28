@@ -850,48 +850,64 @@ export async function getAllCategories({}) {
 }
 
 export async function getSubCategoryBySlug({ slug }: { slug: string }) {
+  const locale = (await getLocale()) as Language
+
   return await prisma.subCategory.findFirst({
-    where: {
-      url: slug,
-    },
-    include: {
-      translations: true,
+    where: { url: slug },
+    select: {
+      id: true,
+      url: true,
+      translations: {
+        where: { language: locale },
+        select: {
+          name: true,
+          description: true,
+        },
+        take: 1,
+      },
       images: {
-        select: { url: true },
+        select: {
+          url: true,
+        },
+        take: 1,
+      },
+      category: {
+        select: {
+          id: true,
+          url: true,
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+            },
+            take: 1,
+          },
+        },
       },
       products: {
         select: {
-          id: true, // You'll likely need this
-          // name: true,
-          translations: {
-            select: { name: true, description: true },
-          },
+          id: true,
           slug: true,
-          brand: true,
           rating: true,
           numReviews: true,
           sales: true,
           isSale: true,
           saleEndDate: true,
+          brand: true,
           images: {
             select: {
               url: true,
             },
           },
-          // variantImages: {
-          //   select: {
-          //     url: true,
-          //   },
-          // },
           variants: {
-            orderBy: {
-              discount: 'desc',
-            },
             select: {
               price: true,
               discount: true,
               quantity: true,
-
+              images: {
+                take: 1,
+                select: { url: true },
+              },
               size: {
                 select: {
                   id: true,
@@ -905,24 +921,30 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
                   hex: true,
                 },
               },
-              images: {
-                select: {
-                  url: true,
-                },
+            },
+            orderBy: [{ quantity: 'desc' }, { price: 'asc' }],
+            take: 1,
+          },
+          translations: {
+            where: { language: locale },
+            select: {
+              name: true,
+              description: true,
+            },
+            take: 1,
+          },
+        },
+        where: {
+          variants: {
+            some: {
+              quantity: {
+                gt: 0,
               },
             },
           },
         },
-      },
-      category: {
-        select: {
-          id: true,
-          translations: {
-            select: {
-              name: true,
-            },
-          },
-          url: true,
+        orderBy: {
+          createdAt: 'desc',
         },
       },
     },

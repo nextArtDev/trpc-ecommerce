@@ -19,6 +19,7 @@ export async function generateMetadata({
 }: SubcategoryPageProps): Promise<Metadata> {
   const { slug, locale } = await params
   const t = await getTranslations('subcategory')
+  const tKeywords = await getTranslations('keywords')
   const subcategory = await getSubCategoryBySlug({ slug })
 
   if (!subcategory) {
@@ -52,10 +53,10 @@ export async function generateMetadata({
     keywords: [
       subcategoryName.toLowerCase(),
       categoryName.toLowerCase(),
-      t('keywords.shop'),
-      t('keywords.buyOnline'),
-      t('keywords.premiumQuality'),
-      t('keywords.fastShipping'),
+      tKeywords('shop'),
+      tKeywords('buyOnline'),
+      tKeywords('premiumQuality'),
+      tKeywords('fastShipping'),
     ].join(', '),
 
     openGraph: {

@@ -201,6 +201,12 @@
     "defaultDescription": "Entdecken Sie die {name} Kollektion.",
     "heroImageAlt": "Bild von {name}"
   },
+  "keywords": {
+    "shop": "einkaufen",
+    "buyOnline": "online kaufen",
+    "premiumQuality": "Premium-Qualität",
+    "fastShipping": "schneller Versand"
+  },
   "search": {
     "meta": {
       "title": "Suchergebnisse für \"{query}\"{page}",

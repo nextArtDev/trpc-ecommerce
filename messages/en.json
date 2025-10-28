@@ -212,6 +212,12 @@
     "defaultDescription": "Explore the {name} collection.",
     "heroImageAlt": "Image of {name}"
   },
+  "keywords": {
+    "shop": "shop",
+    "buyOnline": "buy online",
+    "premiumQuality": "premium quality",
+    "fastShipping": "fast shipping"
+  },
   "search": {
     "meta": {
       "title": "Search Results for \"{query}\"{page}",

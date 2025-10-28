@@ -201,6 +201,12 @@
     "defaultDescription": "Esplora la collezione {name}.",
     "heroImageAlt": "Immagine di {name}"
   },
+  "keywords": {
+    "shop": "negozio",
+    "buyOnline": "acquista online",
+    "premiumQuality": "qualità premium",
+    "fastShipping": "spedizione veloce"
+  },
   "search": {
     "meta": {
       "title": "Risultati della ricerca per \"{query}\"{page}",
