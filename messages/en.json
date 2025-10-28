@@ -80,6 +80,10 @@
       "selectAnother": "Please select another combination of size and color."
     },
     "cart": {
+      "addedToCart": "{name} ({size} / {color}) added to cart!",
+      "buy": "Buy",
+      "outOfStock": "Out of stock!",
+      "itemsInStock": "{count} items in stock",
       "viewCart": "View Cart"
     },
     "keywords": "Keywords",

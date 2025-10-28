@@ -80,6 +80,10 @@
       "selectAnother": "Veuillez sélectionner une autre combinaison de taille et de couleur."
     },
     "cart": {
+      "addedToCart": "{name} ({size} / {color}) ajouté au panier!",
+      "buy": "Acheter",
+      "outOfStock": "Rupture de stock!",
+      "itemsInStock": "{count} articles en stock",
       "viewCart": "Voir le panier"
     },
     "keywords": "Mots-clés",

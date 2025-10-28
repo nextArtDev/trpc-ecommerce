@@ -80,6 +80,10 @@
       "selectAnother": "Seleziona un'altra combinazione di taglia e colore."
     },
     "cart": {
+       "addedToCart": "{name} ({size} / {color}) aggiunto al carrello!",
+      "buy": "Acquista",
+      "outOfStock": "Esaurito!",
+      "itemsInStock": "{count} articoli in magazzino",
       "viewCart": "Visualizza carrello"
     },
     "keywords": "Parole chiave",

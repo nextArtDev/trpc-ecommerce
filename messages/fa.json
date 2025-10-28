@@ -80,6 +80,10 @@
       "selectAnother": "لطفاً ترکیب دیگری از سایز و رنگ را انتخاب کنید."
     },
     "cart": {
+      "addedToCart": "{name} ({size} / {color}) به کارت اضافه شد!",
+      "buy": "خرید",
+      "outOfStock": "اتمام موجودی!",
+      "itemsInStock": "{count} عدد در انبار",
       "viewCart": "مشاهده سبد خرید"
     },
     "keywords": "کلمات کلیدی",

@@ -5,6 +5,7 @@ import useFromStore from '@/hooks/useFromStore'
 import { CartProductType } from '@/lib/types/home'
 import { cn } from '@/lib/utils'
 import { Minus, Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React, { FC } from 'react'
 import { toast } from 'sonner'
 
@@ -33,7 +34,7 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
   const updateProductQuantity = useCartStore(
     (state) => state.updateProductQuantity
   )
-
+  const t = useTranslations('product')
   const existItem = cart?.find((item) => item.variantId === variant.id)
 
   const handleAddToCart = () => {
@@ -59,7 +60,12 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
     }
     addToCart(itemToAdd)
     toast.success(
-      ` ${product.name} (${variant.size} / ${variant.color}) به کارت اضافه شد!`
+      // ` ${product.name} (${variant.size} / ${variant.color}) به کارت اضافه شد!`
+      t('cart.addedToCart', {
+        name: product.name,
+        size: variant.size,
+        color: variant.color,
+      })
     )
   }
 
@@ -77,9 +83,7 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
   if (variant.quantity <= 0) {
     return (
       <div className="w-full p-4 bg-red-50 border border-red-200 rounded-sm text-center">
-        <p className="text-red-600 font-medium">
-          این ترکیب رنگ و سایز موجود نیست!
-        </p>
+        <p className="text-red-600 font-medium">{t('variant.unavailable')}</p>
       </div>
     )
   }
@@ -118,11 +122,13 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
         <article className="flex  w-full h-full items-center justify-center">
           {existItem.quantity >= variant.quantity ? (
             <span className="px-3 py-2 block text-center text-rose-300 text-xs">
-              {'اتمام موجودی!'}
+              {t('cart.outOfStock')}
             </span>
           ) : (
             <span className="px-3 py-2 block text-center text-indigo-600 dark:text-indigo-100 bg-indigo-500/30 text-xs rounded-md">
-              {variant.quantity - existItem.quantity} عدد در انبار
+              {t('cart.itemsInStock', {
+                count: variant.quantity - existItem.quantity,
+              })}
             </span>
           )}
         </article>
@@ -144,17 +150,21 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
         'w-full rounded-sm py-6 font-bold flex justify-between items-center'
       )}
     >
-      <p>خرید</p>
+      <p>{t('cart.buy')}</p>
       {!!variant.discount ? (
         <div className="flex items-center gap-1 text-lg">
-          {variant.discount > 0 && <p className="">{finalPrice} تومان</p>}
+          {variant.discount > 0 && (
+            <p className="">
+              {finalPrice} {t('currency')}
+            </p>
+          )}
           <p className={cn('text-red-300', variant.discount && 'line-through')}>
-            {variant.price} تومان
+            {variant.price} {t('currency')}
           </p>
         </div>
       ) : (
         <p className={cn(' text-lg', variant.discount && 'line-through')}>
-          {variant.price} تومان
+          {variant.price} {t('currency')}
         </p>
       )}
     </Button>

@@ -68,7 +68,7 @@ const ProductPage: FC<ProductPageProp> = ({
     saleEndDate,
     views,
   } = data
-  console.log({ data })
+  // console.log({ data })
   const currentVariant = variants.find(
     (v) => v.size?.id === selectedSizeId && v.color?.id === selectedColorId
   )
@@ -241,11 +241,11 @@ const ProductPage: FC<ProductPageProp> = ({
           {currentVariant && currentVariant.quantity > 0
             ? t('stock.available')
             : t('stock.outOfStock')}
-          {currentVariant && currentVariant.quantity > 0 && (
+          {/* {currentVariant && currentVariant.quantity > 0 && (
             <span className="text-xs text-gray-500">
               ({currentVariant.quantity} {t('stock.remaining')})
             </span>
-          )}
+          )} */}
         </span>
         <article className="sticky top-1 bg-background/10 backdrop-blur-sm z-20 rounded-md flex items-center justify-center w-full h-full">
           {currentVariant && currentVariant.size && currentVariant.color ? (
