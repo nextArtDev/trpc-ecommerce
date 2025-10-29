@@ -2,13 +2,6 @@ import { Currency, CURRENCY_INFO } from '@/lib/types/home'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-// Exchange rates (you might want to fetch these from an API in real app)
-const EXCHANGE_RATES = {
-  تومان: { dollar: 0.000023, euro: 0.000021 },
-  dollar: { تومان: 43000, euro: 0.92 },
-  euro: { تومان: 47000, dollar: 1.09 },
-}
-
 export interface CurrencyState {
   currentCurrency: Currency
   setCurrency: (currency: Currency) => void
@@ -18,6 +11,25 @@ export interface CurrencyState {
     fromCurrency: Currency,
     toCurrency: Currency
   ) => number
+}
+
+// Fixed exchange rates with proper typing
+const EXCHANGE_RATES: Record<Currency, Record<Currency, number>> = {
+  تومان: {
+    dollar: 0.000023,
+    euro: 0.000021,
+    تومان: 1, // Add self-reference
+  },
+  dollar: {
+    تومان: 43000,
+    euro: 0.92,
+    dollar: 1, // Add self-reference
+  },
+  euro: {
+    تومان: 47000,
+    dollar: 1.09,
+    euro: 1, // Add self-reference
+  },
 }
 
 export const useCurrencyStore = create<CurrencyState>()(
@@ -49,12 +61,16 @@ export const useCurrencyStore = create<CurrencyState>()(
       ) => {
         if (fromCurrency === toCurrency) return amount
 
-        const rates = EXCHANGE_RATES[fromCurrency]
-        if (!rates || !rates[toCurrency]) return amount
+        // Get the rates for the source currency
+        const sourceRates = EXCHANGE_RATES[fromCurrency]
+        if (!sourceRates) return amount
 
-        // Convert to base currency first, then to target currency
-        const baseAmount = amount * rates[toCurrency]
-        return baseAmount
+        // Get the rate to target currency
+        const rate = sourceRates[toCurrency]
+        if (rate === undefined) return amount
+
+        // Convert to target currency
+        return amount * rate
       },
     }),
     {

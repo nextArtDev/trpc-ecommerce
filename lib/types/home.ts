@@ -487,6 +487,7 @@ export type CartProductType = {
   shippingMethod: string
   shippingFee: number
   extraShippingFee: number
+  currency: Currency
 }
 
 // Payment

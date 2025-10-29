@@ -11,13 +11,15 @@ export const dynamic = 'force-dynamic'
 
 const page = async () => {
   const cUser = await getCurrentUser()
-  const provinces = await prisma.province.findMany()
   const userId = cUser?.id
 
   if (!userId || !cUser.phoneNumber) redirect('/sign-in')
 
   const cart = await getMyCart()
   if (!cart || cart.cartItems.length === 0) redirect('/cart')
+
+  const provinces = await prisma.province.findMany()
+  const countries = await prisma.country.findMany()
 
   const user = await getUserById(userId)
   const shippingAddress = await prisma.shippingAddress.findFirst({
@@ -27,6 +29,7 @@ const page = async () => {
     include: {
       city: true,
       country: true,
+      province: true,
       user: true,
     },
   })
@@ -42,6 +45,7 @@ const page = async () => {
         <ShippingOrders cartItems={cart.cartItems} />
         <ShippingDetails
           provinces={provinces}
+          countries={countries}
           initialData={shippingAddress}
           phone={cUser.phoneNumber}
         />

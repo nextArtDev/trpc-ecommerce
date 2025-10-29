@@ -1,3 +1,4 @@
+import { AddressType } from '@/lib/generated/prisma'
 import { OrderStatus } from '@/lib/types/home'
 import { z } from 'zod'
 
@@ -16,41 +17,23 @@ export const ReviewFormSchema = z.object({
     .min(1, { message: 'ستاره باید حداقل 1 باشد.' })
     .max(5, { message: 'ستاره‌ها باید حداکثر 5 باشد.' }),
 })
-export const shippingAddressSchema = z.object({
-  name: z
-    .string({ message: 'نام و نام‌خانوادگی نمی‌تواند خالی باشد.' })
-    .min(2, { message: 'نام و نام‌خانوادگی باید حداقل 2 کاراکتر باشد.' })
-    .max(50, { message: 'نام باید حداکثر 50 کاراکتر باشد.' }),
-  // .regex(/^[a-zA-Z\u0600-\u06FF]+$/, {
-  //   message: 'نام و نام‌خانوادگی تنها از حروف تشکیل شده است.',
-  // }),
-  // province: z.string().min(1, 'استان نمی‌تواند خالی باشد.'),
-  // city: z.string().min(1, 'شهر نمی‌تواند خالی باشد.'),
-  // location: z.tuple([
-  //   z.string().min(1, { message: 'استان نمی‌تواند خالی باشد.' }),
-  //   z.string().min(1, { message: 'شهر نمی‌تواند خالی باشد.' }),
-  // ]),
-  // streetAddress: z.string().min(10, 'آدرس حداقل باید 10 کاراکتر باشد.'),
-  // postalCode: z.string().min(10, 'کدپستی باید 10 رقمی باشد.'),
-  // lat: z.number().optional(),
-  // lng: z.number().optional(),
-  address1: z
-    .string({ message: '  آدرس نمی‌تواند خالی باشد.' })
-    .min(10, { message: 'آدرس حداقل باید 10 کاراکتر باشد.' })
-    .max(100, { message: 'آدرس حداکثر باید 100 کاراکتر باشد.' }),
+// export const shippingAddressSchema = z.object({
+//   name: z
+//     .string({ message: 'نام و نام‌خانوادگی نمی‌تواند خالی باشد.' })
+//     .min(2, { message: 'نام و نام‌خانوادگی باید حداقل 2 کاراکتر باشد.' })
+//     .max(50, { message: 'نام باید حداکثر 50 کاراکتر باشد.' }),
 
-  // address2: z
-  //   .string()
-  //   .max(100, { message: 'آدرس حداکثر باید 100 کاراکتر باشد.' })
-  //   .optional(),
-  cityId: z.number().min(1, { message: 'نام شهر نمی‌تواند خالی باشد.' }),
-  provinceId: z.number().min(1, { message: 'استان نمی‌تواند خالی باشد.' }),
-  zip_code: z
-    .string({ message: 'کدپستی نمی‌تواند خالی باشد.' })
-    .min(10, { message: 'کدپستی باید 10 رقمی باشد.' }),
+//   address1: z
+//     .string({ message: '  آدرس نمی‌تواند خالی باشد.' })
+//     .min(10, { message: 'آدرس حداقل باید 10 کاراکتر باشد.' })
+//     .max(100, { message: 'آدرس حداکثر باید 100 کاراکتر باشد.' }),
 
-  // default: z.boolean().default(false),
-})
+//   cityId: z.number().min(1, { message: 'نام شهر نمی‌تواند خالی باشد.' }),
+//   provinceId: z.number().min(1, { message: 'استان نمی‌تواند خالی باشد.' }),
+//   zip_code: z
+//     .string({ message: 'کدپستی نمی‌تواند خالی باشد.' })
+//     .min(10, { message: 'کدپستی باید 10 رقمی باشد.' }),
+// })
 
 //Payment
 
@@ -72,3 +55,30 @@ export const updateProfileSchema = z.object({
   name: z.string(),
   phoneNumber: z.string().optional(),
 })
+
+const iranianAddressSchema = z.object({
+  name: z.string().min(1, 'Recipient name is required'),
+  addressType: z.literal(AddressType.IRANIAN),
+  provinceId: z.number().min(1, 'Province is required'),
+  cityId: z.number().min(1, 'City is required'),
+  address1: z.string().min(1, 'Address is required'),
+  address2: z.string().optional(),
+  zip_code: z.string().min(1, 'Postal code is required'),
+})
+
+// Define schema for international addresses
+const internationalAddressSchema = z.object({
+  name: z.string().min(1, 'Recipient name is required'),
+  addressType: z.literal(AddressType.INTERNATIONAL),
+  countryId: z.string().min(1, 'Country is required'),
+  state: z.string().min(1, 'State/Province is required'),
+  cityInt: z.string().min(1, 'City is required'),
+  address1: z.string().min(1, 'Address is required'),
+  address2: z.string().optional(),
+  zip_code: z.string().optional(),
+})
+
+export const shippingAddressSchema = z.discriminatedUnion('addressType', [
+  iranianAddressSchema,
+  internationalAddressSchema,
+])

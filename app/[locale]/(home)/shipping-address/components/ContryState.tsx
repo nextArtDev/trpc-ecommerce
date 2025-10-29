@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import {
@@ -20,6 +21,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Country } from '@/lib/generated/prisma'
 import { getStateByCountryId, getStateById } from '@/lib/home/actions/location'
+import { useTranslations } from 'next-intl'
 
 interface CountryStateSelectorProps {
   isPending?: boolean
@@ -32,11 +34,14 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
   countries,
   className,
 }) => {
+  const t = useTranslations('shipping')
+
   const form = useFormContext()
 
   // Get current form values as numbers
   const currentCountryId = form.watch('countryId')
   const currentStateId = form.watch('stateId')
+  const currentState = form.watch('state')
 
   const [{ data: states, isPending: isPendingCountry }] = useQueries({
     queries: [
@@ -75,6 +80,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
     form.setValue('countryId', numericValue)
     // Clear state selection when country changes
     form.setValue('stateId', 0)
+    form.setValue('state', '')
   }
 
   // Handle state change
@@ -82,6 +88,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
     const numericValue = parseInt(value, 10)
     // console.log('State changed to:', numericValue)
     form.setValue('stateId', numericValue)
+    form.setValue('state', value)
   }
 
   // Clear state when country changes to ensure consistency
@@ -102,6 +109,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
           name="countryId"
           render={({ field }) => (
             <FormItem className="flex-1">
+              <FormLabel>{t('country')}</FormLabel>
               <Select
                 disabled={isPending || countries?.length === 0}
                 onValueChange={handleCountryChange}
@@ -111,7 +119,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="استان" />
+                    <SelectValue placeholder={t('selectCountry')} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -163,6 +171,35 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
             </FormItem>
           )}
         />
+        {/* State/Province Input for International Addresses */}
+        {/* <FormField
+          control={form.control}
+          name="state"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('stateProvince')}</FormLabel>
+              <FormControl>
+                <Input placeholder={t('stateProvincePlaceholder')} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        /> */}
+
+        {/* City Input for International Addresses */}
+        {/* <FormField
+          control={form.control}
+          name="cityInt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('city')}</FormLabel>
+              <FormControl>
+                <Input placeholder={t('cityPlaceholder')} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        /> */}
       </div>
     </div>
   )

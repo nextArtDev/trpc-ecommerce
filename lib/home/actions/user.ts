@@ -14,8 +14,12 @@ interface CreateShippingAddressFormState {
   errors: {
     name?: string[]
     address1?: string[]
+    addressType?: string[]
     cityId?: string[]
     provinceId?: string[]
+    countryId?: string[]
+    state?: string[]
+    cityInt?: string[]
     zip_code?: string[]
     _form?: string[]
   }
@@ -46,6 +50,8 @@ export async function createShippingAddress(
         },
       }
     }
+
+    const { addressType } = result.data
 
     const userAddress = await prisma.user.findFirst({
       where: {

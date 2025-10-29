@@ -22,26 +22,40 @@ import { toast } from 'sonner'
 import { ArrowLeft, Loader } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import ProvinceCity from './ProvinceCity'
-import { City, Province, ShippingAddress, User } from '@/lib/generated/prisma'
-import { shippingAddressSchema } from '@/lib/home/schemas'
+import {
+  AddressType,
+  City,
+  Country,
+  Province,
+  ShippingAddress,
+  User,
+} from '@/lib/generated/prisma'
+
 import { handleServerErrors } from '@/app/(dashboard)/dashboard/lib/server-utils'
 import {
   createShippingAddress,
   editShippingAddress,
 } from '@/lib/home/actions/user'
+import { useTranslations } from 'next-intl'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
+import CountryStateSelector from './ContryState'
+import { shippingAddressSchema } from '@/lib/home/schemas'
 
 const ShippingDetails = ({
   provinces,
   phone,
+  countries,
   initialData,
 }: {
   provinces: Province[]
+  countries: Country[]
   phone: string
   initialData?: Partial<
     ShippingAddress & {
       city: City
       province: Province
       User: User
+      country: Country
     }
   > | null
 }) => {
@@ -49,6 +63,11 @@ const ShippingDetails = ({
   const router = useRouter()
 
   const [isPending, startTransition] = useTransition()
+
+  const t = useTranslations('shipping')
+  const { currentCurrency } = useCurrencyStore()
+
+  const isIranianForm = currentCurrency === 'تومان'
 
   const form = useForm<z.infer<typeof shippingAddressSchema>>({
     resolver: zodResolver(shippingAddressSchema),
@@ -60,6 +79,27 @@ const ShippingDetails = ({
       zip_code: initialData?.zip_code,
     },
   })
+
+  const defaultValues: Partial<z.infer<typeof shippingAddressSchema>> = {
+    name: initialData?.name || '',
+    address1: initialData?.address1 || '',
+    address2: initialData?.address2 || '',
+    zip_code: initialData?.zip_code || '',
+    addressType: isIranianForm
+      ? AddressType.IRANIAN
+      : AddressType.INTERNATIONAL,
+  }
+
+  // Add Iranian-specific defaults
+  if (isIranianForm) {
+    defaultValues.provinceId = Number(initialData?.provinceId) || 0
+    defaultValues.cityId = Number(initialData?.cityId) || 0
+  } else {
+    // Add international-specific defaults
+    defaultValues.countryId = initialData?.countryId || ''
+    defaultValues.state = initialData?.state || ''
+    defaultValues.cityInt = initialData?.cityInt || ''
+  }
 
   function onSubmit(data: z.infer<typeof shippingAddressSchema>) {
     // console.log('Form submitted:', data)
@@ -93,21 +133,22 @@ const ShippingDetails = ({
         Payment and shipping details
       </h2>
 
-      <div className=" max-w-md items-center justify-center mx-auto">
+      <div className="max-w-md items-center justify-center mx-auto">
         <Input
           dir="ltr"
           disabled
-          className="text-right max-w-sm text-indigo-800  bg-indigo-400"
+          className="text-right max-w-sm text-indigo-800 bg-indigo-400"
           value={phone}
         />
       </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 space-y-12 "
+          className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0 space-y-12"
         >
-          <h3 id="contact-info-heading" className="text-lg font-medium ">
-            اطلاعات ارسال و تماس
+          <h3 id="contact-info-heading" className="text-lg font-medium">
+            {t('title')}
           </h3>
 
           <FormField
@@ -115,31 +156,56 @@ const ShippingDetails = ({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>نام و نام‌خانوادگی گیرنده</FormLabel>
+                <FormLabel>{t('recipientName')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="نام و نام‌خانوادگی" {...field} />
+                  <Input
+                    placeholder={t('recipientNamePlaceholder')}
+                    {...field}
+                  />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <div className="flex flex-col space-y-6">
-            <FormLabel>انتخاب استان و شهر</FormLabel>
+          {/* Address Type Selector - Hidden but needed for form validation */}
+          <FormField
+            control={form.control}
+            name="addressType"
+            render={({ field }) => (
+              <FormItem className="hidden">
+                <FormControl>
+                  <Input {...field} type="hidden" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <ProvinceCity provinces={provinces} />
-          </div>
+          {/* Conditional Address Form */}
+          {isIranianForm ? (
+            <div className="flex flex-col space-y-6">
+              <FormLabel>{t('selectProvinceCity')}</FormLabel>
+              <ProvinceCity provinces={provinces} />
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-6">
+              <FormLabel>{t('selectCountryState')}</FormLabel>
+              <CountryStateSelector countries={countries} />
+            </div>
+          )}
 
-          <div className="mt-3! flex flex-col gap-3">
+          <div className="mt-3 flex flex-col gap-3">
             <FormField
-              // disabled={isLoading}
               control={form.control}
               name="address1"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormControl>
-                    <Textarea placeholder="خیابان، کوچه، محله..." {...field} />
+                    <Textarea
+                      placeholder={t('addressPlaceholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -149,27 +215,42 @@ const ShippingDetails = ({
 
           <FormField
             control={form.control}
-            name="zip_code"
+            name="address2"
             render={({ field }) => (
-              <FormItem className="flex-1 w-[calc(50%-8px)] mt-3!">
+              <FormItem className="flex-1">
                 <FormControl>
-                  <Input placeholder="کدپستی" {...field} />
+                  <Input placeholder={t('address2Placeholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="zip_code"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>{t('postalCode')}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t('postalCodePlaceholder')} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="flex gap-2">
             <Button
               type="submit"
               disabled={isPending}
-              className="bg-indigo-600 w-full hover:bg-indigo-500 text-white cursor-pointer!"
+              className="bg-indigo-600 w-full hover:bg-indigo-500 text-white"
             >
               {isPending ? (
                 <Loader className="w-4 h-4 animate-spin" />
               ) : (
                 <>
-                  ادامه
+                  {t('continue')}
                   <ArrowLeft className="w-4 h-4" />
                 </>
               )}
