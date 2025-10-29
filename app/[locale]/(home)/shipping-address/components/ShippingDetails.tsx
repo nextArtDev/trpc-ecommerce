@@ -21,7 +21,7 @@ import { toast } from 'sonner'
 
 import { ArrowLeft, Loader } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
-import ProvinceCity from './LocationSelection'
+import ProvinceCity from './ProvinceCity'
 import { City, Province, ShippingAddress, User } from '@/lib/generated/prisma'
 import { shippingAddressSchema } from '@/lib/home/schemas'
 import { handleServerErrors } from '@/app/(dashboard)/dashboard/lib/server-utils'
@@ -131,7 +131,7 @@ const ShippingDetails = ({
             <ProvinceCity provinces={provinces} />
           </div>
 
-          <div className="!mt-3 flex flex-col gap-3">
+          <div className="mt-3! flex flex-col gap-3">
             <FormField
               // disabled={isLoading}
               control={form.control}
@@ -151,7 +151,7 @@ const ShippingDetails = ({
             control={form.control}
             name="zip_code"
             render={({ field }) => (
-              <FormItem className="flex-1 w-[calc(50%-8px)] !mt-3">
+              <FormItem className="flex-1 w-[calc(50%-8px)] mt-3!">
                 <FormControl>
                   <Input placeholder="کدپستی" {...field} />
                 </FormControl>
@@ -163,7 +163,7 @@ const ShippingDetails = ({
             <Button
               type="submit"
               disabled={isPending}
-              className="bg-indigo-600 w-full hover:bg-indigo-500 text-white !cursor-pointer"
+              className="bg-indigo-600 w-full hover:bg-indigo-500 text-white cursor-pointer!"
             >
               {isPending ? (
                 <Loader className="w-4 h-4 animate-spin" />

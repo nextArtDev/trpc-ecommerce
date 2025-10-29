@@ -38,13 +38,6 @@ const ProvinceCity: FC<ProvinceCityProps> = ({
   const currentProvinceId = form.watch('provinceId')
   const currentCityId = form.watch('cityId')
 
-  // console.log('Form values:', {
-  //   currentProvinceId,
-  //   currentCityId,
-  //   type: typeof currentProvinceId,
-  // })
-
-  // Use queries with proper dependencies
   const [{ data: cities, isPending: isPendingProvince }] = useQueries({
     queries: [
       {
@@ -176,30 +169,3 @@ const ProvinceCity: FC<ProvinceCityProps> = ({
 }
 
 export default ProvinceCity
-
-// const distance = getDistance(
-//   {
-//     latitude: '32.390',
-
-//     longitude: '51.400',
-//   },
-//   {
-//     latitude: `${city?.latitude}`,
-//     longitude: `${city?.longitude}`,
-//   }
-// )
-// const isThePointWithinRadius = isPointWithinRadius(
-//   {
-//     latitude: '32.390',
-
-//     longitude: '51.400',
-//   },
-//   {
-//     latitude: `${city?.latitude}`,
-//     longitude: `${city?.longitude}`,
-//   },
-//   500000
-// )
-// console.log(city?.name)
-// console.log({ distance })
-// console.log({ isThePointWithinRadius })
