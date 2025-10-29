@@ -549,19 +549,25 @@ model ShippingAddress {
   zip_code String
   default  Boolean @default(false)
 
+  addressType AddressType @default(IRANIAN)
+
   orders Order[] @relation("ShippingAddressToOrder")
 
   userId String
   user   User   @relation("UserShippingAddresses", fields: [userId], references: [id])
 
+  // International address fields
   countryId String?
   country   Country? @relation("CountryToShippingAddress", fields: [countryId], references: [id])
+  state     String?
+  cityInt   String?
 
-  provinceId Int
-  province   Province @relation("ProvinceToShippingAddress", fields: [provinceId], references: [id])
+  // Iranian address fields
+  provinceId Int?
+  province   Province? @relation("ProvinceToShippingAddress", fields: [provinceId], references: [id])
 
-  cityId Int
-  city   City @relation("CityToShippingAddress", fields: [cityId], references: [id])
+  cityId Int?
+  city   City? @relation("CityToShippingAddress", fields: [cityId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -570,6 +576,11 @@ model ShippingAddress {
   @@index([provinceId])
   @@index([userId])
   @@index([cityId])
+}
+
+enum AddressType {
+  IRANIAN
+  INTERNATIONAL
 }
 
 enum OrderStatus {

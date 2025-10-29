@@ -587,3 +587,34 @@ export function transformCategoryData(category: {
     name: category.translations[0]?.name || '',
   }
 }
+
+// Currency types
+export type Currency = 'تومان' | 'dollar' | 'euro'
+
+export interface CurrencyInfo {
+  code: Currency
+  name: string
+  symbol: string
+  locale: string
+}
+
+export const CURRENCY_INFO: Record<Currency, CurrencyInfo> = {
+  تومان: {
+    code: 'تومان',
+    name: 'Iranian Toman',
+    symbol: 'تومان',
+    locale: 'fa-IR',
+  },
+  dollar: {
+    code: 'dollar',
+    name: 'US Dollar',
+    symbol: '$',
+    locale: 'en-US',
+  },
+  euro: {
+    code: 'euro',
+    name: 'Euro',
+    symbol: '€',
+    locale: 'de-DE',
+  },
+}
