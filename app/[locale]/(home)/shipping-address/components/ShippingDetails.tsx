@@ -55,7 +55,7 @@ const ShippingDetails = ({
       city: City
       province: Province
       User: User
-      country: Country
+      country: Country | null
     }
   > | null
 }) => {

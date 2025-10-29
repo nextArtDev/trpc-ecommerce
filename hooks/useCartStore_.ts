@@ -1,5 +1,5 @@
 import { fetchCurrentPricesAndStock } from '@/lib/home/actions/cart'
-import { CartProductType } from '@/lib/types/home'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useCurrencyStore } from './useCurrencyStore'
@@ -9,6 +9,8 @@ interface State {
   cart: CartProductType[]
   totalItems: number
   totalPrice: number
+  baseCurrency: Currency // Add base currency tracking
+  lastCurrencyUpdate: number // Timestamp of last currency sync
 }
 
 // Define the interface of the actions that can be performed in the Cart
@@ -20,10 +22,8 @@ interface Actions {
   emptyCart: () => void
   setCart: (newCart: CartProductType[]) => void
   validateAndUpdatePrices: () => Promise<void>
-
-  // Currency-aware computed values (using YOUR currency store)
-  getCartTotalInCurrency: () => number // Uses current currency from your store
-  getFormattedCartTotal: () => string // Uses your formatPrice function
+  convertCartPrices: (targetCurrency: Currency) => Promise<void> // New currency conversion
+  getCartTotalInCurrency: (currency?: Currency) => number //: remove async
 }
 
 // Initialize a default state
@@ -31,6 +31,8 @@ const INITIAL_STATE: State = {
   cart: [],
   totalItems: 0,
   totalPrice: 0,
+  baseCurrency: 'تومان', // Default base currency
+  lastCurrencyUpdate: Date.now(),
 }
 
 const calculateTotals = (cart: CartProductType[]) => {
@@ -42,16 +44,55 @@ const calculateTotals = (cart: CartProductType[]) => {
   return { totalItems, totalPrice }
 }
 
-// Create the store with Zustand, combining the status interface and actions with persisted data
+// Helper function to convert prices between currencies
+const convertPrice = (
+  amount: number,
+  fromCurrency: Currency,
+  toCurrency: Currency
+): number => {
+  if (fromCurrency === toCurrency) return amount
+
+  // Static rates with proper typing
+  const rates: Record<Currency, Record<Currency, number>> = {
+    تومان: {
+      dollar: 0.000023,
+      euro: 0.000021,
+      تومان: 1,
+    },
+    dollar: {
+      تومان: 43000,
+      euro: 0.92,
+      dollar: 1,
+    },
+    euro: {
+      تومان: 47000,
+      dollar: 1.09,
+      euro: 1,
+    },
+  }
+
+  const sourceRates = rates[fromCurrency]
+  if (!sourceRates) return amount
+
+  const rate = sourceRates[toCurrency]
+  if (rate === undefined) return amount
+
+  return amount * rate
+}
+
+// Create the store with Zustand
 export const useCartStore = create<State & Actions>()(
   persist(
     (set, get) => ({
       cart: INITIAL_STATE.cart,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
+      baseCurrency: INITIAL_STATE.baseCurrency,
+      lastCurrencyUpdate: INITIAL_STATE.lastCurrencyUpdate,
 
       addToCart: (product: CartProductType) => {
         if (!product || !product.variantId) return
+
         const cart = get().cart
 
         // If product already exists in cart
@@ -67,7 +108,7 @@ export const useCartStore = create<State & Actions>()(
                     item.quantity + product.quantity,
                     item.stock
                   ),
-                } // Prevent adding more than stock
+                }
               : item
           )
           set({ cart: updatedCart, ...calculateTotals(updatedCart) })
@@ -80,7 +121,6 @@ export const useCartStore = create<State & Actions>()(
       updateProductQuantity: (product: CartProductType, quantity: number) => {
         const cart = get().cart
 
-        // If quantity is 0 or less, remove the item
         if (quantity <= 0) {
           get().removeFromCart(product)
           return
@@ -88,7 +128,7 @@ export const useCartStore = create<State & Actions>()(
 
         const updatedCart = cart.map((item) =>
           item.variantId === product.variantId
-            ? { ...item, quantity: Math.min(quantity, item.stock) } // Prevent setting more than stock
+            ? { ...item, quantity: Math.min(quantity, item.stock) }
             : item
         )
 
@@ -101,14 +141,6 @@ export const useCartStore = create<State & Actions>()(
           (item) => item.variantId !== product.variantId
         )
         set({ cart: updatedCart, ...calculateTotals(updatedCart) })
-
-        // Manually sync with localStorage after removal
-        localStorage.setItem(
-          'cart',
-          JSON.stringify({
-            state: { cart: updatedCart, ...calculateTotals(updatedCart) },
-          })
-        )
       },
 
       removeMultipleFromCart: (products: CartProductType[]) => {
@@ -144,12 +176,10 @@ export const useCartStore = create<State & Actions>()(
 
           const updatedCart = cart
             .map((item) => {
-              // ✅ CHANGE: Find current data by variantId
               const currentVariant = currentData.find(
                 (data) => data.variantId === item.variantId
               )
 
-              // If variant was deleted from DB, it will be removed
               if (!currentVariant) {
                 hasChanges = true
                 return null
@@ -188,42 +218,60 @@ export const useCartStore = create<State & Actions>()(
         }
       },
 
-      // Currency-aware computed values using YOUR currency store
-      getCartTotalInCurrency: () => {
-        const { totalPrice } = get()
-        const { currentCurrency, convertCurrency } = useCurrencyStore.getState()
+      convertCartPrices: async (targetCurrency: Currency) => {
+        const cart = get().cart
+        if (cart.length === 0) return
 
-        // Convert from تومان (base currency) to current currency
-        if (currentCurrency === 'تومان') return totalPrice
+        try {
+          const { baseCurrency } = get()
 
-        return convertCurrency(totalPrice, 'تومان', currentCurrency)
+          // Convert each cart item to target currency
+          const convertedCart = cart.map((item) => ({
+            ...item,
+            price: convertPrice(item.price, baseCurrency, targetCurrency),
+            currency: targetCurrency,
+          }))
+
+          set({
+            cart: convertedCart,
+            ...calculateTotals(convertedCart),
+            lastCurrencyUpdate: Date.now(),
+          })
+        } catch (error) {
+          console.error('Failed to convert cart prices:', error)
+        }
       },
 
-      getFormattedCartTotal: () => {
-        const { totalPrice } = get()
-        const { currentCurrency, formatPrice } = useCurrencyStore.getState()
+      //: Remove async, return number directly
+      getCartTotalInCurrency: (currency?: Currency) => {
+        const { totalPrice, baseCurrency } = get()
+        const targetCurrency =
+          currency || useCurrencyStore.getState().currentCurrency
 
-        // If current currency is تومان, use base total
-        if (currentCurrency === 'تومان') return formatPrice(totalPrice)
+        if (baseCurrency === targetCurrency) return totalPrice
 
-        // Convert and format
-        const convertedPrice = get().getCartTotalInCurrency()
-        return formatPrice(convertedPrice)
+        const convertedPrice = convertPrice(
+          totalPrice,
+          baseCurrency,
+          targetCurrency
+        )
+        return convertedPrice
       },
     }),
     {
       name: 'cart',
-      // Add storage event listener for cross-tab synchronization
+      partialize: (state) => ({
+        cart: state.cart,
+        baseCurrency: state.baseCurrency,
+        lastCurrencyUpdate: state.lastCurrencyUpdate,
+      }),
       onRehydrateStorage: () => (state) => {
-        // This runs after the store is rehydrated from localStorage
         if (state && typeof window !== 'undefined') {
-          // Listen for storage changes from other tabs
           const handleStorageChange = (e: StorageEvent) => {
             if (e.key === 'cart' && e.newValue) {
               try {
                 const parsed = JSON.parse(e.newValue)
                 if (parsed.state) {
-                  // Update the store with the new state from other tab
                   state.setCart(parsed.state.cart)
                 }
               } catch (error) {
@@ -234,18 +282,11 @@ export const useCartStore = create<State & Actions>()(
 
           window.addEventListener('storage', handleStorageChange)
 
-          // Cleanup function
           return () => {
             window.removeEventListener('storage', handleStorageChange)
           }
         }
       },
-      // Update partialize to only persist cart data
-      partialize: (state) => ({
-        cart: state.cart,
-        totalItems: state.totalItems,
-        totalPrice: state.totalPrice,
-      }),
     }
   )
 )

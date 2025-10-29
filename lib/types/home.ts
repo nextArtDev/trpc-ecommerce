@@ -619,3 +619,14 @@ export const CURRENCY_INFO: Record<Currency, CurrencyInfo> = {
     locale: 'de-DE',
   },
 }
+
+// export const CURRENCIES: Record<Currency, CurrencyInfo> = {
+//   تومان: {
+//     symbol: 'تومان',
+//     name: 'Iranian Toman',
+//     locale: 'fa-IR',
+//     flag: '🇮🇷',
+//   },
+//   dollar: { symbol: '$', name: 'US Dollar', locale: 'en-US', flag: '🇺🇸' },
+//   euro: { symbol: '€', name: 'Euro', locale: 'de-DE', flag: '🇪🇺' },
+// }

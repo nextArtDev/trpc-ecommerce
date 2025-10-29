@@ -489,6 +489,12 @@ model Review {
   @@index([productId])
 }
 
+enum Currency {
+  تومان
+  dollar
+  euro
+}
+
 model Cart {
   id     String @id @default(uuid())
   userId String @unique
@@ -499,8 +505,11 @@ model Cart {
 
   cartItems    CartItem[] @relation("CartToCartItem")
   shippingFees Float      @default(0)
-  subTotal     Float
-  total        Float
+  subTotal     Float      @default(0)
+
+  displayCurrency Currency @default(تومان)
+
+  total Float @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -525,8 +534,9 @@ model CartItem {
   color       String
   weight      Float
   price       Float
-  quantity    Int    @default(1)
-  shippingFee Float  @default(0)
+  currency    Currency @default(تومان)
+  quantity    Int      @default(1)
+  shippingFee Float    @default(0)
   totalPrice  Float
 
   cartId String
@@ -655,9 +665,10 @@ model OrderItem {
   image       String
   size        String
   color       String
-  quantity    Int     @default(1)
-  shippingFee Float   @default(0)
+  quantity    Int      @default(1)
+  shippingFee Float    @default(0)
   price       Float
+  currency    Currency @default(تومان)
   totalPrice  Float
 
   status    ProductStatus @default(Pending)
@@ -843,4 +854,18 @@ model PaymentRateLimit {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model ExchangeRate {
+  id        String   @id @default(uuid())
+  from      Currency
+  to        Currency
+  rate      Float // Exchange rate
+  updatedAt DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+
+  @@unique([from, to])
+  @@index([from])
+  @@index([to])
 }
