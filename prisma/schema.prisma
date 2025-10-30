@@ -398,15 +398,32 @@ model QuestionTranslation {
 }
 
 model Country {
-  id   String @id @default(uuid())
-  name String @unique
-  code String @unique
-
+  id                String            @id @default(uuid())
+  code2             String            @unique
+  code3             String            @unique
+  name              String
+  states            State[]
   shippingRates     ShippingRate[]    @relation("CountryShippingRates")
   shippingAddresses ShippingAddress[] @relation("CountryToShippingAddress")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model State {
+  id   String @id @default(cuid())
+  code String
+  name String
+
+  countryId         String
+  country           Country           @relation(fields: [countryId], references: [id])
+  shippingAddresses ShippingAddress[] @relation("StateToShippingAddress")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([code, countryId])
+  @@index([countryId])
 }
 
 model ShippingRate {
@@ -569,8 +586,10 @@ model ShippingAddress {
   // International address fields
   countryId String?
   country   Country? @relation("CountryToShippingAddress", fields: [countryId], references: [id])
-  state     String?
-  cityInt   String?
+  stateId   String?
+  state     State?   @relation("StateToShippingAddress", fields: [stateId], references: [id])
+
+  cityInt String?
 
   // Iranian address fields
   provinceId Int?

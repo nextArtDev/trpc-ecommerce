@@ -30,6 +30,7 @@ const page = async () => {
       city: true,
       country: true,
       province: true,
+      state: true,
       user: true,
     },
   })

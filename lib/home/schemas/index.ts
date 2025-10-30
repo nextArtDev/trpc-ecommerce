@@ -66,11 +66,12 @@ const iranianAddressSchema = z.object({
   zip_code: z.string().min(1, 'Postal code is required'),
 })
 
-// Define schema for international addresses
+// International address schema
 const internationalAddressSchema = z.object({
   name: z.string().min(1, 'Recipient name is required'),
   addressType: z.literal(AddressType.INTERNATIONAL),
   countryId: z.string().min(1, 'Country is required'),
+  stateId: z.string().optional(),
   state: z.string().min(1, 'State/Province is required'),
   cityInt: z.string().min(1, 'City is required'),
   address1: z.string().min(1, 'Address is required'),

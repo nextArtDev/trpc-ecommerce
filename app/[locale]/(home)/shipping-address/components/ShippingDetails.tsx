@@ -4,8 +4,6 @@ import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-// import { toast } from 'sonner'
-
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,7 +16,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
-
 import { ArrowLeft, Loader } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import ProvinceCity from './ProvinceCity'
@@ -28,9 +25,9 @@ import {
   Country,
   Province,
   ShippingAddress,
+  State,
   User,
 } from '@/lib/generated/prisma'
-
 import { handleServerErrors } from '@/app/(dashboard)/dashboard/lib/server-utils'
 import {
   createShippingAddress,
@@ -38,8 +35,9 @@ import {
 } from '@/lib/home/actions/user'
 import { useTranslations } from 'next-intl'
 import { useCurrencyStore } from '@/hooks/useCurrencyStore'
-import CountryStateSelector from './ContryState'
+
 import { shippingAddressSchema } from '@/lib/home/schemas'
+import CountryStateSelector from './ContryState'
 
 const ShippingDetails = ({
   provinces,
@@ -52,18 +50,17 @@ const ShippingDetails = ({
   phone: string
   initialData?: Partial<
     ShippingAddress & {
-      city: City
-      province: Province
+      city: City | null
+      province: Province | null
       User: User
       country: Country | null
+      state: State | null
     }
   > | null
 }) => {
   const path = usePathname()
   const router = useRouter()
-
   const [isPending, startTransition] = useTransition()
-
   const t = useTranslations('shipping')
   const { currentCurrency } = useCurrencyStore()
 
@@ -71,38 +68,35 @@ const ShippingDetails = ({
 
   const form = useForm<z.infer<typeof shippingAddressSchema>>({
     resolver: zodResolver(shippingAddressSchema),
-    defaultValues: {
-      name: initialData?.name,
-      address1: initialData?.address1 || '',
-      cityId: Number(initialData?.cityId) || 0,
-      provinceId: Number(initialData?.provinceId) || 0,
-      zip_code: initialData?.zip_code,
-    },
+    defaultValues: ((): z.infer<typeof shippingAddressSchema> => {
+      const baseValues = {
+        name: initialData?.name || '',
+        address1: initialData?.address1 || '',
+        address2: initialData?.address2 || '',
+        zip_code: initialData?.zip_code || '',
+      }
+
+      if (isIranianForm) {
+        return {
+          ...baseValues,
+          addressType: AddressType.IRANIAN,
+          provinceId: Number(initialData?.provinceId) || 0,
+          cityId: Number(initialData?.cityId) || 0,
+        }
+      } else {
+        return {
+          ...baseValues,
+          addressType: AddressType.INTERNATIONAL,
+          countryId: initialData?.countryId || '',
+          stateId: initialData?.stateId || '',
+          state: initialData?.stateId || '',
+          cityInt: initialData?.cityInt || '',
+        }
+      }
+    })(),
   })
 
-  const defaultValues: Partial<z.infer<typeof shippingAddressSchema>> = {
-    name: initialData?.name || '',
-    address1: initialData?.address1 || '',
-    address2: initialData?.address2 || '',
-    zip_code: initialData?.zip_code || '',
-    addressType: isIranianForm
-      ? AddressType.IRANIAN
-      : AddressType.INTERNATIONAL,
-  }
-
-  // Add Iranian-specific defaults
-  if (isIranianForm) {
-    defaultValues.provinceId = Number(initialData?.provinceId) || 0
-    defaultValues.cityId = Number(initialData?.cityId) || 0
-  } else {
-    // Add international-specific defaults
-    defaultValues.countryId = initialData?.countryId || ''
-    defaultValues.state = initialData?.state || ''
-    defaultValues.cityInt = initialData?.cityInt || ''
-  }
-
   function onSubmit(data: z.infer<typeof shippingAddressSchema>) {
-    // console.log('Form submitted:', data)
     startTransition(async () => {
       try {
         if (initialData?.id) {
@@ -112,14 +106,13 @@ const ShippingDetails = ({
         } else {
           const res = await createShippingAddress(data, phone, path)
           if (res?.errors) handleServerErrors(res.errors, form.setError)
-
           router.push('/place-order')
         }
       } catch (error) {
         if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
           return
         }
-        toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
+        toast.error(t('error.general'))
       }
     })
   }

@@ -1,9 +1,11 @@
+import { PriceDisplay } from '@/components/shared/price-display'
 import { Separator } from '@/components/ui/separator'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
+import { Link } from '@/i18n/navigation'
 import { CartItem } from '@/lib/generated/prisma'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
 
 type Props = {
   cartItems: CartItem[]
@@ -11,6 +13,9 @@ type Props = {
 }
 
 const ShippingShoppingList = ({ cartItems }: Props) => {
+  const t = useTranslations('cart')
+  const currency = useCurrencyStore((state) => state.currentCurrency)
+  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
   return (
     <ul
       role="list"
@@ -36,27 +41,45 @@ const ShippingShoppingList = ({ cartItems }: Props) => {
                   className="font-medium line-clamp-1  hover:underline"
                 >
                   <h3 className="text-sm">
-                    {item.name} | {item.quantity ? item.quantity : null} عدد
+                    {item.name} | {item.quantity ? item.quantity : null}{' '}
+                    {t('quantity')}
                   </h3>
                 </Link>
                 {/* <p className="mt-1 text-sm ">{product.color}</p> */}
                 {item.size ? (
-                  <p className="mt-1 text-sm ">{item.size}</p>
+                  <p className="mt-1 text-sm ">
+                    {item.size} | {item.color}
+                  </p>
                 ) : null}
                 {item.price ? (
-                  <p className="mt-1 text-sm ">{item.price} تومان</p>
+                  // <p className="mt-1 text-sm ">
+                  //   {item.price} تومان
+                  //   </p>
+                  <PriceDisplay
+                    className="mt-1 text-sm"
+                    amount={convertCurrency(item.price, 'تومان', currency)}
+                    currency={currency}
+                  />
                 ) : null}
               </div>
             </div>
             <Separator />
             <div className={cn('mt-4 flex items-center font-semibold gap-1 ')}>
-              <p className="font-semibold">مجموع:</p>
+              <p className="font-semibold"> {t('totalPrice')}</p>
               <div
                 className={cn(
                   'inline-grid w-full max-w-32 lg:mr-44  grid-cols-1'
                 )}
               >
-                <p>{+item.price * item.quantity} تومان</p>
+                {/* <p>{+item.price * item.quantity} تومان</p> */}
+                <PriceDisplay
+                  amount={convertCurrency(
+                    +item.price * item.quantity,
+                    'تومان',
+                    currency
+                  )}
+                  currency={currency}
+                />
               </div>
             </div>
           </div>

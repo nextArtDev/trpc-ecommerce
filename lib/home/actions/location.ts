@@ -74,45 +74,37 @@ export const getProvinceById = async (provinceId: string | number) => {
   }
 }
 
-export const getStateByCountryId = async (countryId: string | number) => {
+export const getStatesByCountryId = async (countryId: string) => {
   try {
-    // Convert to number and validate
-    const numericCountryId =
-      typeof countryId === 'string' ? parseInt(countryId, 10) : countryId
-
-    if (!countryId || isNaN(numericCountryId) || numericCountryId <= 0) {
+    if (!countryId) {
       return []
     }
 
-    const cities = await prisma.state.findMany({
+    const states = await prisma.state.findMany({
       where: {
-        countryId: numericCountryId,
+        countryId,
       },
       orderBy: {
-        id: 'asc',
+        name: 'asc',
       },
     })
 
-    return cities
+    return states
   } catch (error) {
-    console.error('getCityByCountryId error:', error)
+    console.error('getStatesByCountryId error:', error)
     return []
   }
 }
 
-export const getStateById = async (stateId: string | number) => {
+export const getStateById = async (stateId: string) => {
   try {
-    // Convert to number and validate
-    const numericStateId =
-      typeof stateId === 'string' ? parseInt(stateId, 10) : stateId
-
-    if (!stateId || isNaN(numericStateId) || numericStateId <= 0) {
+    if (!stateId) {
       return null
     }
 
     const state = await prisma.state.findFirst({
       where: {
-        id: numericStateId,
+        id: stateId,
       },
     })
 

@@ -286,6 +286,7 @@ export async function updateCartWithShipping(
         city: true,
         province: true,
         country: true,
+        state: true,
       },
     })
 
@@ -337,7 +338,7 @@ export async function updateCartWithShipping(
       // For now, we'll default to USD for international addresses
       shippingParams.destination = {
         country: shippingAddress.country?.name,
-        state: shippingAddress.state,
+        state: shippingAddress.state?.name,
         cityInt: shippingAddress.cityInt,
       }
       shippingParams.currency = 'dollar' // Default to USD for international

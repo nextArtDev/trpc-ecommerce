@@ -1,8 +1,10 @@
-//https://github.com/stefanbinder/countries-states
+// app/[locale]/(home)/shipping-address/components/CountryStateSelector.tsx
+
 'use client'
 import { useQueries } from '@tanstack/react-query'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 
 import {
   FormControl,
@@ -18,10 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { Country } from '@/lib/generated/prisma'
-import { getStateByCountryId, getStateById } from '@/lib/home/actions/location'
-import { useTranslations } from 'next-intl'
+import { getStatesByCountryId, getStateById } from '@/lib/home/actions/location'
 
 interface CountryStateSelectorProps {
   isPending?: boolean
@@ -29,45 +31,39 @@ interface CountryStateSelectorProps {
   countries: Country[]
   className?: string
 }
+
 const CountryStateSelector: FC<CountryStateSelectorProps> = ({
   isPending = false,
   countries,
   className,
 }) => {
   const t = useTranslations('shipping')
-
   const form = useFormContext()
 
-  // Get current form values as numbers
+  // Get current form values
   const currentCountryId = form.watch('countryId')
   const currentStateId = form.watch('stateId')
-  const currentState = form.watch('state')
 
   const [{ data: states, isPending: isPendingCountry }] = useQueries({
     queries: [
       {
         queryKey: ['stateByCountry', currentCountryId],
         queryFn: () => {
-          return currentCountryId && currentCountryId > 0
-            ? getStateByCountryId(currentCountryId)
+          return currentCountryId
+            ? getStatesByCountryId(currentCountryId)
             : Promise.resolve([])
         },
-        enabled: !!(currentCountryId && currentCountryId > 0),
+        enabled: !!currentCountryId,
         staleTime: 5 * 60 * 1000,
       },
       {
         queryKey: ['stateById', currentStateId],
         queryFn: () => {
-          return currentStateId && currentStateId > 0
+          return currentStateId
             ? getStateById(currentStateId)
             : Promise.resolve(null)
         },
-        enabled: !!(
-          currentStateId &&
-          currentStateId > 0 &&
-          currentCountryId &&
-          currentCountryId > 0
-        ),
+        enabled: !!currentStateId,
         staleTime: 5 * 60 * 1000,
       },
     ],
@@ -75,47 +71,36 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
 
   // Handle country change
   const handleCountryChange = (value: string) => {
-    const numericValue = parseInt(value, 10)
-    // console.log('Country changed to:', numericValue)
-    form.setValue('countryId', numericValue)
+    form.setValue('countryId', value)
     // Clear state selection when country changes
-    form.setValue('stateId', 0)
+    form.setValue('stateId', '')
     form.setValue('state', '')
   }
 
   // Handle state change
   const handleStateChange = (value: string) => {
-    const numericValue = parseInt(value, 10)
-    // console.log('State changed to:', numericValue)
-    form.setValue('stateId', numericValue)
+    form.setValue('stateId', value)
     form.setValue('state', value)
   }
 
-  // Clear state when country changes to ensure consistency
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'countryId' && value.countryId !== currentCountryId) {
-        form.setValue('stateId', 0)
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [form, currentCountryId])
+  // Handle state text input change
+  const handleStateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue('state', e.target.value)
+  }
 
   return (
     <div className={cn('w-full h-full relative', className)}>
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4">
         <FormField
           control={form.control}
           name="countryId"
           render={({ field }) => (
-            <FormItem className="flex-1">
+            <FormItem>
               <FormLabel>{t('country')}</FormLabel>
               <Select
                 disabled={isPending || countries?.length === 0}
                 onValueChange={handleCountryChange}
-                value={
-                  field.value && field.value > 0 ? String(field.value) : ''
-                }
+                value={field.value || ''}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -124,7 +109,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
                 </FormControl>
                 <SelectContent>
                   {countries?.map((country) => (
-                    <SelectItem key={country.id} value={String(country.id)}>
+                    <SelectItem key={country.id} value={country.id}>
                       {country.name}
                     </SelectItem>
                   ))}
@@ -135,59 +120,64 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="stateId"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <Select
-                disabled={
-                  isPending ||
-                  isPendingCountry ||
-                  !states ||
-                  states.length === 0 ||
-                  !currentCountryId ||
-                  currentCountryId <= 0
-                }
-                onValueChange={handleStateChange}
-                value={
-                  field.value && field.value > 0 ? String(field.value) : ''
-                }
-              >
+        {/* Conditional rendering based on whether the country has predefined states */}
+        {states && states.length > 0 ? (
+          <FormField
+            control={form.control}
+            name="stateId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('stateProvince')}</FormLabel>
+                <Select
+                  disabled={
+                    isPending ||
+                    isPendingCountry ||
+                    !states ||
+                    states.length === 0 ||
+                    !currentCountryId
+                  }
+                  onValueChange={handleStateChange}
+                  value={field.value || ''}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectState')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {states?.map((state) => (
+                      <SelectItem key={state.id} value={state.id}>
+                        {state.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('stateProvince')}</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="شهرستان" />
-                  </SelectTrigger>
+                  <Input
+                    placeholder={t('stateProvincePlaceholder')}
+                    {...field}
+                    onChange={handleStateTextChange}
+                  />
                 </FormControl>
-                <SelectContent>
-                  {states?.map((state) => (
-                    <SelectItem key={state.id} value={String(state.id)}>
-                      {state.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* State/Province Input for International Addresses */}
-        {/* <FormField
-          control={form.control}
-          name="state"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('stateProvince')}</FormLabel>
-              <FormControl>
-                <Input placeholder={t('stateProvincePlaceholder')} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* City Input for International Addresses */}
-        {/* <FormField
+        <FormField
           control={form.control}
           name="cityInt"
           render={({ field }) => (
@@ -199,7 +189,7 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
       </div>
     </div>
   )
