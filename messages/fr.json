@@ -180,6 +180,27 @@
     "unitPrice": "Prix unitaire",
     "totalPrice": "Prix total"
   },
+  "shipping": {
+    "title": "Informations de livraison et de contact",
+    "recipientName": "Nom du destinataire",
+    "recipientNamePlaceholder": "Entrez le nom du destinataire",
+    "selectProvinceCity": "Sélectionner la province et la ville",
+    "selectCountryState": "Sélectionner le pays et l'état",
+    "addressPlaceholder": "Rue, allée, quartier...",
+    "address2Placeholder": "Appartement, suite, etc. (optionnel)",
+    "postalCode": "Code postal",
+    "postalCodePlaceholder": "Entrez le code postal",
+    "country": "Pays",
+    "selectCountry": "Sélectionner un pays",
+    "stateProvince": "État/Province",
+    "stateProvincePlaceholder": "Entrez l'état ou la province",
+    "city": "Ville",
+    "cityPlaceholder": "Entrez la ville",
+    "continue": "Continuer",
+    "error": {
+      "general": "Une erreur s'est produite, veuillez réessayer !"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

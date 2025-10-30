@@ -180,6 +180,27 @@
     "unitPrice": "Unit Price",
     "totalPrice": "Total Price"
   },
+  "shipping": {
+    "title": "Shipping and Contact Information",
+    "recipientName": "Recipient Name",
+    "recipientNamePlaceholder": "Enter recipient name",
+    "selectProvinceCity": "Select Province and City",
+    "selectCountryState": "Select Country and State",
+    "addressPlaceholder": "Street, alley, neighborhood...",
+    "address2Placeholder": "Apartment, suite, etc. (optional)",
+    "postalCode": "Postal Code",
+    "postalCodePlaceholder": "Enter postal code",
+    "country": "Country",
+    "selectCountry": "Select a country",
+    "stateProvince": "State/Province",
+    "stateProvincePlaceholder": "Enter state or province",
+    "city": "City",
+    "cityPlaceholder": "Enter city",
+    "continue": "Continue",
+    "error": {
+      "general": "An error occurred, please try again!"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",

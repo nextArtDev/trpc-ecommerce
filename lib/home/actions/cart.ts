@@ -68,19 +68,7 @@ export async function saveAllToCart(
       // 4. Validate all items and prepare cart data
       const validationErrors: SaveCartResult['validationErrors'] = []
       const correctedItems: SaveCartResult['correctedItems'] = []
-      // const validatedCartItems: Array<{
-      //   productId: string
-      //   sizeId: string
-      //   productSlug: string
-      //   sku: string | ''
-      //   name: string
-      //   image: string
-      //   size: string
-      //   quantity: number
-      //   price: number
-      //   weight: number
-      //   totalPrice: number
-      // }> = []
+
       const validatedCartItemsData = []
 
       for (const cartProduct of items) {
@@ -197,6 +185,7 @@ export async function saveAllToCart(
               totalPrice: item.totalPrice,
               weight: item.weight,
               color: item.color,
+              // currency:item.cu
             })),
           },
         },
@@ -296,6 +285,7 @@ export async function updateCartWithShipping(
       include: {
         city: true,
         province: true,
+        country: true,
       },
     })
 
@@ -319,9 +309,6 @@ export async function updateCartWithShipping(
       return { success: false, message: 'سبد خرید نامعتبر است.' }
     }
 
-    // Calculate shipping fees based on your business logic
-    // This is where you'd implement your shipping calculation
-    // let totalShippingFee = 0
     const totalShippingFee = calculateShippingCost({
       origin: { province: 'خوزستان', city: 'دزفول' },
       destination: {
@@ -340,14 +327,6 @@ export async function updateCartWithShipping(
         ) * 10,
       dimensions: { length: 50, width: 50, height: 50 },
     })
-    // const updatedItems = cart.cartItems.map((item) => {
-    //   // Calculate shipping for each item
-    //     // item,
-    //     // shippingAddress
-    //   )
-    //   totalShippingFee += itemShippingFee
-    //   return { ...item, shippingFee: itemShippingFee }
-    // })
 
     // Update cart with shipping information
     await prisma.cart.update({
@@ -355,12 +334,6 @@ export async function updateCartWithShipping(
       data: {
         total: cart.subTotal + totalShippingFee.total,
         shippingFees: totalShippingFee.total,
-        // cartItems: {
-        //   updateMany: updatedItems.map((item) => ({
-        //     where: { id: item.id },
-        //     data: { shippingFee: item.shippingFee },
-        //   })),
-        // },
       },
     })
 

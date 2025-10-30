@@ -180,6 +180,27 @@
     "unitPrice": "قیمت واحد",
     "totalPrice": "قیمت مجموع"
   },
+  "shipping": {
+    "title": "اطلاعات ارسال و تماس",
+    "recipientName": "نام و نام‌خانوادگی گیرنده",
+    "recipientNamePlaceholder": "نام و نام‌خانوادگی",
+    "selectProvinceCity": "انتخاب استان و شهر",
+    "selectCountryState": "انتخاب کشور و استان",
+    "addressPlaceholder": "خیابان، کوچه، محله...",
+    "address2Placeholder": "آپارتمان، سوئیت و غیره (اختیاری)",
+    "postalCode": "کدپستی",
+    "postalCodePlaceholder": "کدپستی",
+    "country": "کشور",
+    "selectCountry": "انتخاب کشور",
+    "stateProvince": "استان/ایالت",
+    "stateProvincePlaceholder": "نام استان یا ایالت",
+    "city": "شهر",
+    "cityPlaceholder": "نام شهر",
+    "continue": "ادامه",
+    "error": {
+      "general": "مشکلی پیش آمده، لطفا دوباره امتحان کنید!"
+    }
+  },
   "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",

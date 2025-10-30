@@ -180,6 +180,27 @@
     "unitPrice": "Einzelpreis",
     "totalPrice": "Gesamtpreis"
   },
+  "shipping": {
+    "title": "Versand- und Kontaktinformationen",
+    "recipientName": "Name des Empfängers",
+    "recipientNamePlaceholder": "Empfängernamen eingeben",
+    "selectProvinceCity": "Provinz und Stadt auswählen",
+    "selectCountryState": "Land und Bundesland auswählen",
+    "addressPlaceholder": "Straße, Gasse, Nachbarschaft...",
+    "address2Placeholder": "Wohnung, Suite usw. (optional)",
+    "postalCode": "Postleitzahl",
+    "postalCodePlaceholder": "Postleitzahl eingeben",
+    "country": "Land",
+    "selectCountry": "Land auswählen",
+    "stateProvince": "Bundesland/Provinz",
+    "stateProvincePlaceholder": "Bundesland oder Provinz eingeben",
+    "city": "Stadt",
+    "cityPlaceholder": "Stadt eingeben",
+    "continue": "Weiter",
+    "error": {
+      "general": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut!"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",

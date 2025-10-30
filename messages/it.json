@@ -180,6 +180,27 @@
     "unitPrice": "Prezzo unitario",
     "totalPrice": "Prezzo totale"
   },
+  "shipping": {
+    "title": "Informazioni di spedizione e contatto",
+    "recipientName": "Nome del destinatario",
+    "recipientNamePlaceholder": "Inserisci il nome del destinatario",
+    "selectProvinceCity": "Seleziona provincia e città",
+    "selectCountryState": "Seleziona paese e stato",
+    "addressPlaceholder": "Via, vicolo, quartiere...",
+    "address2Placeholder": "Appartamento, suite, ecc. (opzionale)",
+    "postalCode": "Codice postale",
+    "postalCodePlaceholder": "Inserisci il codice postale",
+    "country": "Paese",
+    "selectCountry": "Seleziona un paese",
+    "stateProvince": "Stato/Provincia",
+    "stateProvincePlaceholder": "Inserisci stato o provincia",
+    "city": "Città",
+    "cityPlaceholder": "Inserisci la città",
+    "continue": "Continua",
+    "error": {
+      "general": "Si è verificato un errore, riprova!"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",

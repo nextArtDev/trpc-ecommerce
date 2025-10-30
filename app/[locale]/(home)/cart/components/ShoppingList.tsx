@@ -1,6 +1,8 @@
 import { TransitionLink } from '@/components/home/shared/TransitionLink'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
+import { PriceDisplay } from '@/components/shared/price-display'
 import { Badge } from '@/components/ui/badge'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import { CartProductType } from '@/lib/types/home'
 import { useTranslations } from 'next-intl'
 
@@ -13,6 +15,9 @@ type Props = {
 
 const ShoppingList = ({ cartItems, mutable = false }: Props) => {
   const t = useTranslations('cart')
+  const currency = useCurrencyStore((state) => state.currentCurrency)
+  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+
   return (
     <ul
       role="list"
@@ -78,7 +83,15 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                           {t('unitPrice')}:
                         </span>
                         <p className="text-xs px-0.5 py-1">
-                          {item.price} {t('currency')}
+                          {/* {item.price} {t('currency')} */}
+                          <PriceDisplay
+                            amount={convertCurrency(
+                              item.price,
+                              'تومان',
+                              currency
+                            )}
+                            currency={currency}
+                          />
                         </p>
                       </>
                     )}
@@ -92,7 +105,15 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                       variant="outline"
                       className="text-red-500 text-sm sm:text-base px-2 py-1"
                     >
-                      {+item.price * item.quantity} {t('currency')}
+                      {/* {+item.price * item.quantity} {t('currency')} */}
+                      <PriceDisplay
+                        amount={convertCurrency(
+                          +item.price * item.quantity,
+                          'تومان',
+                          currency
+                        )}
+                        currency={currency}
+                      />
                     </Badge>
                   </div>
                 </div>
