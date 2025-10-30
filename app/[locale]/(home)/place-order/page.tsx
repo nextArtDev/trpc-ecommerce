@@ -55,8 +55,8 @@ const PlaceOrderPage = async () => {
   if (!cart || cart.cart?.items.length === 0) redirect('/cart')
   const shippingAddress = await getUserShippingAddressById(userId)
   if (!shippingAddress) redirect('/shipping-address')
-  console.log({ shippingAddress })
-  console.log({ cart })
+  // console.log({ shippingAddress })
+  // console.log({ cart })
   return (
     <section className="px-2">
       <CheckoutSteps current={2} />
@@ -91,7 +91,11 @@ const PlaceOrderPage = async () => {
               <p>
                 {shippingAddress?.addressType === 'IRANIAN'
                   ? `${shippingAddress?.city?.name} - ${shippingAddress?.province?.name}`
-                  : `${shippingAddress?.cityInt}, ${shippingAddress?.state}, ${shippingAddress?.country?.name}`}
+                  : `${
+                      shippingAddress?.cityInt ? shippingAddress?.cityInt : ''
+                    }| ${shippingAddress?.state?.name}, ${
+                      shippingAddress?.country?.name
+                    }`}
               </p>
               <p>{shippingAddress.address1}</p>
               <p>{shippingAddress.zip_code}</p>

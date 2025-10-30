@@ -73,7 +73,7 @@ const internationalAddressSchema = z.object({
   countryId: z.string().min(1, 'Country is required'),
   stateId: z.string().optional(),
   state: z.string().min(1, 'State/Province is required'),
-  cityInt: z.string().min(1, 'City is required'),
+  cityInt: z.string().optional(),
   address1: z.string().min(1, 'Address is required'),
   address2: z.string().optional(),
   zip_code: z.string().optional(),

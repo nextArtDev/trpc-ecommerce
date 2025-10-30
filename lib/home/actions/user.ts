@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation'
 import { updateCartWithShipping } from './cart'
 import { getCurrentUser } from '@/lib/auth-helpers'
 import { formatError } from '@/lib/utils'
+import { AddressType } from '@/lib/generated/prisma'
 
 interface CreateShippingAddressFormState {
   success?: string
@@ -18,6 +19,7 @@ interface CreateShippingAddressFormState {
     cityId?: string[]
     provinceId?: string[]
     countryId?: string[]
+    stateId?: string[]
     state?: string[]
     cityInt?: string[]
     zip_code?: string[]
@@ -66,57 +68,80 @@ export async function createShippingAddress(
         },
       }
     }
+    // Prepare address data based on type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const addressData: any = {
+      name: result.data.name,
+      address1: result.data.address1,
+      address2: result.data.address2 || null,
+      zip_code: result.data.zip_code || null,
+      userId: cUser.id,
+      phone: phone.toString(),
+      addressType: result.data.addressType,
+    }
+
+    if (addressType === AddressType.IRANIAN) {
+      addressData.provinceId = result.data.provinceId
+      addressData.cityId = result.data.cityId
+      // Clear international fields
+      addressData.countryId = null
+      addressData.stateId = null
+      addressData.state = null
+      addressData.cityInt = null
+    } else {
+      addressData.countryId = result.data.countryId
+      addressData.stateId = result.data.stateId || null
+      addressData.state = result.data.state
+      addressData.cityInt = result.data.cityInt
+      // Clear Iranian fields
+      addressData.provinceId = null
+      addressData.cityId = null
+    }
+
     // console.log(user)
     const shippingAddress = await prisma.shippingAddress.create({
-      data: {
-        name: result.data.name,
-        zip_code: result.data.zip_code,
-        cityId: +result.data.cityId,
-        provinceId: +result.data.provinceId,
-        address1: result.data.address1,
-        userId: cUser.id,
-        phone: phone.toString(),
-        //  images: {
-        //    connect: imageIds.map((id) => ({
-        //      id: id,
-        //    })),
-        //  },
-      },
+      data: addressData,
       include: {
         province: {
-          select: {
-            name: true,
-          },
+          select: { name: true },
         },
         city: {
-          select: {
-            name: true,
-          },
+          select: { name: true },
+        },
+        country: {
+          select: { name: true },
+        },
+        state: {
+          select: { name: true },
         },
         user: {
           select: {
             name: true,
-            cart: {
-              select: {
-                id: true,
-              },
-            },
+            cart: { select: { id: true } },
           },
         },
       },
     })
 
-    const AddressToSaveForUser = `${shippingAddress?.province.name}-${shippingAddress?.city.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+    let AddressToSaveForUser: string
+    if (addressType === AddressType.IRANIAN) {
+      AddressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+    } else {
+      AddressToSaveForUser = `${shippingAddress?.country?.name}, ${
+        shippingAddress?.state?.name || shippingAddress.state
+      }, ${shippingAddress.cityInt} | ${shippingAddress.address1} - ${
+        shippingAddress.zip_code || 'N/A'
+      }`
+    }
 
     await prisma.user.update({
-      where: {
-        id: cUser.id,
-      },
+      where: { id: cUser.id },
       data: {
         address: AddressToSaveForUser,
         name: result.data.name,
       },
     })
+
     await updateCartWithShipping(
       shippingAddress.user.cart?.id as string,
       shippingAddress.id
@@ -136,8 +161,13 @@ interface EditShippingAddressFormState {
   errors: {
     name?: string[]
     address1?: string[]
+    addressType?: string[]
     cityId?: string[]
     provinceId?: string[]
+    countryId?: string[]
+    stateId?: string[]
+    state?: string[]
+    cityInt?: string[]
     zip_code?: string[]
     _form?: string[]
   }
@@ -199,76 +229,101 @@ export async function editShippingAddress(
         },
       }
     }
-    await prisma.user.findFirst({
-      where: {
-        id: cUser.id,
-      },
-      include: {
-        shippingAddresses: {
-          include: {
-            city: true,
-            province: true,
-          },
-        },
-      },
-    })
+    // await prisma.user.findFirst({
+    //   where: {
+    //     id: cUser.id,
+    //   },
+    //   include: {
+    //     shippingAddresses: {
+    //       include: {
+    //         city: true,
+    //         province: true,
+    //         country: true,
+    //         state: true,
+    //       },
+    //     },
+    //   },
+    // })
+
     // console.log(user)
+
+    const { addressType } = result.data
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const addressData: any = {
+      name: result.data.name,
+      address1: result.data.address1,
+      address2: result.data.address2 || null,
+      zip_code: result.data.zip_code || null,
+      addressType: result.data.addressType,
+    }
+
+    if (addressType === AddressType.IRANIAN) {
+      addressData.provinceId = result.data.provinceId
+      addressData.cityId = result.data.cityId
+      // Clear international fields
+      addressData.country = { disconnect: true }
+      addressData.state = { disconnect: true }
+    } else {
+      // For international addresses, use the correct field names
+      addressData.country = { connect: { id: result.data.countryId } }
+      if (result.data.stateId) {
+        addressData.state = { connect: { id: result.data.stateId } }
+      }
+      // Clear Iranian fields
+      addressData.province = { disconnect: true }
+      addressData.city = { disconnect: true }
+    }
+
     const shippingAddress = await prisma.shippingAddress.update({
       where: { id: shippingAddressId },
-      data: {
-        name: result.data.name,
-        zip_code: result.data.zip_code,
-        cityId: +result.data.cityId,
-        provinceId: +result.data.provinceId,
-        address1: result.data.address1,
-        userId: cUser.id,
-        // phone: phone.toString(),
-        //  images: {
-        //    connect: imageIds.map((id) => ({
-        //      id: id,
-        //    })),
-        //  },
-      },
+      data: addressData,
       include: {
         province: {
-          select: {
-            name: true,
-          },
+          select: { name: true },
         },
         city: {
-          select: {
-            name: true,
-          },
+          select: { name: true },
+        },
+        country: {
+          select: { name: true },
+        },
+        state: {
+          select: { name: true },
         },
         user: {
           select: {
             name: true,
-            cart: {
-              select: {
-                id: true,
-              },
-            },
+            cart: { select: { id: true } },
           },
         },
       },
     })
+
     await updateCartWithShipping(
       shippingAddress.user.cart?.id as string,
       shippingAddress.id
     )
-    // console.log({ shippingFee })
-    const AddressToSaveForUser = `${shippingAddress?.province.name}-${shippingAddress?.city.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+
+    // console.log({ shippingAddress })
+    let AddressToSaveForUser: string
+    if (addressType === AddressType.IRANIAN) {
+      AddressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+    } else {
+      AddressToSaveForUser = `${shippingAddress?.country?.name}, ${
+        shippingAddress?.state?.name
+      }, ${shippingAddress.cityInt} | ${shippingAddress.address1} - ${
+        shippingAddress.zip_code || 'N/A'
+      }`
+    }
 
     await prisma.user.update({
-      where: {
-        id: cUser.id,
-      },
+      where: { id: userAddress.id },
       data: {
         address: AddressToSaveForUser,
         name: result.data.name,
       },
     })
-
     // console.log(res)
   } catch (err: unknown) {
     const message =
