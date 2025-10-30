@@ -201,6 +201,21 @@
       "general": "Si è verificato un errore, riprova!"
     }
   },
+  "placeOrder": {
+    "title": "Effettua ordine",
+    "shippingAddress": "Indirizzo di spedizione",
+    "orders": "Ordini",
+    "product": "Prodotto",
+    "quantity": "Quantità",
+    "unitPrice": "Prezzo unitario",
+    "subtotal": "Subtotale",
+    "shipping": "Spedizione",
+    "total": "Totale",
+    "edit": "Modifica",
+    "invalidCart": "Carrello non valido",
+    "backToCart": "Torna al carrello",
+    "confirm": "Conferma ordine"
+  },
   "metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",

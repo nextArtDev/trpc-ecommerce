@@ -201,6 +201,21 @@
       "general": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut!"
     }
   },
+  "placeOrder": {
+    "title": "Bestellung aufgeben",
+    "shippingAddress": "Lieferadresse",
+    "orders": "Bestellungen",
+    "product": "Produkt",
+    "quantity": "Menge",
+    "unitPrice": "Einzelpreis",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "total": "Gesamt",
+    "edit": "Bearbeiten",
+    "invalidCart": "Ungültiger Warenkorb",
+    "backToCart": "Zurück zum Warenkorb",
+    "confirm": "Bestellung bestätigen"
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",

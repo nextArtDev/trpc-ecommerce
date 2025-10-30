@@ -201,6 +201,21 @@
       "general": "مشکلی پیش آمده، لطفا دوباره امتحان کنید!"
     }
   },
+  "placeOrder": {
+    "title": "تایید سفارش",
+    "shippingAddress": "آدرس ارسال",
+    "orders": "سفارشها",
+    "product": "محصول",
+    "quantity": "تعداد",
+    "unitPrice": "قیمت واحد",
+    "subtotal": "مجموع سفارش",
+    "shipping": "هزینه ارسال",
+    "total": "مجموع",
+    "edit": "ویرایش",
+    "invalidCart": "سبد خرید معتبر نیست",
+    "backToCart": "برگشت به سبد خرید",
+    "confirm": "تایید سفارش"
+  },
   "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",

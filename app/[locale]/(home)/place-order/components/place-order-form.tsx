@@ -8,11 +8,15 @@ import { useTransition } from 'react'
 import { createOrder } from '@/lib/home/actions/order'
 import { toast } from 'sonner'
 import { useCartStore } from '@/hooks/useCartStore'
+import { useTranslations } from 'next-intl'
 
 const PlaceOrderForm = () => {
   const emptyCart = useCartStore((state) => state.emptyCart)
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+
+  const t = useTranslations('placeOrder')
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
@@ -43,7 +47,7 @@ const PlaceOrderForm = () => {
         ) : (
           <Check className="w-4 h-4" />
         )}{' '}
-        تایید
+        {t('confirm')}
       </Button>
     )
   }

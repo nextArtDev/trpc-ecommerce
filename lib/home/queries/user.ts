@@ -1,5 +1,11 @@
 import { currentUser } from '@/lib/auth'
-import { City, Province, ShippingAddress } from '@/lib/generated/prisma'
+import {
+  City,
+  Country,
+  Province,
+  ShippingAddress,
+  State,
+} from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
 
 export async function getMyCart() {
@@ -46,10 +52,10 @@ export async function getUserById(userId: string) {
 
   return user
 }
-export async function getUserShippingAddressById(
-  userId: string
-): Promise<
-  | (ShippingAddress & { city: City | null } & { province: Province | null })
+export async function getUserShippingAddressById(userId: string): Promise<
+  | (ShippingAddress & { city: City | null } & { province: Province | null } & {
+      country: Country | null
+    } & { state: State | null })
   | null
 > {
   const user = await prisma.user.findFirst({
@@ -59,6 +65,8 @@ export async function getUserShippingAddressById(
         include: {
           city: true,
           province: true,
+          country: true,
+          state: true,
         },
       },
     },

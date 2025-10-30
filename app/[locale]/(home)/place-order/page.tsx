@@ -10,13 +10,8 @@ import {
 } from '@/components/ui/table'
 import { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
+
 import { notFound, redirect } from 'next/navigation'
-// import { formatCurrency } from '@/lib/utils'
-// import { getMyCart } from '../../lib/actions/cart.action'
-// import { getUserById } from '../../lib/actions/user.action'
-// import { ShippingAddress } from '../../types'
-// import CheckoutSteps from '../../components/checkout-steps'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,14 +26,22 @@ import { getUserShippingAddressById } from '@/lib/home/queries/user'
 import CheckoutSteps from '../shipping-address/components/checkout-steps'
 import PlaceOrderForm from './components/place-order-form'
 import { getCurrentUser } from '@/lib/auth-helpers'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
+import { PriceDisplay } from '@/components/shared/price-display'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: 'سفارش',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('placeOrder')
+
+  return {
+    title: t('title'),
+  }
 }
 const PlaceOrderPage = async () => {
   const cUser = await getCurrentUser()
+  const t = await getTranslations('placeOrder')
 
   if (!cUser) {
     notFound()
@@ -52,46 +55,49 @@ const PlaceOrderPage = async () => {
   if (!cart || cart.cart?.items.length === 0) redirect('/cart')
   const shippingAddress = await getUserShippingAddressById(userId)
   if (!shippingAddress) redirect('/shipping-address')
+  console.log({ shippingAddress })
+  console.log({ cart })
   return (
     <section className="px-2">
       <CheckoutSteps current={2} />
-      <h1 className="py-4 text-2xl font-bold text-center">تایید سفارش</h1>
+      <h1 className="py-4 text-2xl font-bold text-center"> {t('title')}</h1>
 
       {(!cart.success || cart.cart?.validationErrors) && (
         <AlertDialog open={!!cart.cart?.validationErrors.length}>
-          {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle className="text-red-500">
-                سبد خرید معتبر نیست!
+                {t('invalidCart')}
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {cart.cart?.validationErrors.map((er) => er.issue).join(', ')}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              {/* <AlertDialogCancel>Cancel</AlertDialogCancel> */}
               <AlertDialogAction asChild>
-                <Link href={'/cart'}>برگشت به سبد خرید &larr;</Link>
+                <Link href={'/cart'}>{t('backToCart')}</Link>
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       )}
+
       <div className="grid md:grid-cols-3 md:gap-5">
         <div className="md:col-span-2 overflow-x-auto space-y-4">
           <Card>
             <CardContent className="p-4 flex flex-col gap-2">
-              <h2 className="text-xl pb-4 font-bold">آدرس ارسال</h2>
+              <h2 className="text-xl pb-4 font-bold">{t('shippingAddress')}</h2>
               <p>{shippingAddress?.name}</p>
               <p>
-                {`${shippingAddress?.city?.name} - ${shippingAddress?.province?.name}`}{' '}
+                {shippingAddress?.addressType === 'IRANIAN'
+                  ? `${shippingAddress?.city?.name} - ${shippingAddress?.province?.name}`
+                  : `${shippingAddress?.cityInt}, ${shippingAddress?.state}, ${shippingAddress?.country?.name}`}
               </p>
               <p>{shippingAddress.address1}</p>
               <p>{shippingAddress.zip_code}</p>
               <div className="mt-3">
                 <Link href="/shipping-address">
-                  <Button variant="outline">ویرایش</Button>
+                  <Button variant="outline">{t('edit')}</Button>
                 </Link>
               </div>
             </CardContent>
@@ -99,13 +105,13 @@ const PlaceOrderPage = async () => {
 
           <Card>
             <CardContent className="p-4 gap-4 ">
-              <h2 className="text-xl pb-4 font-bold">سفارشها</h2>
+              <h2 className="text-xl pb-4 font-bold">{t('orders')}</h2>
               <Table dir="rtl">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>سفارش</TableHead>
-                    <TableHead>تعداد</TableHead>
-                    <TableHead>قیمت واحد</TableHead>
+                    <TableHead>{t('product')}</TableHead>
+                    <TableHead>{t('quantity')}</TableHead>
+                    <TableHead>{t('unitPrice')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -129,7 +135,14 @@ const PlaceOrderPage = async () => {
                       <TableCell>
                         <span className="px-2">{item.quantity}</span>
                       </TableCell>
-                      <TableCell className="text-right">{item.price}</TableCell>
+                      <TableCell className="text-right">
+                        <PriceDisplay
+                          amount={item.price}
+                          originalCurrency="تومان"
+                          // currency={item}
+                        />
+                        {/* {item.price} */}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -141,20 +154,31 @@ const PlaceOrderPage = async () => {
           <Card>
             <CardContent className="p-4 gap-4 space-y-4">
               <div className="flex justify-between">
-                <div>سفارشها</div>
-                <div>{cart.cart?.subTotal}</div>
+                <p>{t('subtotal')}</p>
+                {/* <p>{cart.cart?.subTotal}</p> */}
+
+                <PriceDisplay
+                  amount={Number(cart.cart?.subTotal)}
+                  originalCurrency="تومان"
+                  // currency={item}
+                />
               </div>
               {/* <div className="flex justify-between">
                 <div>مالیات</div>
                 <div>{cart.taxPrice}</div>
               </div> */}
               <div className="flex justify-between">
-                <div>هزینه ارسال</div>
-                <div>{cart.cart?.shippingFees}</div>
+                <p>{t('shipping')}</p>
+                <p>{cart.cart?.shippingFees}</p>
               </div>
               <div className="flex justify-between">
-                <div>مجموع</div>
-                <div>{cart.cart?.total}</div>
+                <p>{t('total')}</p>
+                {/* <p>{cart.cart?.total}</p> */}
+                <PriceDisplay
+                  amount={Number(cart.cart?.total)}
+                  originalCurrency="تومان"
+                  // currency={item}
+                />
               </div>
               <PlaceOrderForm />
             </CardContent>

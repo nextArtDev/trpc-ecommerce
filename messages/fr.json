@@ -201,6 +201,21 @@
       "general": "Une erreur s'est produite, veuillez réessayer !"
     }
   },
+  "placeOrder": {
+    "title": "Passer la commande",
+    "shippingAddress": "Adresse de livraison",
+    "orders": "Commandes",
+    "product": "Produit",
+    "quantity": "Quantité",
+    "unitPrice": "Prix unitaire",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "total": "Total",
+    "edit": "Modifier",
+    "invalidCart": "Panier invalide",
+    "backToCart": "Retour au panier",
+    "confirm": "Confirmer la commande"
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

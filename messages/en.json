@@ -201,6 +201,21 @@
       "general": "An error occurred, please try again!"
     }
   },
+    "placeOrder": {
+    "title": "Place Order",
+    "shippingAddress": "Shipping Address",
+    "orders": "Orders",
+    "product": "Product",
+    "quantity": "Quantity",
+    "unitPrice": "Unit Price",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "edit": "Edit",
+    "invalidCart": "Invalid Cart",
+    "backToCart": "Back to Cart",
+    "confirm": "Confirm Order"
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",
