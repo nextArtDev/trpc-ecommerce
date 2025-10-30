@@ -1,3 +1,6 @@
+import { AddressType } from './generated/prisma'
+import { Currency } from './types/home'
+
 type CityInfo = {
   province: string
   city: string
@@ -10,6 +13,8 @@ type ShippingInput = {
   valueRial: number
   dimensions?: { length: number; width: number; height: number } // cm
   packaging?: number
+  currency: Currency
+  addressType: AddressType
 }
 
 const provinceAdjacency: Record<string, string[]> = {
@@ -107,6 +112,7 @@ export function calculateShippingCost(input: ShippingInput): {
   packaging: number
   oversize: number
   total: number
+  currency: string
 } {
   const {
     origin,
@@ -115,6 +121,8 @@ export function calculateShippingCost(input: ShippingInput): {
     valueRial,
     dimensions,
     packaging = 100000,
+    currency = 'تومان',
+    addressType = AddressType.IRANIAN,
   } = input
   // console.log({
   //   origin,
@@ -124,12 +132,53 @@ export function calculateShippingCost(input: ShippingInput): {
   //   dimensions,
   //   packaging,
   // })
+
+  if (addressType === AddressType.INTERNATIONAL && currency !== 'تومان') {
+    return calculateInternationalShipping({
+      weightGrams,
+      valueRial,
+      dimensions,
+      packaging,
+      currency,
+    })
+  }
+  return calculateIranianShipping({
+    origin,
+    destination,
+    weightGrams,
+    valueRial,
+    dimensions,
+    packaging,
+  })
+}
+function calculateIranianShipping({
+  origin,
+  destination,
+  weightGrams,
+  valueRial,
+  dimensions,
+  packaging,
+}: {
+  origin: { province: string; city: string }
+  destination: { province?: string; city?: string }
+  weightGrams: number
+  valueRial: number
+  dimensions?: { length: number; width: number; height: number }
+  packaging: number
+}): {
+  base: number
+  insurance: number
+  packaging: number
+  oversize: number
+  total: number
+  currency: string
+} {
   // تعیین نوع مسیر
   let region: 'intra' | 'neighbor' | 'nonNeighbor'
   if (origin.province === destination.province) {
     region = 'intra'
   } else if (
-    provinceAdjacency[origin.province]?.includes(destination.province)
+    provinceAdjacency[origin.province]?.includes(destination.province || '')
   ) {
     region = 'neighbor'
   } else {
@@ -187,6 +236,7 @@ export function calculateShippingCost(input: ShippingInput): {
     packaging: toTomanRounded(packaging),
     oversize: toTomanRounded(oversize),
     total: toTomanRounded(totalRial),
+    currency: 'تومان',
   }
 }
 
@@ -202,3 +252,100 @@ export function calculateShippingCost(input: ShippingInput): {
 // console.log(result)
 // خروجی نمونه:
 // { base: 375000, insurance: 200000, packaging: 30000, oversize: 0, total: 605000 }
+
+const INTERNATIONAL_RATES = {
+  dollar: {
+    base: 50, // $50 base rate
+    weightMultiplier: 5, // $5 per additional kg
+    maxWeight: 10, // Max weight before additional charges
+  },
+  euro: {
+    base: 45, // €45 base rate
+    weightMultiplier: 4.5, // €4.5 per additional kg
+    maxWeight: 10, // Max weight before additional charges
+  },
+}
+
+function calculateInternationalShipping({
+  weightGrams,
+  valueRial,
+  dimensions,
+  packaging,
+  currency,
+}: {
+  weightGrams: number
+  valueRial: number
+  dimensions?: { length: number; width: number; height: number }
+  packaging: number
+  currency: 'dollar' | 'euro'
+}): {
+  base: number
+  insurance: number
+  packaging: number
+  oversize: number
+  total: number
+  currency: string
+} {
+  const weightKg = weightGrams / 1000
+  const rates = INTERNATIONAL_RATES[currency]
+
+  // Calculate base shipping
+  let base = rates.base
+
+  // Add weight-based charges for overweight items
+  if (weightKg > 1) {
+    const extraWeight = Math.min(weightKg - 1, rates.maxWeight - 1)
+    base += extraWeight * rates.weightMultiplier
+  }
+
+  // For very heavy items, add additional charges
+  if (weightKg > rates.maxWeight) {
+    base += (weightKg - rates.maxWeight) * rates.weightMultiplier * 1.5
+  }
+
+  // Insurance (0.5% of item value, with caps based on currency)
+  let insurance = 0
+  if (currency === 'dollar') {
+    // Convert value from Rial to USD (assuming 43,000 Rial = 1 USD)
+    const valueUSD = valueRial / 43000
+    const maxCovered = 500 // $500 max coverage
+    const insuredValue = Math.min(valueUSD, maxCovered)
+    insurance = Math.ceil(insuredValue * 0.005)
+  } else if (currency === 'euro') {
+    // Convert value from Rial to EUR (assuming 47,000 Rial = 1 EUR)
+    const valueEUR = valueRial / 47000
+    const maxCovered = 450 // €450 max coverage
+    const insuredValue = Math.min(valueEUR, maxCovered)
+    insurance = Math.ceil(insuredValue * 0.005)
+  }
+
+  // Oversize package handling (+20% of base)
+  let oversize = 0
+  if (dimensions) {
+    const { length, width, height } = dimensions
+    const volume = length * width * height
+    // If volume exceeds 30,000 cm³ (30L), add oversize charge
+    if (volume > 30000) {
+      oversize = Math.ceil(base * 0.2)
+    }
+  }
+
+  // Convert packaging from Rial to target currency
+  let packagingFee = 0
+  if (currency === 'dollar') {
+    packagingFee = packaging / 43000
+  } else if (currency === 'euro') {
+    packagingFee = packaging / 47000
+  }
+
+  const total = base + insurance + oversize + packagingFee
+
+  return {
+    base: Math.round(base * 100) / 100,
+    insurance: Math.round(insurance * 100) / 100,
+    packaging: Math.round(packagingFee * 100) / 100,
+    oversize: Math.round(oversize * 100) / 100,
+    total: Math.round(total * 100) / 100,
+    currency,
+  }
+}

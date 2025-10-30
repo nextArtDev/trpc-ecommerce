@@ -1,7 +1,7 @@
 'use server'
 
 import { currentUser } from '@/lib/auth'
-import { Cart, CartItem } from '@/lib/generated/prisma'
+import { AddressType, Cart, CartItem } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
 import { calculateShippingCost } from '@/lib/shipping-price'
 
@@ -297,11 +297,7 @@ export async function updateCartWithShipping(
     const cart = await prisma.cart.findUnique({
       where: { id: cartId },
       include: {
-        cartItems: {
-          include: {
-            // Include product for shipping calculation
-          },
-        },
+        cartItems: true,
       },
     })
 
@@ -309,39 +305,67 @@ export async function updateCartWithShipping(
       return { success: false, message: 'سبد خرید نامعتبر است.' }
     }
 
-    const totalShippingFee = calculateShippingCost({
+    // Calculate total weight and value
+    const totalWeight = cart.cartItems.reduce(
+      (acc, item) =>
+        acc + ((Number(item.weight) ?? 1000) * item.quantity || 2000),
+      0
+    )
+
+    const totalValue = cart.cartItems.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const shippingParams: any = {
       origin: { province: 'خوزستان', city: 'دزفول' },
-      destination: {
-        province: shippingAddress.province.name,
-        city: shippingAddress.city.name,
-      },
-      weightGrams: cart.cartItems.reduce(
-        (acc, item) =>
-          acc + ((Number(item.weight) ?? 1000) * item.quantity || 2000),
-        0
-      ),
-      valueRial:
-        cart.cartItems.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0
-        ) * 10,
+      weightGrams: totalWeight,
+      valueRial: totalValue * 10, // Convert to Rial
       dimensions: { length: 50, width: 50, height: 50 },
-    })
+      addressType: shippingAddress.addressType,
+    }
+
+    if (shippingAddress.addressType === AddressType.IRANIAN) {
+      shippingParams.destination = {
+        province: shippingAddress.province?.name,
+        city: shippingAddress.city?.name,
+      }
+    } else {
+      // For international addresses, we need to determine the currency
+      // This could come from user preferences or cart metadata
+      // For now, we'll default to USD for international addresses
+      shippingParams.destination = {
+        country: shippingAddress.country?.name,
+        state: shippingAddress.state,
+        cityInt: shippingAddress.cityInt,
+      }
+      shippingParams.currency = 'dollar' // Default to USD for international
+    }
+    // Calculate shipping cost
+    const shippingCost = calculateShippingCost(shippingParams)
+    // Convert shipping cost to Rial for database storage
+    let shippingFeeInRial = shippingCost.total
+    if (shippingCost.currency === 'dollar') {
+      shippingFeeInRial = shippingCost.total * 43000
+    } else if (shippingCost.currency === 'euro') {
+      shippingFeeInRial = shippingCost.total * 47000
+    }
 
     // Update cart with shipping information
     await prisma.cart.update({
       where: { id: cartId },
       data: {
-        total: cart.subTotal + totalShippingFee.total,
-        shippingFees: totalShippingFee.total,
+        total: cart.subTotal + shippingFeeInRial,
+        shippingFees: shippingFeeInRial,
       },
     })
 
     return {
       success: true,
       message: 'هزینه ارسال محاسبه شد.',
-      totalShippingFee,
-      total: cart.subTotal + totalShippingFee.total / 10,
+      totalShippingFee: shippingCost,
+      total: cart.subTotal + shippingFeeInRial,
     }
   } catch (error) {
     console.error('Update shipping error:', error)

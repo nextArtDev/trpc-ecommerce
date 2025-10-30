@@ -1,6 +1,8 @@
 'use client'
+import { PriceDisplay } from '@/components/shared/price-display'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/hooks/useCartStore'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import useFromStore from '@/hooks/useFromStore'
 import { CartProductType } from '@/lib/types/home'
 import { cn } from '@/lib/utils'
@@ -35,6 +37,9 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
     (state) => state.updateProductQuantity
   )
   const t = useTranslations('product')
+  const currency = useCurrencyStore((state) => state.currentCurrency)
+  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+
   const existItem = cart?.find((item) => item.variantId === variant.id)
 
   const handleAddToCart = () => {
@@ -57,6 +62,7 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
       shippingMethod: product.shippingFeeMethod,
       extraShippingFee: 0,
       shippingFee: 0,
+      currency,
     }
     addToCart(itemToAdd)
     toast.success(
@@ -155,16 +161,28 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
         <div className="flex items-center gap-1 text-lg">
           {variant.discount > 0 && (
             <p className="">
-              {finalPrice} {t('currency')}
+              {/* {finalPrice} {t('currency')} */}
+              <PriceDisplay
+                amount={convertCurrency(finalPrice, 'تومان', currency)}
+                currency={currency}
+              />
             </p>
           )}
           <p className={cn('text-red-300', variant.discount && 'line-through')}>
-            {variant.price} {t('currency')}
+            {/* {variant.price} {t('currency')} */}
+            <PriceDisplay
+              amount={convertCurrency(variant.price, 'تومان', currency)}
+              currency={currency}
+            />
           </p>
         </div>
       ) : (
         <p className={cn(' text-lg', variant.discount && 'line-through')}>
-          {variant.price} {t('currency')}
+          {/* {variant.price} {t('currency')} */}
+          <PriceDisplay
+            amount={convertCurrency(variant.price, 'تومان', currency)}
+            currency={currency}
+          />
         </p>
       )}
     </Button>
