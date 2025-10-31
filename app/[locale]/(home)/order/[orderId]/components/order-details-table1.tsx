@@ -59,6 +59,7 @@ interface OrderDetailsTableProps {
     user: { name: string; phoneNumber: string | null }
   }
   isAdmin: boolean
+  currency: Currency
 }
 
 // Helper function to safely parse date
@@ -69,13 +70,17 @@ const parseDate = (date: Date | string | null): Date | null => {
   return null
 }
 
-const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
+const OrderDetailsTable = ({
+  order,
+  isAdmin,
+  currency,
+}: OrderDetailsTableProps) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
   const t = useTranslations('order')
-  const currency = useCurrencyStore((state) => state.currentCurrency)
+
   // Show toast messages based on URL parameters
   useEffect(() => {
     const status = searchParams?.get('status')

@@ -54,6 +54,7 @@ export async function createOrder() {
         shippingAddressId: user.shippingAddresses[0].id,
         orderStatus: 'Pending',
         paymentStatus: 'Pending',
+        currency: cart.cart.currency,
         subTotal: cart.cart.subTotal, // Will calculate below
         shippingFees: cart.cart.shippingFees, // Will calculate below
         total: cart.cart.total, // Will calculate below

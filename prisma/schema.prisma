@@ -639,15 +639,15 @@ enum PaymentStatus {
 }
 
 model Order {
-  id           String    @id @default(uuid())
+  id           String      @id @default(uuid())
   shippingFees Float
   subTotal     Float
   total        Float
-  paidAt       DateTime? @db.Timestamp(6)
-  deliveredAt  DateTime? @db.Timestamp(6)
+  paidAt       DateTime?   @db.Timestamp(6)
+  deliveredAt  DateTime?   @db.Timestamp(6)
   // groups OrderGroup[] @relation("OrderGroupToOrder")
-
-  orderStatus OrderStatus @default(Pending)
+  currency     Currency    @default(تومان)
+  orderStatus  OrderStatus @default(Pending)
 
   paymentStatus  PaymentStatus   @default(Pending)
   authority      String?
@@ -684,10 +684,10 @@ model OrderItem {
   image       String
   size        String
   color       String
-  quantity    Int      @default(1)
-  shippingFee Float    @default(0)
+  quantity    Int     @default(1)
+  shippingFee Float   @default(0)
   price       Float
-  currency    Currency @default(تومان)
+  // currency    Currency @default(تومان)
   totalPrice  Float
 
   status    ProductStatus @default(Pending)

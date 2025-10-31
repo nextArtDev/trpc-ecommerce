@@ -5,7 +5,7 @@ import { AddressType, Cart, CartItem } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
 import { calculateShippingCost } from '@/lib/shipping-price'
 
-import { CartProductType } from '@/lib/types/home'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { revalidatePath } from 'next/cache'
 import { getCurrentLocale } from './locale'
 
@@ -430,6 +430,7 @@ export interface DbCart {
   total: number
   items: DbCartItem[]
   hasValidationIssues: boolean
+  currency: Currency
   validationErrors: Array<{
     itemId: string
     productName: string
@@ -589,6 +590,7 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
     const validatedCart: DbCart = {
       ...cart,
       items: validatedItems,
+      currency: cart.displayCurrency,
       hasValidationIssues,
       validationErrors,
     }

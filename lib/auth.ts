@@ -12,8 +12,9 @@ import { cache } from 'react'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: 'mysql', // or "mysql", "postgresql", ...etc
+    provider: 'postgresql', // or "mysql", "postgresql", ...etc
   }),
+
   emailAndPassword: {
     enabled: false, // Disable email/password since we want phone-only
   },
