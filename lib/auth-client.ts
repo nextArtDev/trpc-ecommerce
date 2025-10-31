@@ -10,6 +10,9 @@ import { auth } from './auth'
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'http://localhost:3000',
   // plugins: [phoneNumberClient()],
+  fetchOptions: {
+    credentials: 'include',
+  },
   plugins: [
     inferAdditionalFields<typeof auth>(), // added fot additional fields, user, in auth file
     adminClient(),

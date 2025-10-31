@@ -1,4 +1,26 @@
 {
+  "auth": {
+    "title": "Se connecter",
+    "signInWithGoogle": "Se connecter avec Google",
+    "signInSuccess": "Connexion réussie!",
+    "signInError": "Échec de connexion",
+    "phone": "Numéro de téléphone",
+    "code": "Code de vérification",
+    "resendCode": "Renvoyer le code",
+    "resendSuccess": "Code renvoyé avec succès",
+    "codeExpired": "Le code a expiré",
+    "tooManyAttempts": "Trop de tentatives",
+    "invalidCode": "Code invalide",
+    "codeNotFound": "Code non trouvé",
+    "phoneRequired": "Numéro de téléphone requis",
+    "codeRequired": "Code de vérification requis",
+    "codeLength": "Le code doit contenir 6 chiffres",
+    "codeInvalid": "Le code doit contenir 6 chiffres",
+    "loading": "En cours...", 
+    "phoneSignIn": "Se connecter avec téléphone",
+    "codeSent": "Code de vérification envoyé",
+    "backToHome": "Retour à l'accueil"
+  },
   "Hero": {
     "title": "Atelier de Cuir Sarina",
     "description": "Nos produits sont conçus pour les femmes qui cherchent à exprimer leur véritable personnalité, pas seulement à l'afficher. Chaque sac est un symbole de beauté brute, naturelle et d'artisanat à la main, créé avec amour.",

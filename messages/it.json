@@ -1,4 +1,26 @@
 {
+  "auth": {
+    "title": "Accedi",
+    "signInWithGoogle": "Accedi con Google",
+    "signInSuccess": "Accesso effettuato!",
+    "signInError":"Errore effettuato",
+    "phone":"Numero di telefono",
+    "code": "Codice di verifica",
+    "resendCode": "Codice inviato di nuovo",
+    "resendSuccess": "Codice inviato con successo",
+    "codeExpired": "Il codice è scaduto",
+    "tooManyAttempts": "Troppi tentativi",
+    "invalidCode": "Codice non valido",
+    "codeNotFound": "Codice non trovato",
+    "phoneRequired": "Numero di telefono è richiesto",
+    "codeRequired": "Il codice di verifica è richiesto",
+    "codeLength": "Il codice deve contenir 6 cifre",
+    "codeInvalid": "Il codice deve contenir 6 cifre",
+    "loading": "Elaborazione in corso...", 
+    "phoneSignIn": "Accedi con telefono",
+    "codeSent": "Codice di verifica inviato",
+    "backToHome": "Torna alla home"
+  },
   "Hero": {
     "title": "Laboratorio di Pelle Sarina",
     "description": "I nostri prodotti sono progettati per donne che cercano di esprimere la loro vera personalità, non solo mostrarla. Ogni borsa è un simbolo di bellezza grezza, naturale e di artigianato fatto a mano, creato con amore.",

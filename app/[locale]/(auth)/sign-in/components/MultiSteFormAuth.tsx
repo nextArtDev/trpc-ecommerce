@@ -24,11 +24,13 @@ import {
   Shield,
   LucideIcon,
   Loader,
+  Globe,
 } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
 
 import { SlidingNumber } from './SlidingTimer'
 import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 // Schemas
 const phoneSchema = z.object({
@@ -72,12 +74,16 @@ interface FormStep {
 
 interface MultiStepFormAuthProps {
   className?: string
+  locale: string
 }
 
 export default function MultiStepFormAuth({
   className,
+  locale,
 }: // onSuccess,
 MultiStepFormAuthProps) {
+  const t = useTranslations('auth')
+
   const [isPending, startTransition] = useTransition()
   const [step, setStep] = useState<0 | 1>(0)
   const [phoneNumber, setPhoneNumber] = useState<string>('')
@@ -85,22 +91,24 @@ MultiStepFormAuthProps) {
   const [otpKey, setOtpKey] = useState<number>(0)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [countdown, setCountdown] = useState(180)
-
   const router = useRouter()
+
+  const [authMethod, setAuthMethod] = useState<'phone' | 'google' | null>(null)
+
+  const isIranianLocale = locale === 'fa'
+
   // Define steps
   const steps: FormStep[] = [
     {
       id: 'phone',
-      title: 'تایید شماره موبایل',
-      // description: 'شماره موبایل خود را وارد کنید',
-      description: 'شماره موبایل خود را وارد کنید.',
+      title: t('title'),
+      description: t('phone'),
       schema: phoneSchema,
       icon: Phone,
     },
     {
       id: 'otp',
-      title: 'کد تایید',
-      // description: 'کد ارسال شده را وارد کنید',
+      title: t('code'),
       description: '',
       schema: otpSchema,
       icon: Shield,
@@ -152,9 +160,9 @@ MultiStepFormAuthProps) {
         const result = await authClient.phoneNumber.sendOtp({
           phoneNumber: data.phone,
         })
-        console.log({ result })
+        // console.log({ result })
         if (result.error) {
-          toast.error(result.error.message || 'خطا در ارسال کد')
+          toast.error(result.error.message || t('signInError'))
         } else {
           setPhoneNumber(data.phone)
           setStep(1)
@@ -162,11 +170,11 @@ MultiStepFormAuthProps) {
           setOtpKey((prev) => prev + 1)
           otpForm.reset({ code: '' })
           setCountdown(180)
-          toast.success('کد تایید ارسال شد')
+          toast.success(t('resendSuccess'))
         }
       } catch (error) {
         console.error('Phone submission error:', error)
-        toast.error('خطا در ارسال کد تایید')
+        toast.error(t('signInError'))
       }
     })
   }
@@ -174,7 +182,7 @@ MultiStepFormAuthProps) {
   // Handle OTP submission
   const handleOtpSubmit = (data: OtpFormData): void => {
     if (!phoneNumber) {
-      toast.error('شماره تلفن یافت نشد')
+      toast.error(t('phoneRequired'))
       return
     }
 
@@ -203,16 +211,31 @@ MultiStepFormAuthProps) {
           otpForm.setValue('code', '')
         } else {
           setIsSuccess(true)
-          toast.success('تایید موفقیت‌آمیز بود!')
+          toast.success(t('signInSuccess'))
           // onSuccess?.()
           router.push('/')
         }
       } catch (error) {
         console.error('OTP verification error:', error)
-        toast.error('خطا در تایید کد')
+        toast.error(t('signInError'))
         setOtpValue('')
         setOtpKey((prev) => prev + 1)
         otpForm.setValue('code', '')
+      }
+    })
+  }
+
+  const handleGoogleSignIn = () => {
+    startTransition(async () => {
+      try {
+        // Redirect to Google OAuth
+        await authClient.signIn.social({
+          provider: 'google',
+          callbackURL: `/${locale}/`,
+        })
+      } catch (error) {
+        console.error('Google sign-in error:', error)
+        toast.error(t('signInError'))
       }
     })
   }
@@ -236,7 +259,7 @@ MultiStepFormAuthProps) {
   // Handle resend OTP
   const handleResendOtp = (): void => {
     if (!phoneNumber) {
-      toast.error('شماره تلفن یافت نشد!')
+      toast.error(t('phoneRequired'))
       return
     }
     if (countdown > 0) {
@@ -257,11 +280,11 @@ MultiStepFormAuthProps) {
           setOtpKey((prev) => prev + 1)
           otpForm.setValue('code', '')
           setCountdown(180)
-          toast.success('کد تایید مجدداً ارسال شد!')
+          toast.success(t('resendSuccess'))
         }
       } catch (error) {
         console.error('Resend OTP error:', error)
-        toast.error('خطا در ارسال مجدد کد!')
+        toast.error(t('signInError'))
       }
     })
   }
@@ -302,13 +325,73 @@ MultiStepFormAuthProps) {
   const minutes = Math.floor(countdown / 60)
   const seconds = countdown % 60
 
+  if (!authMethod && step === 0) {
+    return (
+      <div
+        className={cn(
+          'mx-auto w-full max-w-md rounded-none border p-6 shadow-lg bg-card/5 backdrop-blur-2xl text-white',
+          className
+        )}
+        dir={isIranianLocale ? 'rtl' : 'ltr'}
+      >
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold mb-2">{t('title')}</h2>
+          <p className="text-sm text-muted dark:text-white/80">
+            {isIranianLocale
+              ? 'لطفا روش ورود خود را انتخاب کنید'
+              : 'Please choose your sign-in method'}
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {/* Phone/OTP Method - Always available */}
+          <Button
+            onClick={() => setAuthMethod('phone')}
+            variant="outline"
+            className="w-full h-auto py-4 flex items-center justify-center gap-3"
+          >
+            <Phone className="h-5 w-5" />
+            <div className="text-left">
+              <div className="font-semibold">
+                {isIranianLocale
+                  ? 'ورود با شماره موبایل'
+                  : 'Sign in with Phone'}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {isIranianLocale ? 'کد تایید از طریق پیامک' : 'OTP via SMS'}
+              </div>
+            </div>
+          </Button>
+
+          {/* Google Method - Only for non-Iranian locales */}
+          {!isIranianLocale && (
+            <Button
+              onClick={handleGoogleSignIn}
+              variant="outline"
+              disabled={isPending}
+              className="w-full h-auto py-4 flex items-center justify-center gap-3"
+            >
+              <Globe className="h-5 w-5" />
+              <div className="text-left">
+                <div className="font-semibold">{t('signInWithGoogle')}</div>
+                <div className="text-xs text-muted-foreground">
+                  Quick and secure
+                </div>
+              </div>
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
         'mx-auto w-full max-w-md rounded-none border  p-6 shadow-lg bg-card/5 backdrop-blur-2xl text-white ',
         className
       )}
-      dir="rtl"
+      dir={isIranianLocale ? 'rtl' : 'ltr'}
     >
       {!isSuccess ? (
         <>
@@ -342,7 +425,7 @@ MultiStepFormAuthProps) {
             })}
           </div>
           {/* Progress bar */}
-          <div dir="rtl" className="mb-8">
+          <div dir={isIranianLocale ? 'rtl' : 'ltr'} className="mb-8">
             <Progress value={progress} className="h-2  " />
             <div className="my-2 flex justify-between">
               <span className="text-xs font-medium  dark:text-white/70">
@@ -365,13 +448,15 @@ MultiStepFormAuthProps) {
               transition={{ duration: 0.3 }}
             >
               <div className="mb-6 text-center">
-                <h2 className="text-xl font-bold  ">{currentStep.title}</h2>
+                <h2 className="text-xl font-bold">{currentStep.title}</h2>
                 <p className="text-sm text-muted dark:text-white/80">
                   {currentStep.description}
                 </p>
                 {step === 1 && phoneNumber && (
                   <p className="mt-2 text-sm text-indigo-900 dark:text-indigo-200">
-                    کد تایید به شماره {phoneNumber} ارسال شد.
+                    {isIranianLocale
+                      ? `کد تایید به شماره ${phoneNumber} ارسال شد.`
+                      : `Verification code sent to ${phoneNumber}`}
                   </p>
                 )}
               </div>
@@ -451,7 +536,7 @@ MultiStepFormAuthProps) {
                         disabled={isPending}
                         className="text-sm text-white/80"
                       >
-                        ارسال مجدد کد تایید
+                        {t('resendCode')}
                       </Button>
                     )}
                   </div>
@@ -468,10 +553,18 @@ MultiStepFormAuthProps) {
                       step === 0 && 'invisible'
                     )}
                   >
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                    قبلی
+                    {isIranianLocale ? (
+                      <>
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                        قبلی
+                      </>
+                    ) : (
+                      <>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back
+                      </>
+                    )}
                   </Button>
-
                   <Button
                     type="submit"
                     variant={'indigo'}
@@ -481,24 +574,23 @@ MultiStepFormAuthProps) {
                     className="rounded-xs"
                   >
                     {isPending ? (
-                      step === 0 ? (
-                        <span className="flex gap-1">
-                          <Loader className="animate-spin" />
-                          <p>{'در حال ارسال...'}</p>
-                        </span>
-                      ) : (
-                        <span className="flex gap-1">
-                          <Loader className="animate-spin" />
-                          <p>{'در حال بررسی...'}</p>
-                        </span>
-                      )
+                      <span className="flex gap-1">
+                        <Loader className="animate-spin" />
+                        <p>{t('loading')}</p>
+                      </span>
                     ) : step === 0 ? (
                       <>
-                        بعدی
-                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        {isIranianLocale ? 'بعدی' : 'Next'}
+                        {isIranianLocale ? (
+                          <ArrowLeft className="mr-2 h-4 w-4" />
+                        ) : (
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        )}
                       </>
-                    ) : (
+                    ) : isIranianLocale ? (
                       'تایید'
+                    ) : (
+                      'Verify'
                     )}
                   </Button>
                 </div>
@@ -514,12 +606,14 @@ MultiStepFormAuthProps) {
           transition={{ duration: 0.5 }}
           className="py-10 text-center"
         >
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full  ">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full">
             <CheckCircle2 className="h-8 w-8 text-green-600" />
           </div>
-          <h2 className="mb-2 text-2xl font-bold">تایید موفقیت‌آمیز!</h2>
+          <h2 className="mb-2 text-2xl font-bold">{t('signInSuccess')}</h2>
           <p className="mb-6 text-muted dark:text-white/80">
-            شماره موبایل شما با موفقیت تایید شد.
+            {isIranianLocale
+              ? 'شماره موبایل شما با موفقیت تایید شد.'
+              : 'Your account has been verified successfully.'}
           </p>
         </motion.div>
       )}

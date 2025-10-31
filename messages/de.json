@@ -1,4 +1,26 @@
 {
+  "auth": {
+    "title": "Anmelden",
+    "signInWithGoogle": "Mit Google anmelden",
+    "signInSuccess": "Erfolgreich angemeldet",
+    "signInError": "Anmeldung fehlgeschlagen",
+    "phone": "Telefonnummer",
+    "code": "Bestätigungscode",
+    "resendCode": "Code erneut senden",
+    "resendSuccess": "Code erfolgreich erneut gesendet",
+    "codeExpired": "Code abgelaufen",
+    "tooManyAttempts": "Zu viele Versuche",
+    "invalidCode": "Ungültiger Code",
+    "codeNotFound": "Code nicht gefunden",
+    "phoneRequired": "Telefonnummer ist erforderlich",
+    "codeRequired": "Bestätigungscode ist erforderlich",
+    "codeLength": "Code muss 6 Ziffern lang sein",
+    "codeInvalid": "Code muss 6 Ziffern lang sein",
+    "loading": "Wird verarbeitet...", 
+    "phoneSignIn": "Mit Telefon anmelden",
+    "codeSent": "Bestätigungscode gesendet",
+    "backToHome": "Zur Startseite"
+  },
   "Hero": {
     "title": "Sarina Lederwerkstatt",
     "description": "Unsere Produkte sind für Frauen konzipiert, die ihre wahre Persönlichkeit ausdrücken möchten, nicht nur zur Schau stellen. Jede Tasche ist ein Symbol für rohe, natürliche Schönheit und handgefertigte Kunstfertigkeit, mit Liebe hergestellt.",

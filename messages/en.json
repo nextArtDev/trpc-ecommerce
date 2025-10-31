@@ -1,4 +1,26 @@
 {
+  "auth": {
+    "title": "Sign In",
+    "signInWithGoogle": "Sign in with Google",
+    "signInSuccess": "Successfully signed in!",
+    "signInError": "Failed to sign in",
+    "phone": "Phone Number",
+    "code": "Verification Code",
+    "resendCode": "Resend Code",
+    "resendSuccess": "Code resent successfully",
+    "codeExpired": "Code has expired",
+    "tooManyAttempts": "Too many attempts",
+    "invalidCode": "Invalid code",
+    "codeNotFound": "Code not found",
+    "phoneRequired": "Phone number is required", 
+    "codeLength": "Code must be 6 digits",
+    "codeInvalid": "Code must be 6 digits",
+    "codeRequired": "Verification code is required",
+    "loading": "Processing...", 
+    "phoneSignIn": "Sign in with Phone",
+    "codeSent": "Verification code sent",
+    "backToHome": "Back to Home"
+  },
   "Hero": {
     "title": "Sarina Leather Workshop",
     "description": "Our products are designed for women who seek to express their true personality, not just display it. Each bag is a symbol of raw, natural beauty and handmade artistry, crafted with love.",

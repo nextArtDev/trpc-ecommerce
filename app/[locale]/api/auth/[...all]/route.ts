@@ -2,7 +2,17 @@ import { auth } from '@/lib/auth' // path to your auth file
 import { toNextJsHandler } from 'better-auth/next-js'
 
 export const { POST, GET } = toNextJsHandler(auth)
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function OPTIONS(request: Request) {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
+}
 //Getting Session on rsc
 
 // import { auth } from '@/lib/auth'

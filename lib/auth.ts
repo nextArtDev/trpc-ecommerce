@@ -11,12 +11,23 @@ import { cache } from 'react'
 // import { headers } from 'next/headers'
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   database: prismaAdapter(prisma, {
     provider: 'postgresql', // or "mysql", "postgresql", ...etc
   }),
 
   emailAndPassword: {
     enabled: false, // Disable email/password since we want phone-only
+  },
+  socialProviders: {
+    prompt: 'select_account',
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      redirectURI: `${
+        process.env.BETTER_AUTH_URL || 'http://localhost:3000'
+      }/api/auth/callback/google`,
+    },
   },
   user: {
     additionalFields: {
@@ -59,6 +70,13 @@ export const auth = betterAuth({
             `Please wait ${timeLeft} more seconds before requesting a new code.`
           )
         }
+        // Update or create rate limit record
+        await prisma.otpRateLimit.upsert({
+          where: { phoneNumber },
+          update: { lastSentAt: new Date() },
+          create: { phoneNumber, lastSentAt: new Date() },
+        })
+
         console.log({ code, phoneNumber })
         return
         // Implement sending OTP code via SMS
@@ -119,7 +137,16 @@ export const currentUser = cache(async () => {
 
   return user
 })
+// Helper to determine user location (Iranian vs International)
+export const getUserLocationType = async () => {
+  'use server'
+  const user = await currentUser()
 
+  if (!user) return null
+
+  // Iranian users have phone numbers, international users have Google accounts
+  return user.phoneNumber ? 'iranian' : 'international'
+}
 // export const currentRole = async () => {
 // const session = await auth.api.getSession({
 //   headers: await headers(), // you need to pass the headers object.

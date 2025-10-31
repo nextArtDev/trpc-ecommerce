@@ -15,6 +15,8 @@ const getAllowedDomains = () => {
     'https://*.better-auth.com',
     'https://api.github.com',
     'https://accounts.google.com',
+    'https://oauth2.googleapis.com',
+    'https://www.googleapis.com',
     'https://sarina-leather.com',
     'https://api.twilio.com',
     'https://*.twilio.com',
@@ -23,7 +25,7 @@ const getAllowedDomains = () => {
   ]
 
   if (isDev) {
-    return [...baseDomains, ...envDomains, 'data:']
+    return [...baseDomains, ...envDomains, 'data:', 'http://localhost:3000']
   }
 
   return [...baseDomains, ...envDomains]
@@ -56,6 +58,11 @@ const nextConfig: NextConfig = {
         hostname: 'kharak.storage.c2.liara.space',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
@@ -65,7 +72,67 @@ const nextConfig: NextConfig = {
     const corsOrigins = getCorsOrigins()
 
     return [
-      // Public pages - More relaxed for better-auth compatibility
+      // Better-Auth specific routes - MOST PERMISSIVE
+      {
+        source: '/api/auth/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: isDev ? '*' : corsOrigins.join(','),
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'Content-Type, Authorization, X-Requested-With, X-CSRF-Token, Cookie',
+          },
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
+          },
+        ],
+      },
+
+      // All other API routes
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: isDev ? '*' : corsOrigins.join(','),
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'Content-Type, Authorization, X-Requested-With, X-CSRF-Token',
+          },
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
+          },
+        ],
+      },
+
+      // Public pages
       {
         source: '/((?!dashboard|api).*)',
         headers: [
@@ -73,22 +140,21 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self';",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval';", // Added unsafe-eval
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval';",
               `connect-src 'self' ${getAllowedDomains().join(' ')};`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
-              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com;",
+              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
               "media-src 'self' blob: https://kharak.storage.c2.liara.space;",
-              "frame-src 'self' https://*.zarinpal.com;",
+              "frame-src 'self' https://*.zarinpal.com https://accounts.google.com;",
               "frame-ancestors 'none';",
               "worker-src 'self' blob:;",
               "object-src 'none';",
             ].join(' '),
           },
-          // REMOVED Cross-Origin-Embedder-Policy - this was likely causing issues
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups', // Changed from same-origin
+            value: 'same-origin-allow-popups',
           },
           {
             key: 'Cross-Origin-Resource-Policy',
@@ -117,9 +183,9 @@ const nextConfig: NextConfig = {
         ],
       },
 
-      // Dashboard - More permissive
+      // Dashboard
       {
-        source: '/dashboard/(.*)',
+        source: '/dashboard/:path*',
         headers: [
           {
             key: 'Content-Security-Policy',
@@ -131,7 +197,7 @@ const nextConfig: NextConfig = {
               )};`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
-              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com;",
+              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
               "media-src 'self' blob: https://kharak.storage.c2.liara.space;",
               "frame-src 'self' https://*.zarinpal.com;",
               "frame-ancestors 'none';",
@@ -139,7 +205,6 @@ const nextConfig: NextConfig = {
               "object-src 'none';",
             ].join(' '),
           },
-          // REMOVED Cross-Origin-Embedder-Policy
           {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin-allow-popups',
@@ -171,71 +236,8 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-
-      // API routes
-      {
-        source: '/api/(.*)',
-        headers: [
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: isDev ? '*' : corsOrigins.join(','),
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value:
-              'Content-Type, Authorization, X-Requested-With, X-CSRF-Token',
-          },
-          {
-            key: 'Access-Control-Allow-Credentials',
-            value: 'true',
-          },
-          {
-            key: 'Cross-Origin-Resource-Policy',
-            value: 'cross-origin',
-          },
-          // REMOVED Cross-Origin-Embedder-Policy
-        ],
-      },
-
-      // Better-Auth endpoints
-      {
-        source: '/api/auth/(.*)',
-        headers: [
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: isDev ? '*' : corsOrigins.join(','),
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value:
-              'Content-Type, Authorization, X-Requested-With, X-CSRF-Token',
-          },
-          {
-            key: 'Access-Control-Allow-Credentials',
-            value: 'true',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
-          },
-          // REMOVED Cross-Origin-Embedder-Policy
-          {
-            key: 'Cross-Origin-Resource-Policy',
-            value: 'cross-origin',
-          },
-        ],
-      },
     ]
   },
 }
 
-// Export the config wrapped with the next-intl plugin
 export default withNextIntl(nextConfig)
