@@ -2,8 +2,10 @@ import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 import { routing } from './i18n/routing'
 
-const intlMiddleware = createMiddleware(routing)
+const handleI18nRouting = createMiddleware(routing)
 export async function proxy(request: NextRequest) {
+  const response = handleI18nRouting(request)
+
   const pathname = request.nextUrl.pathname
 
   if (
@@ -14,7 +16,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const intlResponse = intlMiddleware(request)
+  // const intlResponse = intlMiddleware(request)
 
   const pathSegments = pathname.split('/')
   const locale = pathSegments[1] || routing.defaultLocale
@@ -54,7 +56,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(signInUrl)
     }
   }
-  return intlResponse
+  return response
 }
 // export const config = {
 //   matcher: [

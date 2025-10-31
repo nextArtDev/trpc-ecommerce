@@ -20,7 +20,7 @@ export const auth = betterAuth({
     enabled: false, // Disable email/password since we want phone-only
   },
   socialProviders: {
-    prompt: 'select_account',
+    // prompt: 'select_account',
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
