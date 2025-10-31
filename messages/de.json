@@ -216,6 +216,62 @@
     "backToCart": "Zurück zum Warenkorb",
     "confirm": "Bestellung bestätigen"
   },
+  "order": {
+    "title": "Bestelldetails",
+    "paymentStatus": {
+      "title": "Zahlungsstatus",
+      "paid": "Bezahlt",
+      "unpaid": "Nicht bezahlt",
+      "paidAt": "Bezahlt am {date}",
+      "transactionId": "Transaktions-ID: "
+    },
+    "shippingAddress": {
+      "title": "Lieferadresse",
+      "delivered": "Geliefert",
+      "notDelivered": "Nicht geliefert"
+    },
+    "items": {
+      "title": "Bestellpositionen",
+      "product": "Produkt",
+      "quantity": "Menge",
+      "price": "Preis"
+    },
+    "summary": {
+      "title": "Bestellübersicht",
+      "items": "Positionen",
+      "shipping": "Versand",
+      "total": "Gesamt"
+    },
+    "actions": {
+      "loading": "Wird verarbeitet...",
+      "markAsPaidSuccess": "Bestellung erfolgreich als bezahlt markiert",
+      "markAsPaidError": "Fehler beim Markieren als bezahlt",
+      "markAsDeliveredSuccess": "Bestellung erfolgreich als geliefert markiert",
+      "markAsDeliveredError": "Fehler beim Markieren als geliefert",
+      "payWithZarinpal": "Mit Zarinpal bezahlen"
+    },
+    "payment": {
+      "success": "Zahlung erfolgreich",
+      "alreadyPaid": "Bestellung bereits bezahlt",
+      "error": "Zahlungsfehler",
+      "processing": "Wird verarbeitet...",
+      "paid": "Bezahlt",
+      "paidAt": "Bezahlt am {date}",
+      "transactionId": "Transaktions-ID: "
+    }
+  },
+  "payment": {
+    "title": "Zahlungsmethoden",
+    "orderTotal": "Bestellsumme",
+    "paypal": {
+      "title": "PayPal",
+      "description": "Sicher mit PayPal bezahlen"
+    },
+    "stripe": {
+      "title": "Stripe",
+      "description": "Sicher mit Ihrer Kreditkarte bezahlen"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",

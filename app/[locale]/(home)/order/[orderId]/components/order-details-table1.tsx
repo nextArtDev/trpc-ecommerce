@@ -16,12 +16,24 @@ import Image from 'next/image'
 
 import { useActionState, useEffect, useMemo, useTransition } from 'react'
 
-import { Order, OrderItem, ShippingAddress } from '@/lib/generated/prisma'
+import {
+  AddressType,
+  Country,
+  Order,
+  OrderItem,
+  ShippingAddress,
+  State,
+} from '@/lib/generated/prisma'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { deliverOrder, updateOrderToPaidCOD } from '@/lib/home/actions/order'
 import { toast } from 'sonner'
 import { zarinpalPayment } from '@/lib/home/actions/payment1'
 import { formatDateTime, formatId } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
+import { PriceDisplay } from '@/components/shared/price-display'
+import { Currency } from '@/lib/types/home'
+import OrderPayment from './OrderPayment'
 // import OrderPayment from './OrderPayment'
 
 // Types
@@ -38,11 +50,13 @@ const errorMessages: Record<string, string> = {
 
 interface OrderDetailsTableProps {
   order: Order & { items: OrderItem[] } & {
-    shippingAddress: ShippingAddress & { province: { name: string } } & {
-      city: { name: string }
+    shippingAddress: ShippingAddress & { province: { name: string | null } } & {
+      city: { name: string | null }
+    } & { country: Country | null } & {
+      state: State | null
     }
   } & { paymentDetails: { transactionId: string | null } | null } & {
-    user: { name: string; phoneNumber: string }
+    user: { name: string; phoneNumber: string | null }
   }
   isAdmin: boolean
 }
@@ -59,6 +73,9 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+
+  const t = useTranslations('order')
+  const currency = useCurrencyStore((state) => state.currentCurrency)
   // Show toast messages based on URL parameters
   useEffect(() => {
     const status = searchParams?.get('status')
@@ -99,6 +116,8 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
   const isPaid = paymentStatus === 'Paid'
   const paidAt = parseDate(rawPaidAt)
   const transactionId = paymentDetails?.transactionId
+
+  const isIranianAddress = shippingAddress.addressType === AddressType.IRANIAN
   // Payment action state
   const [actionState, zarinpalPaymentAction, isPending] = useActionState(
     zarinpalPayment.bind(null, `/order/${id}`, id),
@@ -124,12 +143,22 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
 
   const formattedShippingAddress = useMemo(() => {
     if (!shippingAddress) return ''
-    return `${shippingAddress.province.name}، ${shippingAddress.city.name}، ${shippingAddress.address1}، ${shippingAddress.zip_code}`
-  }, [shippingAddress])
+    if (isIranianAddress) {
+      return `${shippingAddress.province?.name}، ${shippingAddress.city?.name}، ${shippingAddress.address1}، ${shippingAddress.zip_code}`
+    } else {
+      return `${shippingAddress.cityInt}, ${
+        shippingAddress.state?.name || shippingAddress.state
+      }, ${shippingAddress.country?.name}, ${shippingAddress.address1}, ${
+        shippingAddress.zip_code || 'N/A'
+      }`
+    }
+  }, [shippingAddress, isIranianAddress])
 
   return (
     <div className="container mx-auto py-4">
-      <h1 className="text-2xl font-bold mb-6">سفارش {formatId(id)}</h1>
+      <h1 className="text-2xl font-bold mb-6">
+        {t('title', { orderId: formatId(id) })}
+      </h1>
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Main Content */}
@@ -146,10 +175,11 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
             shippingAddress={shippingAddress}
             formattedAddress={formattedShippingAddress}
             isDelivered={isDelivered}
+            isIranianAddress={isIranianAddress}
           />
 
           {/* Order Items Card */}
-          <OrderItemsCard orderItems={orderitems} />
+          <OrderItemsCard orderItems={orderitems} currency={currency} />
         </div>
 
         {/* Order Summary Sidebar */}
@@ -165,6 +195,8 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
             isDelivered={isDelivered}
             orderId={id}
             paidAt={paidAt}
+            currency={currency}
+            isIranianAddress={isIranianAddress}
           />
         </div>
       </div>
@@ -180,104 +212,128 @@ const PaymentStatusCard = ({
   isPaid: boolean
   paidAt: Date | null
   transactionId: string | null | undefined
-}) => (
-  <Card>
-    <CardContent className="p-4 space-y-2">
-      <h2 className="text-xl mb-2">وضعیت پرداخت</h2>
-      {isPaid ? (
-        <div className="space-y-3">
-          <Badge variant="secondary" className="bg-green-100 text-green-800">
-            {paidAt
-              ? `پرداخت در ${formatDateTime(paidAt).dateTime}`
-              : 'پرداخت شده'}
-          </Badge>
-          {transactionId && (
-            <div className="text-sm text-gray-600">
-              <span>شماره پیگیری: </span>
-              <span className="font-mono">{transactionId}</span>
-            </div>
-          )}
-        </div>
-      ) : (
-        <Badge variant="destructive">پرداخت نشده</Badge>
-      )}
-    </CardContent>
-  </Card>
-)
+}) => {
+  const t = useTranslations('order')
+  return (
+    <Card>
+      <CardContent className="p-4 space-y-2">
+        <h2 className="text-xl mb-2">{t('paymentStatus.title')}</h2>
+        {isPaid ? (
+          <div className="space-y-3">
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              {paidAt
+                ? t('payment.paidAt', { date: formatDateTime(paidAt).dateTime })
+                : t('payment.paid')}
+            </Badge>
+            {transactionId && (
+              <div className="text-sm text-gray-600">
+                <span>{t('payment.transactionId')}: </span>
+                <span className="font-mono">{transactionId}</span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Badge variant="destructive">{t('payment.unpaid')}</Badge>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
 
 const ShippingAddressCard = ({
   shippingAddress,
   formattedAddress,
   isDelivered,
+  isIranianAddress,
 }: {
   shippingAddress: ShippingAddress
   formattedAddress: string
   isDelivered: boolean
-}) => (
-  <Card>
-    <CardContent className="p-4">
-      <h2 className="text-xl mb-4">آدرس ارسال</h2>
-      {shippingAddress && (
-        <>
-          <p className="mb-2 font-medium">{shippingAddress.name}</p>
-          <p className="mb-4 text-gray-600">{formattedAddress}</p>
-        </>
-      )}
-      {isDelivered ? (
-        <Badge variant="secondary">تحویل شده</Badge>
-      ) : (
-        <Badge variant="destructive">تحویل نشده</Badge>
-      )}
-    </CardContent>
-  </Card>
-)
+  isIranianAddress: boolean
+}) => {
+  const t = useTranslations('order')
+  return (
+    <Card>
+      <CardContent className="p-4">
+        <h2 className="text-xl mb-4">{t('shippingAddress.title')}</h2>
+        {shippingAddress && (
+          <>
+            <p className="mb-2 font-medium">{shippingAddress.name}</p>
+            <p className="mb-4 text-gray-600">{formattedAddress}</p>
+          </>
+        )}
+        {isDelivered ? (
+          <Badge variant="secondary">{t('shippingAddress.delivered')}</Badge>
+        ) : (
+          <Badge variant="destructive">
+            {t('shippingAddress.notDelivered')}
+          </Badge>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
 
-const OrderItemsCard = ({ orderItems }: { orderItems: OrderItem[] }) => (
-  <Card>
-    <CardContent className="p-4">
-      <h2 className="text-xl mb-4">سفارشها</h2>
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>سفارش</TableHead>
-              <TableHead>تعداد</TableHead>
-              <TableHead className="text-right">هزینه</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {orderItems.map((item) => (
-              <TableRow key={`${item.productSlug}-${item.variantId}`}>
-                <TableCell>
-                  <Link
-                    href={`/product/${item.productSlug}`}
-                    className="flex items-center hover:opacity-80 transition-opacity"
-                  >
-                    <Image
-                      unoptimized
-                      src={item.image || '/images/fallback-image.webp'}
-                      alt={item.name}
-                      width={50}
-                      height={50}
-                      className="rounded-md object-cover"
-                    />
-                    <span className="px-2 text-sm">{item.name}</span>
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <span className="px-2">{item.quantity}</span>
-                </TableCell>
-                <TableCell className="text-right font-medium">
-                  {item.price}
-                </TableCell>
+const OrderItemsCard = ({
+  orderItems,
+  currency,
+}: {
+  orderItems: OrderItem[]
+  currency: Currency
+}) => {
+  const t = useTranslations('order')
+
+  return (
+    <Card>
+      <CardContent className="p-4">
+        <h2 className="text-xl mb-4">{t('items.title')}</h2>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('items.product')}</TableHead>
+                <TableHead>{t('items.quantity')}</TableHead>
+                <TableHead className="text-right">{t('items.price')}</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </CardContent>
-  </Card>
-)
+            </TableHeader>
+            <TableBody>
+              {orderItems.map((item) => (
+                <TableRow key={`${item.productSlug}-${item.variantId}`}>
+                  <TableCell>
+                    <Link
+                      href={`/product/${item.productSlug}`}
+                      className="flex items-center hover:opacity-80 transition-opacity"
+                    >
+                      <Image
+                        unoptimized
+                        src={item.image || '/images/fallback-image.webp'}
+                        alt={item.name}
+                        width={50}
+                        height={50}
+                        className="rounded-md object-cover"
+                      />
+                      <span className="px-2 text-sm">{item.name}</span>
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <span className="px-2">{item.quantity}</span>
+                  </TableCell>
+                  <TableCell className="text-right font-medium">
+                    <PriceDisplay
+                      amount={item.price}
+                      originalCurrency="تومان"
+                      currency={currency}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
 const OrderSummaryCard = ({
   itemsPrice,
@@ -290,6 +346,8 @@ const OrderSummaryCard = ({
   isDelivered,
   orderId,
   paidAt,
+  isIranianAddress,
+  currency,
 }: {
   itemsPrice: number
   shippingPrice: number
@@ -301,10 +359,12 @@ const OrderSummaryCard = ({
   isDelivered: boolean
   orderId: string
   paidAt: Date | null
+  isIranianAddress: boolean
+  currency: Currency
 }) => {
   const MarkAsPaidButton = () => {
     const [isPending, startTransition] = useTransition()
-
+    const t = useTranslations('order')
     return (
       <Button
         type="button"
@@ -316,24 +376,26 @@ const OrderSummaryCard = ({
               toast.success(
                 typeof res?.message === 'string'
                   ? res.message
-                  : 'عملیات با موفقیت انجام شد'
+                  : t('actions.markAsPaidSuccess')
               )
             } else {
               toast.error(
                 typeof res?.message === 'string'
                   ? res.message
-                  : 'مشکلی پیش آمده، لطفا دوباره امتحان کنید!'
+                  : t('actions.markAsPaidError')
               )
             }
           })
         }
       >
-        {isPending ? 'در حال انجام...' : 'تغییر به پرداخت شده'}
+        {isPending ? t('actions.loading') : t('actions.markAsPaid')}
       </Button>
     )
   }
 
   const MarkAsDeliveredButton = () => {
+    const t = useTranslations('order')
+
     const [isPending, startTransition] = useTransition()
 
     return (
@@ -347,55 +409,94 @@ const OrderSummaryCard = ({
               toast.success(
                 typeof res?.message === 'string'
                   ? res.message
-                  : 'عملیات با موفقیت انجام شد'
+                  : t('actions.markAsDeliveredSuccess')
               )
             } else {
               toast.error(
                 typeof res?.message === 'string'
                   ? res.message
-                  : 'مشکلی پیش آمده، لطفا دوباره امتحان کنید!'
+                  : t('actions.markAsDeliveredError')
               )
             }
           })
         }
       >
-        {isPending ? 'در حال انجام...' : 'تغییر به تحویل داده شده'}
+        {isPending ? t('actions.loading') : t('actions.markAsDelivered')}
       </Button>
     )
   }
 
+  const t = useTranslations('order')
+
   return (
     <Card>
       <CardContent className="p-4 space-y-4">
-        <h2 className="text-xl font-bold mb-4">خلاصه سفارش</h2>
+        <h2 className="text-xl font-bold mb-4">{t('summary.title')}</h2>
 
-        <SummaryRow label="سفارشها" value={itemsPrice.toString()} />
-        <SummaryRow label="هزینه ارسال" value={shippingPrice.toString()} />
+        <SummaryRow
+          label={t('summary.items')}
+          value={
+            <PriceDisplay
+              amount={itemsPrice}
+              originalCurrency="تومان"
+              currency={currency}
+            />
+          }
+        />
+        <SummaryRow
+          label={t('summary.shipping')}
+          value={
+            <PriceDisplay
+              amount={shippingPrice}
+              originalCurrency="تومان"
+              currency={currency}
+            />
+          }
+        />
 
         <hr className="my-4" />
 
-        <SummaryRow label="مجموع" value={totalPrice.toString()} isTotal />
+        <SummaryRow
+          label={t('summary.total')}
+          value={
+            <PriceDisplay
+              amount={totalPrice}
+              originalCurrency="تومان"
+              currency={currency}
+            />
+          }
+          isTotal
+        />
 
         {isPaid && paidAt ? (
           <Badge className="bg-green-500 hover:bg-green-600 w-full justify-center h-12">
-            پرداخت شده در {formatDateTime(paidAt).dateTime}
+            {t('payment.paidAt', { date: formatDateTime(paidAt).dateTime })}
           </Badge>
         ) : isPaid ? (
           <Badge className="bg-green-500 hover:bg-green-600 w-full justify-center h-12">
-            پرداخت شده
+            {t('payment.paid')}
           </Badge>
         ) : (
           <div className="flex flex-col gap-4">
-            <form action={zarinpalPaymentAction} className="space-y-2">
-              <Button
-                type="submit"
-                disabled={isPending}
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
-              >
-                {isPending ? 'در حال پردازش...' : 'پرداخت'}
-              </Button>
-            </form>
-            {/* <OrderPayment orderId={orderId} amount={totalPrice} /> */}
+            {isIranianAddress ? (
+              <form action={zarinpalPaymentAction} className="space-y-2">
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isPending
+                    ? t('payment.processing')
+                    : t('payment.payWithZarinpal')}
+                </Button>
+              </form>
+            ) : (
+              <OrderPayment
+                orderId={orderId}
+                amount={totalPrice}
+                currency={currency}
+              />
+            )}
           </div>
         )}
 
@@ -412,7 +513,7 @@ const SummaryRow = ({
   isTotal = false,
 }: {
   label: string
-  value: string
+  value: React.ReactNode
   isTotal?: boolean
 }) => (
   <div className={`flex justify-between ${isTotal ? 'font-bold text-lg' : ''}`}>

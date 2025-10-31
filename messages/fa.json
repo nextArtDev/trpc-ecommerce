@@ -216,6 +216,62 @@
     "backToCart": "برگشت به سبد خرید",
     "confirm": "تایید سفارش"
   },
+  "order": {
+    "title": "جزئیات سفارش",
+    "paymentStatus": {
+      "title": "وضعیت پرداخت",
+      "paid": "پرداخت شده",
+      "unpaid": "پرداخت نشده",
+      "paidAt": "پرداخت در {date}",
+      "transactionId": "شماره پیگیری: "
+    },
+    "shippingAddress": {
+      "title": "آدرس ارسال",
+      "delivered": "تحویل شده",
+      "notDelivered": "تحویل نشده"
+    },
+    "items": {
+      "title": "سفارشها",
+      "product": "محصول",
+      "quantity": "تعداد",
+      "price": "قیمت"
+    },
+    "summary": {
+      "title": "خلاصه سفارش",
+      "items": "سفارشها",
+      "shipping": "هزینه ارسال",
+      "total": "مجموع"
+    },
+    "actions": {
+      "loading": "در حال انجام...",
+      "markAsPaidSuccess": "سفارش با موفقیت به پرداخت شده تغییر کرد",
+      "markAsPaidError": "خطا در تغییر وضعیت سفارش",
+      "markAsDeliveredSuccess": "سفارش با موفقیت به تحویل داده شده",
+      "markAsDeliveredError": "خطا در تغییر وضعیت سفارش",
+      "payWithZarinpal": "پرداخت با زرین‌پال"
+    },
+    "payment": {
+      "success": "پرداخت با موفقیت انجام شد",
+      "alreadyPaid": "سفارش قبلاً پرداخت شده بود",
+      "error": "خطا در پرداخت",
+      "processing": "در حال پردازش...",
+      "paid": "پرداخت شده",
+      "paidAt": "پرداخت در {date}",
+      "transactionId": "شماره پیگیری: "
+    }
+  },
+  "payment": {
+    "title": "روش‌های پرداخت",
+    "orderTotal": "مجموع سفارش",
+    "paypal": {
+      "title": "پی‌پال",
+      "description": "با پی‌پال به صورت امن پرداخت کنید"
+    },
+    "stripe": {
+      "title": "استرایپ",
+      "description": "با کارت اعتباری خود به صورت امن پرداخت کنید"
+    }
+  },
   "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",

@@ -141,7 +141,8 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t('selectState')} />
+                      {/* <SelectValue placeholder={t('selectState')} /> */}
+                      <SelectValue />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

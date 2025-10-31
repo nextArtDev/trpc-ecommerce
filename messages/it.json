@@ -216,6 +216,62 @@
     "backToCart": "Torna al carrello",
     "confirm": "Conferma ordine"
   },
+   "order": {
+    "title": "Dettagli dell'ordine",
+    "paymentStatus": {
+      "title": "Stato del pagamento",
+      "paid": "Pagato",
+      "unpaid": "Non pagato",
+      "paidAt": "Pagato il {date}",
+      "transactionId": "ID transazione: "
+    },
+    "shippingAddress": {
+      "title": "Indirizzo di spedizione",
+      "delivered": "Consegnato",
+      "notDelivered": "Non consegnato"
+    },
+    "items": {
+      "title": "Articoli dell'ordine",
+      "product": "Prodotto",
+      "quantity": "Quantità",
+      "price": "Prezzo"
+    },
+    "summary": {
+      "title": "Riepilogo ordine",
+      "items": "Articoli",
+      "shipping": "Spedizione",
+      "total": "Totale"
+    },
+    "actions": {
+      "loading": "Elaborazione in corso...",
+      "markAsPaidSuccess": "Ordine contrassegnata come pagata con successo",
+      "markAsPaidError": "Errore nel contrassegnare come pagata",
+      "markAsDeliveredSuccess": "Ordine contrassegnata come consegnata con successo",
+      "markAsDeliveredError": "Errore nel contrassegnare come consegnata",
+      "payWithZarinpal": "Paga con Zarinpal"
+    },
+    "payment": {
+      "success": "Pagamento riuscito",
+      "alreadyPaid": "Ordine già pagata",
+      "error": "Errore di pagamento",
+      "processing": "In elaborazione...",
+      "paid": "Pagato",
+      "paidAt": "Pagato il {date}",
+      "transactionId": "ID transazione: "
+    }
+  },
+  "payment": {
+    "title": "Metodi di pagamento",
+    "orderTotal": "Totale ordine",
+    "paypal": {
+      "title": "PayPal",
+      "description": "Paga in modo sicuro con PayPal"
+    },
+    "stripe": {
+      "title": "Stripe",
+      "description": "Paga in modo sicuro con la tua carta di credito"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",

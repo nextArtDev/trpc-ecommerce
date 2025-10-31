@@ -216,6 +216,62 @@
     "backToCart": "Back to Cart",
     "confirm": "Confirm Order"
   },
+  "order": {
+    "title": "Order Details",
+    "paymentStatus": {
+      "title": "Payment Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "paidAt": "Paid on {date}",
+      "transactionId": "Transaction ID: "
+    },
+    "shippingAddress": {
+      "title": "Shipping Address",
+      "delivered": "Delivered",
+      "notDelivered": "Not Delivered"
+    },
+    "items": {
+      "title": "Order Items",
+      "product": "Product",
+      "quantity": "Quantity",
+      "price": "Price"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "items": "Items",
+      "shipping": "Shipping",
+      "total": "Total"
+    },
+    "actions": {
+      "loading": "Processing...",
+      "markAsPaidSuccess": "Order marked as paid successfully",
+      "markAsPaidError": "Failed to mark order as paid",
+      "markAsDeliveredSuccess": "Order marked as delivered successfully",
+      "markAsDeliveredError": "Failed to mark order as delivered",
+      "payWithZarinpal": "Pay with Zarinpal"
+    },
+    "payment": {
+      "success": "Payment successful",
+      "alreadyPaid": "Order already paid",
+      "error": "Payment error",
+      "processing": "Processing...",
+      "paid": "Paid",
+      "paidAt": "Paid on {date}",
+      "transactionId": "Transaction ID: "
+    }
+  },
+  "payment": {
+    "title": "Payment Methods",
+    "orderTotal": "Order Total",
+    "paypal": {
+      "title": "PayPal",
+      "description": "Pay securely with PayPal"
+    },
+    "stripe": {
+      "title": "Stripe",
+      "description": "Pay securely with your credit card"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",

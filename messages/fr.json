@@ -216,6 +216,62 @@
     "backToCart": "Retour au panier",
     "confirm": "Confirmer la commande"
   },
+  "order": {
+    "title": "Détails de la commande",
+    "paymentStatus": {
+      "title": "Statut du paiement",
+      "paid": "Payé",
+      "unpaid": "Non payé",
+      "paidAt": "Payé le {date}",
+      "transactionId": "ID de transaction : "
+    },
+    "shippingAddress": {
+      "title": "Adresse de livraison",
+      "delivered": "Livré",
+      "notDelivered": "Non livré"
+    },
+    "items": {
+      "title": "Articles de la commande",
+      "product": "Produit",
+      "quantity": "Quantité",
+      "price": "Prix"
+    },
+    "summary": {
+      "title": "Résumé de la commande",
+      "items": "Articles",
+      "shipping": "Livraison",
+      "total": "Total"
+    },
+    "actions": {
+      "loading": "En cours...",
+      "markAsPaidSuccess": "Commande marquée comme payée avec succès",
+      "markAsPaidError": "Erreur lors du marquage comme payé",
+      "markAsDeliveredSuccess": "Commande marquée comme livrée avec succès",
+      "markAsDeliveredError": "Erreur lors du marquage comme livrée",
+      "payWithZarinpal": "Payer avec Zarinpal"
+    },
+    "payment": {
+      "success": "Paiement réussi",
+      "alreadyPaid": "Commande déjà payée",
+      "error": "Erreur de paiement",
+      "processing": "En cours...",
+      "paid": "Payé",
+      "paidAt": "Payé le {date}",
+      "transactionId": "ID de transaction : "
+    }
+  },
+  "payment": {
+    "title": "Méthodes de paiement",
+    "orderTotal": "Total de la commande",
+    "paypal": {
+      "title": "PayPal",
+      "description": "Payer en toute sécurité avec PayPal"
+    },
+    "stripe": {
+      "title": "Stripe",
+      "description": "Payer en toute sécurité avec votre carte de crédit"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

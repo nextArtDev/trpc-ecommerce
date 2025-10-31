@@ -33,6 +33,16 @@ export async function getOrderById(orderId: string) {
                 name: true,
               },
             },
+            country: {
+              select: {
+                name: true,
+              },
+            },
+            state: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
         user: { select: { name: true, phoneNumber: true, role: true } },

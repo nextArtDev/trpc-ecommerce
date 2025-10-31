@@ -65,7 +65,6 @@ const ShippingDetails = ({
   const { currentCurrency } = useCurrencyStore()
 
   const isIranianForm = currentCurrency === 'تومان'
-
   const form = useForm<z.infer<typeof shippingAddressSchema>>({
     resolver: zodResolver(shippingAddressSchema),
     defaultValues: ((): z.infer<typeof shippingAddressSchema> => {
