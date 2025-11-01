@@ -30,7 +30,6 @@ import { toast } from 'sonner'
 import { zarinpalPayment } from '@/lib/home/actions/payment1'
 import { formatDateTime, formatId } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import { PriceDisplay } from '@/components/shared/price-display'
 import { Currency } from '@/lib/types/home'
 import OrderPayment from './OrderPayment'
@@ -59,7 +58,6 @@ interface OrderDetailsTableProps {
     user: { name: string; phoneNumber: string | null }
   }
   isAdmin: boolean
-  currency: Currency
 }
 
 // Helper function to safely parse date
@@ -70,11 +68,7 @@ const parseDate = (date: Date | string | null): Date | null => {
   return null
 }
 
-const OrderDetailsTable = ({
-  order,
-  isAdmin,
-  currency,
-}: OrderDetailsTableProps) => {
+const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -184,7 +178,7 @@ const OrderDetailsTable = ({
           />
 
           {/* Order Items Card */}
-          <OrderItemsCard orderItems={orderitems} currency={currency} />
+          <OrderItemsCard orderItems={orderitems} currency={order.currency} />
         </div>
 
         {/* Order Summary Sidebar */}
@@ -200,7 +194,7 @@ const OrderDetailsTable = ({
             isDelivered={isDelivered}
             orderId={id}
             paidAt={paidAt}
-            currency={currency}
+            currency={order.currency}
             isIranianAddress={isIranianAddress}
           />
         </div>

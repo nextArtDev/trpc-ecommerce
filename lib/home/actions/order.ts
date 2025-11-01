@@ -10,10 +10,10 @@ import { getCurrentUser } from '@/lib/auth-helpers'
 
 import { UpdateOrderStatusFormSchema } from '../schemas'
 import { currentUser } from '@/lib/auth'
-import { OrderStatus } from '@/lib/types/home'
+import { Currency, OrderStatus } from '@/lib/types/home'
 import { redirect } from 'next/navigation'
 
-export async function createOrder() {
+export async function createOrder(currency?: Currency) {
   try {
     const session = await getCurrentUser()
     // if (!session) throw new Error('User is not authenticated')
@@ -40,11 +40,29 @@ export async function createOrder() {
       }
     }
 
+    const cartCurrency = cart.cart.currency
+    if (currency && currency !== cartCurrency) {
+      return {
+        success: false,
+        message: `خطا: واحد پول درخواستی (${currency}) با واحد پول سبد خرید (${cartCurrency}) مطابقت ندارد.`,
+        redirectTo: '/cart',
+      }
+    }
+
     if (!user?.shippingAddresses.length) {
       return {
         success: false,
         message: 'آدرس پستی موجود نیست!',
         redirectTo: '/shipping-address',
+      }
+    }
+
+    const itemCurrencies = new Set(cart.cart.items.map((item) => item.currency))
+    if (itemCurrencies.size > 1) {
+      return {
+        success: false,
+        message: 'خطا: محصولات با واحدهای پولی مختلف در سبد خرید وجود دارد.',
+        redirectTo: '/cart',
       }
     }
 
@@ -54,7 +72,7 @@ export async function createOrder() {
         shippingAddressId: user.shippingAddresses[0].id,
         orderStatus: 'Pending',
         paymentStatus: 'Pending',
-        currency: cart.cart.currency,
+        currency: cartCurrency,
         subTotal: cart.cart.subTotal, // Will calculate below
         shippingFees: cart.cart.shippingFees, // Will calculate below
         total: cart.cart.total, // Will calculate below
@@ -97,10 +115,16 @@ export async function createOrder() {
 
     if (!insertedOrderId) throw new Error('Order not created')
 
+    const paymentRoute =
+      cartCurrency === 'تومان'
+        ? `/payment/${insertedOrderId}` // Iranian payment
+        : `/payment/paypal/${insertedOrderId}` // International payment
+
     return {
       success: true,
       message: 'Order created',
-      redirectTo: `/order/${insertedOrderId}`,
+      // redirectTo: `/order/${insertedOrderId}`,
+      redirectTo: paymentRoute,
     }
   } catch (error) {
     console.log({ error })

@@ -1,8 +1,9 @@
 import { PriceDisplay } from '@/components/shared/price-display'
 import { Separator } from '@/components/ui/separator'
-import { useCurrencyStore } from '@/hooks/useCurrencyStore'
+import { useCartStore } from '@/hooks/useCartStore'
 import { Link } from '@/i18n/navigation'
 import { CartItem } from '@/lib/generated/prisma'
+import { Currency } from '@/lib/types/home'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -14,8 +15,9 @@ type Props = {
 
 const ShippingShoppingList = ({ cartItems }: Props) => {
   const t = useTranslations('cart')
-  const currency = useCurrencyStore((state) => state.currentCurrency)
-  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+  const getLockedCurrency = useCartStore((state) => state.getLockedCurrency)
+  const lockedCurrency = getLockedCurrency()
+
   return (
     <ul
       role="list"
@@ -57,8 +59,9 @@ const ShippingShoppingList = ({ cartItems }: Props) => {
                   //   </p>
                   <PriceDisplay
                     className="mt-1 text-sm"
-                    amount={convertCurrency(item.price, 'تومان', currency)}
-                    currency={currency}
+                    originalCurrency="تومان"
+                    amount={item.price}
+                    currency={lockedCurrency as Currency}
                   />
                 ) : null}
               </div>
@@ -73,12 +76,9 @@ const ShippingShoppingList = ({ cartItems }: Props) => {
               >
                 {/* <p>{+item.price * item.quantity} تومان</p> */}
                 <PriceDisplay
-                  amount={convertCurrency(
-                    +item.price * item.quantity,
-                    'تومان',
-                    currency
-                  )}
-                  currency={currency}
+                  originalCurrency="تومان"
+                  amount={+item.price * item.quantity}
+                  currency={lockedCurrency as Currency}
                 />
               </div>
             </div>

@@ -13,7 +13,6 @@ import { Suspense } from 'react'
 import { OrderDetailsSkeleton } from './components/Skeletons'
 import { getCurrentUser } from '@/lib/auth-helpers'
 import { getTranslations } from 'next-intl/server'
-import { Currency } from '@/lib/types/home'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -32,7 +31,6 @@ export async function generateMetadata({
 function OrderDetailsTableWrapper({
   order,
   isAdmin,
-  currency,
 }: {
   order: Order & { items: OrderItem[] } & {
     shippingAddress: ShippingAddress & { province: { name: string | null } } & {
@@ -45,7 +43,6 @@ function OrderDetailsTableWrapper({
   }
 
   isAdmin: boolean
-  currency: Currency
 }) {
   return (
     <OrderDetailsTable
@@ -65,7 +62,6 @@ function OrderDetailsTableWrapper({
         },
       }}
       isAdmin={isAdmin}
-      currency={currency}
     />
   )
 }
@@ -87,11 +83,7 @@ const OrderDetailsPage = async ({
   return (
     <section>
       <Suspense fallback={<OrderDetailsSkeleton />}>
-        <OrderDetailsTableWrapper
-          order={order}
-          isAdmin={isAdmin}
-          currency={order.currency}
-        />
+        <OrderDetailsTableWrapper order={order} isAdmin={isAdmin} />
       </Suspense>
     </section>
   )

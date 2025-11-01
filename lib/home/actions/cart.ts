@@ -414,6 +414,7 @@ export interface DbCartItem {
   shippingFee: number
   totalPrice: number
   // Validation fields
+  currency: Currency
   currentStock: number
   currentPrice: number
   isStockValid: boolean
@@ -470,8 +471,27 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         message: 'سبد خرید یافت نشد.',
       }
     }
+    if (cart.cartItems.length === 0) {
+      return {
+        success: false,
+        message: 'سبد خرید خالی است.',
+      }
+    }
 
     // Validate each item against current product data
+    const cartCurrency = cart.displayCurrency
+    const itemsWithWrongCurrency = cart.cartItems.filter(
+      (item) => item.currency !== cartCurrency
+    )
+
+    if (itemsWithWrongCurrency.length > 0) {
+      return {
+        success: false,
+        message: `برخی محصولات با واحد پول متفاوت هستند. واحد پول سبد خرید: ${cartCurrency}`,
+        requiresUserAction: true,
+      }
+    }
+
     const validatedItems: DbCartItem[] = []
     const validationErrors: DbCart['validationErrors'] = []
     let hasValidationIssues = false
@@ -506,15 +526,21 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
 
       if (!isStockValid) {
         hasValidationIssues = true
-        validationErrors.push({
-          itemId: item.id,
-          productName: item.name,
-          issue:
-            currentVariant.quantity === 0
-              ? 'موجودی تمام شده است.'
-              : `تنها ${currentVariant.quantity} عدد در انبار موجود است.`,
-          severity: currentVariant.quantity === 0 ? 'error' : 'warning',
-        })
+        if (currentVariant.quantity === 0) {
+          validationErrors.push({
+            itemId: item.id,
+            productName: item.name,
+            issue: 'موجودی تمام شده است.',
+            severity: 'error',
+          })
+        } else {
+          validationErrors.push({
+            itemId: item.id,
+            productName: item.name,
+            issue: `تنها ${currentVariant.quantity} عدد در انبار موجود است. (درخواستی: ${item.quantity})`,
+            severity: 'warning',
+          })
+        }
       }
 
       if (!isPriceValid) {
@@ -557,7 +583,16 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         hasValidationIssues = true
       }
 
-      // Create validated item
+      if (item.currency !== cartCurrency) {
+        validationErrors.push({
+          itemId: item.id,
+          productName: item.name,
+          issue: `واحد پول محصول (${item.currency}) با واحد پول سبد خرید (${cartCurrency}) مطابقت ندارد.`,
+          severity: 'error',
+        })
+        hasValidationIssues = true
+      }
+
       const validatedQuantity = Math.min(item.quantity, currentVariant.quantity)
       const validatedTotalPrice = currentPrice * validatedQuantity
 
@@ -574,6 +609,7 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         quantity: item.quantity,
         shippingFee: item.shippingFee,
         totalPrice: item.totalPrice,
+        currency: item.currency, // ✅ NEW: Include currency in validated item
         // Current validation data
         currentStock: currentVariant.quantity,
         currentPrice,
@@ -583,8 +619,24 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         color: item.color,
       })
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       recalculatedSubTotal += validatedTotalPrice
+    }
+
+    const hasErrors = validationErrors.some((err) => err.severity === 'error')
+
+    if (hasErrors) {
+      return {
+        success: false,
+        message: 'سبد خرید دارای خطاهای مهم است. لطفا آن‌ها را برطرف کنید.',
+        cart: {
+          ...cart,
+          items: validatedItems,
+          currency: cart.displayCurrency,
+          hasValidationIssues: true,
+          validationErrors,
+        },
+        requiresUserAction: true,
+      }
     }
 
     const validatedCart: DbCart = {

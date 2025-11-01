@@ -57,6 +57,7 @@ const PlaceOrderPage = async () => {
   if (!shippingAddress) redirect('/shipping-address')
   // console.log({ shippingAddress })
   // console.log({ cart })
+  const cartCurrency = cart.cart?.currency || 'تومان'
   return (
     <section className="px-2">
       <CheckoutSteps current={2} />
@@ -69,8 +70,20 @@ const PlaceOrderPage = async () => {
               <AlertDialogTitle className="text-red-500">
                 {t('invalidCart')}
               </AlertDialogTitle>
-              <AlertDialogDescription>
-                {cart.cart?.validationErrors.map((er) => er.issue).join(', ')}
+              <AlertDialogDescription className="space-y-2">
+                {cart.cart?.validationErrors.map((err, idx) => (
+                  <div
+                    key={idx}
+                    className={
+                      err.severity === 'error'
+                        ? 'text-red-600 font-semibold'
+                        : 'text-amber-600'
+                    }
+                  >
+                    <span className="font-medium">{err.productName}:</span>{' '}
+                    {err.issue}
+                  </div>
+                ))}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -81,6 +94,25 @@ const PlaceOrderPage = async () => {
           </AlertDialogContent>
         </AlertDialog>
       )}
+
+      {/*   Display payment method based on currency */}
+      <Card className="mb-4 border-indigo-200 bg-indigo-50/50">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-lg">{t('paymentMethod')}</h3>
+              <p className="text-sm text-muted-foreground">
+                {cartCurrency === 'تومان'
+                  ? 'پرداخت از طریق زرین‌پال'
+                  : 'Payment via PayPal'}
+              </p>
+            </div>
+            <div className="text-2xl font-bold text-indigo-600">
+              {cartCurrency}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid md:grid-cols-3 md:gap-5">
         <div className="md:col-span-2 overflow-x-auto space-y-4">
@@ -142,8 +174,7 @@ const PlaceOrderPage = async () => {
                       <TableCell className="text-right">
                         <PriceDisplay
                           amount={item.price}
-                          originalCurrency="تومان"
-                          // currency={item}
+                          currency={cartCurrency}
                         />
                         {/* {item.price} */}
                       </TableCell>
@@ -163,8 +194,7 @@ const PlaceOrderPage = async () => {
 
                 <PriceDisplay
                   amount={Number(cart.cart?.subTotal)}
-                  originalCurrency="تومان"
-                  // currency={item}
+                  currency={cartCurrency}
                 />
               </div>
               {/* <div className="flex justify-between">
@@ -173,18 +203,21 @@ const PlaceOrderPage = async () => {
               </div> */}
               <div className="flex justify-between">
                 <p>{t('shipping')}</p>
-                <p>{cart.cart?.shippingFees}</p>
+                {/* <p>{cart.cart?.shippingFees}</p> */}
+                <PriceDisplay
+                  amount={Number(cart.cart?.shippingFees)}
+                  currency={cartCurrency}
+                />
               </div>
               <div className="flex justify-between">
                 <p>{t('total')}</p>
                 {/* <p>{cart.cart?.total}</p> */}
                 <PriceDisplay
                   amount={Number(cart.cart?.total)}
-                  originalCurrency="تومان"
-                  // currency={item}
+                  currency={cartCurrency}
                 />
               </div>
-              <PlaceOrderForm />
+              <PlaceOrderForm currency={cartCurrency} />
             </CardContent>
           </Card>
         </div>

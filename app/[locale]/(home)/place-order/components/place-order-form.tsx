@@ -9,8 +9,9 @@ import { createOrder } from '@/lib/home/actions/order'
 import { toast } from 'sonner'
 import { useCartStore } from '@/hooks/useCartStore'
 import { useTranslations } from 'next-intl'
+import { Currency } from '@/lib/types/home'
 
-const PlaceOrderForm = () => {
+const PlaceOrderForm = ({ currency }: { currency: Currency }) => {
   const emptyCart = useCartStore((state) => state.emptyCart)
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -22,7 +23,7 @@ const PlaceOrderForm = () => {
 
     startTransition(async () => {
       try {
-        const res = await createOrder()
+        const res = await createOrder(currency)
         emptyCart()
         // console.log({ res })
 
@@ -35,6 +36,8 @@ const PlaceOrderForm = () => {
       }
     })
   }
+
+  const paymentGateway = currency === 'تومان' ? 'زرین‌پال' : 'PayPal'
 
   const PlaceOrderButton = () => {
     return (
@@ -53,7 +56,10 @@ const PlaceOrderForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
+    <form onSubmit={handleSubmit} className="w-full space-y-2">
+      <div className="text-sm text-center text-muted-foreground">
+        {t('paymentVia', { gateway: paymentGateway })}
+      </div>
       <PlaceOrderButton />
     </form>
   )
