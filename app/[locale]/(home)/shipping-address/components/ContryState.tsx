@@ -80,17 +80,24 @@ const CountryStateSelector: FC<CountryStateSelectorProps> = ({
   // Handle state change
   const handleStateChange = (value: string) => {
     form.setValue('stateId', value)
-    form.setValue('state', value)
+    // form.setValue('state', value)
+    const selectedState = states?.find((state) => state.id === value)
+    if (selectedState) {
+      form.setValue('state', selectedState.name)
+    }
   }
 
   // Handle state text input change
   const handleStateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // form.setValue('state', e.target.value)
     form.setValue('state', e.target.value)
+    // Clear stateId when using custom state input
+    form.setValue('stateId', '')
   }
 
   return (
     <div className={cn('w-full h-full relative', className)}>
-      <div className="flex flex-col gap-4">
+      <div className="flex  gap-4">
         <FormField
           control={form.control}
           name="countryId"

@@ -38,16 +38,15 @@ import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 
 import { shippingAddressSchema } from '@/lib/home/schemas'
 import CountryStateSelector from './ContryState'
+import { PhoneInput } from '@/components/ui/phone-input'
 
 const ShippingDetails = ({
   provinces,
-  phone,
   countries,
   initialData,
 }: {
   provinces: Province[]
   countries: Country[]
-  phone: string
   initialData?: Partial<
     ShippingAddress & {
       city: City | null
@@ -81,6 +80,7 @@ const ShippingDetails = ({
           addressType: AddressType.IRANIAN,
           provinceId: Number(initialData?.provinceId) || 0,
           cityId: Number(initialData?.cityId) || 0,
+          phoneNumber: initialData?.phone || '',
         }
       } else {
         return {
@@ -88,8 +88,9 @@ const ShippingDetails = ({
           addressType: AddressType.INTERNATIONAL,
           countryId: initialData?.countryId || '',
           stateId: initialData?.stateId || '',
-          state: initialData?.stateId || '',
+          state: initialData?.state?.name || '',
           cityInt: initialData?.cityInt || '',
+          phoneNumber: initialData?.phone || '',
         }
       }
     })(),
@@ -103,7 +104,7 @@ const ShippingDetails = ({
           if (res?.errors) handleServerErrors(res.errors, form.setError)
           router.push('/place-order')
         } else {
-          const res = await createShippingAddress(data, phone, path)
+          const res = await createShippingAddress(data, path)
           if (res?.errors) handleServerErrors(res.errors, form.setError)
           router.push('/place-order')
         }
@@ -125,14 +126,14 @@ const ShippingDetails = ({
         Payment and shipping details
       </h2>
 
-      <div className="max-w-md items-center justify-center mx-auto">
+      {/* <div className="max-w-md items-center justify-center mx-auto">
         <Input
           dir="ltr"
           disabled
           className="text-right max-w-sm text-indigo-800 bg-indigo-400"
           value={phone}
         />
-      </div>
+      </div> */}
 
       <Form {...form}>
         <form
@@ -142,7 +143,24 @@ const ShippingDetails = ({
           <h3 id="contact-info-heading" className="text-lg font-medium">
             {t('title')}
           </h3>
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+                <FormLabel>Phone number</FormLabel>
+                <FormControl className="w-full">
+                  <PhoneInput
+                    // placeholder="Placeholder"
+                    {...field}
+                    defaultCountry="FR"
+                  />
+                </FormControl>
 
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="name"

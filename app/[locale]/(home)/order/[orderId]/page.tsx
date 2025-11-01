@@ -80,7 +80,7 @@ const OrderDetailsPage = async ({
     getOrderById(orderId),
     getCurrentUser(),
   ])
-  // console.log({ order })
+  console.log({ order })
   if (!order) notFound()
   const isAdmin = currentUser?.role === 'admin' || false
 

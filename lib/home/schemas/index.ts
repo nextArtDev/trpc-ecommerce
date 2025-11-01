@@ -64,20 +64,33 @@ const iranianAddressSchema = z.object({
   address1: z.string().min(1, 'Address is required'),
   address2: z.string().optional(),
   zip_code: z.string().min(1, 'Postal code is required'),
+  phoneNumber: z.string().min(10, 'شماره موبایل معتبر وارد کنید'),
 })
 
 // International address schema
-const internationalAddressSchema = z.object({
-  name: z.string().min(1, 'Recipient name is required'),
-  addressType: z.literal(AddressType.INTERNATIONAL),
-  countryId: z.string().min(1, 'Country is required'),
-  stateId: z.string().optional(),
-  state: z.string().min(1, 'State/Province is required'),
-  cityInt: z.string().optional(),
-  address1: z.string().min(1, 'Address is required'),
-  address2: z.string().optional(),
-  zip_code: z.string().optional(),
-})
+const internationalAddressSchema = z
+  .object({
+    name: z.string().min(1, 'Recipient name is required'),
+    addressType: z.literal(AddressType.INTERNATIONAL),
+    countryId: z.string().min(1, 'Country is required'),
+    stateId: z.string().optional(),
+    state: z.string().optional(),
+    cityInt: z.string().optional(),
+    address1: z.string().min(1, 'Address is required'),
+    address2: z.string().optional(),
+    zip_code: z.string().optional(),
+    phoneNumber: z.string(),
+  })
+  .refine(
+    (data) => {
+      // Either stateId or state must be provided
+      return !!(data.stateId || data.state)
+    },
+    {
+      message: 'State is required',
+      path: ['state'],
+    }
+  )
 
 export const shippingAddressSchema = z.discriminatedUnion('addressType', [
   iranianAddressSchema,

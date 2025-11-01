@@ -49,7 +49,6 @@ const page = async () => {
           provinces={provinces}
           countries={countries}
           initialData={shippingAddress}
-          phone={cUser.phoneNumber ?? ''}
         />
       </article>
     </section>

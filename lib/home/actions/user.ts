@@ -29,7 +29,6 @@ interface CreateShippingAddressFormState {
 
 export async function createShippingAddress(
   data: unknown,
-  phone: string,
   path: string
 ): Promise<CreateShippingAddressFormState> {
   const result = shippingAddressSchema.safeParse(data)
@@ -40,6 +39,7 @@ export async function createShippingAddress(
       errors: result.error.flatten().fieldErrors,
     }
   }
+
   // console.log('phone', phone)
   // console.log('result.data', result.data)
   try {
@@ -77,7 +77,7 @@ export async function createShippingAddress(
       address2: result.data.address2 || null,
       zip_code: result.data.zip_code || null,
       userId: cUser.id,
-      phone: phone.toString(),
+      phone: result.data.phoneNumber.toString(),
       addressType: result.data.addressType,
     }
 
@@ -87,13 +87,13 @@ export async function createShippingAddress(
       // Clear international fields
       addressData.countryId = null
       addressData.stateId = null
-      addressData.state = null
-      addressData.cityInt = null
+      // addressData.state = null
+      // addressData.cityInt = null
     } else {
       addressData.countryId = result.data.countryId
       addressData.stateId = result.data.stateId || null
-      addressData.state = result.data.state
-      addressData.cityInt = result.data.cityInt
+      // addressData.state = result.data.state
+      addressData.cityInt = result.data.cityInt || ''
       // Clear Iranian fields
       addressData.provinceId = null
       addressData.cityId = null
@@ -140,6 +140,7 @@ export async function createShippingAddress(
       data: {
         address: AddressToSaveForUser,
         name: result.data.name,
+        phoneNumber: result.data.phoneNumber,
       },
     })
 
@@ -258,6 +259,7 @@ export async function editShippingAddress(
       address2: result.data.address2 || null,
       zip_code: result.data.zip_code || null,
       addressType: result.data.addressType,
+      phone: result.data.phoneNumber,
     }
 
     if (addressType === AddressType.IRANIAN) {
@@ -324,6 +326,7 @@ export async function editShippingAddress(
       data: {
         address: AddressToSaveForUser,
         name: result.data.name,
+        phoneNumber: result.data.phoneNumber,
       },
     })
     // console.log(res)
