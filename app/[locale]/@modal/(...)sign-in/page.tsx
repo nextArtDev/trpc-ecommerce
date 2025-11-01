@@ -7,7 +7,12 @@ import ModalWrapper from '../components/ModalWrapper'
 
 export const dynamic = 'force-dynamic'
 
-const InterceptedSignInPage = async () => {
+const InterceptedSignInPage = async ({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) => {
+  const locale = (await params).locale
   const session = await getCurrentUser()
 
   // If user is already authenticated, redirect to home
@@ -17,7 +22,7 @@ const InterceptedSignInPage = async () => {
 
   return (
     <ModalWrapper>
-      <MultiStepFormAuth />
+      <MultiStepFormAuth locale={locale} />
     </ModalWrapper>
   )
 }

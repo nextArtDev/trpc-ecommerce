@@ -13,7 +13,8 @@ const page = async () => {
   const cUser = await getCurrentUser()
   const userId = cUser?.id
 
-  if (!userId || !cUser.phoneNumber) redirect('/sign-in')
+  // if (!userId || !cUser.phoneNumber) redirect('/sign-in')
+  if (!userId || !cUser.name) redirect('/sign-in')
 
   const cart = await getMyCart()
   if (!cart || cart.cartItems.length === 0) redirect('/cart')
@@ -48,7 +49,7 @@ const page = async () => {
           provinces={provinces}
           countries={countries}
           initialData={shippingAddress}
-          phone={cUser.phoneNumber}
+          phone={cUser.phoneNumber ?? ''}
         />
       </article>
     </section>

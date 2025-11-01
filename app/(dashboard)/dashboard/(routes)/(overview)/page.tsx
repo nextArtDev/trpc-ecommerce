@@ -173,7 +173,7 @@ const AdminOverviewPage = async () => {
                     <TableRow key={order.id}>
                       <TableCell>
                         {order?.user?.name ||
-                          order?.user?.phoneNumber ||
+                          // order?.user?.phoneNumber ||
                           'کاربر حذف شده'}
                       </TableCell>
                       <TableCell>

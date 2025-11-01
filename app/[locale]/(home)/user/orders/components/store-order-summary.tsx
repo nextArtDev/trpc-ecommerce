@@ -108,7 +108,8 @@ const StoreOrderSummary: FC<Props> = ({ order }) => {
               خریدار
             </p>
             <h6 className="font-semibold text-lg leading-9">
-              {order.user.name}, {order.user.phoneNumber}
+              {order.user.name},{' '}
+              {order.user?.phoneNumber ?? order.user.phoneNumber}
             </h6>
           </div>
         </div>

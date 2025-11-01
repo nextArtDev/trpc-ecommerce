@@ -45,7 +45,8 @@ export async function createShippingAddress(
   try {
     const cUser = await currentUser()
     // console.log('cUser', cUser)
-    if (!cUser || !cUser.phoneNumber) {
+    // if (!cUser || !cUser.phoneNumber) {
+    if (!cUser || !cUser.name) {
       return {
         errors: {
           _form: ['شما اجازه دسترسی ندارید!'],
@@ -196,7 +197,8 @@ export async function editShippingAddress(
   }
   try {
     const cUser = await currentUser()
-    if (!cUser || !cUser.phoneNumber) {
+    // if (!cUser || !cUser.phoneNumber) {
+    if (!cUser || !cUser.name) {
       return {
         errors: {
           _form: ['شما اجازه دسترسی ندارید!'],

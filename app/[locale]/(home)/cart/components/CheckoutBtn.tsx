@@ -25,7 +25,7 @@ const CheckoutBtn = ({ cartItems, locale }: Props) => {
       const res = await saveAllToCart(cartItems)
       // console.log(res)
       if (!res.success) {
-        toast.success(res.message)
+        toast.error(res.message)
         return
       }
       router.push(locale ? `/${locale}/shipping-address` : '/shipping-address')

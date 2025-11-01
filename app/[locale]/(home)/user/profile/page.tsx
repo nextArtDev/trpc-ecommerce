@@ -12,11 +12,12 @@ export const dynamic = 'force-dynamic'
 const Profile = async () => {
   const user = await getCurrentUser()
 
-  if (!user || !user.name || !user.phoneNumber) notFound()
+  // if (!user || !user.name || !user.phoneNumber) notFound()
+  if (!user || !user.name) notFound()
 
   const initialData = {
     name: user.name,
-    phoneNumber: user.phoneNumber,
+    phoneNumber: user.phoneNumber ?? '',
   }
   return (
     <div className="max-w-md mx-auto space-y-4">
