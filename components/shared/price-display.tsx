@@ -17,7 +17,7 @@ interface PriceDisplayProps {
 
 export function PriceDisplay({
   amount,
-  originalCurrency,
+  originalCurrency = 'تومان',
   className = '',
   showOriginalPrice = false,
   variant = 'default',

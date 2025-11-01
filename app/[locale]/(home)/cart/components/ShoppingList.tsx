@@ -2,8 +2,8 @@ import { TransitionLink } from '@/components/home/shared/TransitionLink'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
 import { PriceDisplay } from '@/components/shared/price-display'
 import { Badge } from '@/components/ui/badge'
-import { useCurrencyStore } from '@/hooks/useCurrencyStore'
-import { CartProductType } from '@/lib/types/home'
+import { useCartStore } from '@/hooks/useCartStore'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { useTranslations } from 'next-intl'
 
 import Image from 'next/image'
@@ -15,8 +15,8 @@ type Props = {
 
 const ShoppingList = ({ cartItems, mutable = false }: Props) => {
   const t = useTranslations('cart')
-  const currency = useCurrencyStore((state) => state.currentCurrency)
-  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+  const getLockedCurrency = useCartStore((state) => state.getLockedCurrency)
+  const lockedCurrency = getLockedCurrency()
 
   return (
     <ul
@@ -85,12 +85,9 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                         <p className="text-xs px-0.5 py-1">
                           {/* {item.price} {t('currency')} */}
                           <PriceDisplay
-                            amount={convertCurrency(
-                              item.price,
-                              'تومان',
-                              currency
-                            )}
-                            currency={currency}
+                            amount={item.price}
+                            originalCurrency="تومان"
+                            currency={lockedCurrency as Currency}
                           />
                         </p>
                       </>
@@ -107,12 +104,9 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                     >
                       {/* {+item.price * item.quantity} {t('currency')} */}
                       <PriceDisplay
-                        amount={convertCurrency(
-                          +item.price * item.quantity,
-                          'تومان',
-                          currency
-                        )}
-                        currency={currency}
+                        amount={+item.price * item.quantity}
+                        originalCurrency="تومان"
+                        currency={lockedCurrency as Currency}
                       />
                     </Badge>
                   </div>

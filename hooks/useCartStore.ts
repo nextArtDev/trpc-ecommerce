@@ -1,5 +1,5 @@
 import { fetchCurrentPricesAndStock } from '@/lib/home/actions/cart'
-import { CartProductType } from '@/lib/types/home'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useCurrencyStore } from './useCurrencyStore'
@@ -9,6 +9,7 @@ interface State {
   cart: CartProductType[]
   totalItems: number
   totalPrice: number
+  lockedCurrency: Currency | null
 }
 
 // Define the interface of the actions that can be performed in the Cart
@@ -24,6 +25,9 @@ interface Actions {
   // Currency-aware computed values (using YOUR currency store)
   getCartTotalInCurrency: () => number // Uses current currency from your store
   getFormattedCartTotal: () => string // Uses your formatPrice function
+
+  getLockedCurrency: () => Currency | null // NEW: Get locked currency
+  canAddToCart: (currency: Currency) => boolean // NEW: Check if item can be added
 }
 
 // Initialize a default state
@@ -31,6 +35,7 @@ const INITIAL_STATE: State = {
   cart: [],
   totalItems: 0,
   totalPrice: 0,
+  lockedCurrency: null,
 }
 
 const calculateTotals = (cart: CartProductType[]) => {
@@ -49,10 +54,33 @@ export const useCartStore = create<State & Actions>()(
       cart: INITIAL_STATE.cart,
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
+      lockedCurrency: INITIAL_STATE.lockedCurrency,
 
+      getLockedCurrency: () => {
+        return get().lockedCurrency
+      },
+      canAddToCart: (currency: Currency) => {
+        const { cart, lockedCurrency } = get()
+
+        // If cart is empty, any currency is allowed
+        if (cart.length === 0) return true
+
+        // If cart has items, only allow matching currency
+        return lockedCurrency === currency
+      },
       addToCart: (product: CartProductType) => {
         if (!product || !product.variantId) return
-        const cart = get().cart
+        const { cart, lockedCurrency } = get()
+
+        // NEW: Lock currency on first item
+        const currencyToLock =
+          cart.length === 0 ? product.currency : lockedCurrency
+
+        // NEW: Check if currency matches (for safety)
+        if (lockedCurrency && product.currency !== lockedCurrency) {
+          console.warn('Cannot add item with different currency')
+          return
+        }
 
         // If product already exists in cart
         const cartItem = cart.find(
@@ -67,13 +95,21 @@ export const useCartStore = create<State & Actions>()(
                     item.quantity + product.quantity,
                     item.stock
                   ),
-                } // Prevent adding more than stock
+                }
               : item
           )
-          set({ cart: updatedCart, ...calculateTotals(updatedCart) })
+          set({
+            cart: updatedCart,
+            ...calculateTotals(updatedCart),
+            lockedCurrency: currencyToLock,
+          })
         } else {
           const updatedCart = [...cart, { ...product }]
-          set({ cart: updatedCart, ...calculateTotals(updatedCart) })
+          set({
+            cart: updatedCart,
+            ...calculateTotals(updatedCart),
+            lockedCurrency: currencyToLock,
+          })
         }
       },
 
@@ -100,13 +136,24 @@ export const useCartStore = create<State & Actions>()(
         const updatedCart = get().cart.filter(
           (item) => item.variantId !== product.variantId
         )
-        set({ cart: updatedCart, ...calculateTotals(updatedCart) })
+        const newLockedCurrency =
+          updatedCart.length === 0 ? null : get().lockedCurrency
+
+        set({
+          cart: updatedCart,
+          ...calculateTotals(updatedCart),
+          lockedCurrency: newLockedCurrency,
+        })
 
         // Manually sync with localStorage after removal
         localStorage.setItem(
           'cart',
           JSON.stringify({
-            state: { cart: updatedCart, ...calculateTotals(updatedCart) },
+            state: {
+              cart: updatedCart,
+              ...calculateTotals(updatedCart),
+              lockedCurrency: newLockedCurrency,
+            },
           })
         )
       },
@@ -117,7 +164,14 @@ export const useCartStore = create<State & Actions>()(
         const updatedCart = cart.filter(
           (item) => !variantIdsToRemove.has(item.variantId)
         )
-        set({ cart: updatedCart, ...calculateTotals(updatedCart) })
+        const newLockedCurrency =
+          updatedCart.length === 0 ? null : get().lockedCurrency
+
+        set({
+          cart: updatedCart,
+          ...calculateTotals(updatedCart),
+          lockedCurrency: newLockedCurrency,
+        })
       },
 
       emptyCart: () => {
@@ -129,9 +183,14 @@ export const useCartStore = create<State & Actions>()(
       },
 
       setCart: (newCart: CartProductType[]) => {
-        set({ cart: newCart, ...calculateTotals(newCart) })
+        const newLockedCurrency =
+          newCart.length > 0 ? newCart[0].currency : null
+        set({
+          cart: newCart,
+          ...calculateTotals(newCart),
+          lockedCurrency: newLockedCurrency,
+        })
       },
-
       validateAndUpdatePrices: async () => {
         const cart = get().cart
         if (cart.length === 0) return
@@ -181,7 +240,13 @@ export const useCartStore = create<State & Actions>()(
           const finalCart = updatedCart.filter((item) => item.quantity > 0)
 
           if (hasChanges || finalCart.length !== cart.length) {
-            set({ cart: finalCart, ...calculateTotals(finalCart) })
+            const newLockedCurrency =
+              finalCart.length > 0 ? finalCart[0].currency : null
+            set({
+              cart: finalCart,
+              ...calculateTotals(finalCart),
+              lockedCurrency: newLockedCurrency,
+            })
           }
         } catch (error) {
           console.error('Failed to validate cart:', error)
@@ -190,23 +255,31 @@ export const useCartStore = create<State & Actions>()(
 
       // Currency-aware computed values using YOUR currency store
       getCartTotalInCurrency: () => {
-        const { totalPrice } = get()
-        const { currentCurrency, convertCurrency } = useCurrencyStore.getState()
+        const { totalPrice, lockedCurrency } = get()
 
-        // Convert from تومان (base currency) to current currency
-        if (currentCurrency === 'تومان') return totalPrice
+        // NEW: Use locked currency, not current currency switcher
+        if (!lockedCurrency) return totalPrice
 
-        return convertCurrency(totalPrice, 'تومان', currentCurrency)
+        const { convertCurrency } = useCurrencyStore.getState()
+
+        if (lockedCurrency === 'تومان') return totalPrice
+
+        return convertCurrency(totalPrice, 'تومان', lockedCurrency)
       },
 
       getFormattedCartTotal: () => {
-        const { totalPrice } = get()
-        const { currentCurrency, formatPrice } = useCurrencyStore.getState()
+        const { totalPrice, lockedCurrency } = get()
 
-        // If current currency is تومان, use base total
-        if (currentCurrency === 'تومان') return formatPrice(totalPrice)
+        // NEW: Use locked currency, not current currency switcher
+        if (!lockedCurrency) {
+          const { formatPrice } = useCurrencyStore.getState()
+          return formatPrice(totalPrice)
+        }
 
-        // Convert and format
+        const { formatPrice } = useCurrencyStore.getState()
+
+        if (lockedCurrency === 'تومان') return formatPrice(totalPrice)
+
         const convertedPrice = get().getCartTotalInCurrency()
         return formatPrice(convertedPrice)
       },
@@ -215,15 +288,12 @@ export const useCartStore = create<State & Actions>()(
       name: 'cart',
       // Add storage event listener for cross-tab synchronization
       onRehydrateStorage: () => (state) => {
-        // This runs after the store is rehydrated from localStorage
         if (state && typeof window !== 'undefined') {
-          // Listen for storage changes from other tabs
           const handleStorageChange = (e: StorageEvent) => {
             if (e.key === 'cart' && e.newValue) {
               try {
                 const parsed = JSON.parse(e.newValue)
                 if (parsed.state) {
-                  // Update the store with the new state from other tab
                   state.setCart(parsed.state.cart)
                 }
               } catch (error) {
@@ -234,17 +304,16 @@ export const useCartStore = create<State & Actions>()(
 
           window.addEventListener('storage', handleStorageChange)
 
-          // Cleanup function
           return () => {
             window.removeEventListener('storage', handleStorageChange)
           }
         }
       },
-      // Update partialize to only persist cart data
       partialize: (state) => ({
         cart: state.cart,
         totalItems: state.totalItems,
         totalPrice: state.totalPrice,
+        lockedCurrency: state.lockedCurrency, // NEW: Persist locked currency
       }),
     }
   )

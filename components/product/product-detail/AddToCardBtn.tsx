@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/hooks/useCartStore'
 import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import useFromStore from '@/hooks/useFromStore'
-import { CartProductType } from '@/lib/types/home'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { cn } from '@/lib/utils'
 import { Minus, Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -36,16 +36,32 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
   const updateProductQuantity = useCartStore(
     (state) => state.updateProductQuantity
   )
-  const t = useTranslations('product')
+
+  const canAddToCart = useCartStore((state) => state.canAddToCart)
+  const getLockedCurrency = useCartStore((state) => state.getLockedCurrency)
+  const lockedCurrency = getLockedCurrency()
   const currency = useCurrencyStore((state) => state.currentCurrency)
+  const isWrongCurrency = lockedCurrency && lockedCurrency !== currency
+
+  const t = useTranslations('product')
   // console.log({ currency })
   // console.log({ cart })
-  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+  // const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
 
   const existItem = cart?.find((item) => item.variantId === variant.id)
 
   const handleAddToCart = () => {
-    // Construct the cart item object right when the user clicks.
+    // NEW: Prevent adding if wrong currency
+    if (!canAddToCart(currency)) {
+      toast.error(
+        t('cart.currencyMismatch', {
+          locked: lockedCurrency as Currency,
+          current: currency,
+        })
+      )
+      return
+    }
+
     const itemToAdd: CartProductType = {
       variantId: variant.id,
       productId: product.id,
@@ -60,15 +76,14 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
           : variant.price,
       stock: variant.quantity,
       weight: variant.weight ?? 0,
-      quantity: 1, // Always start with 1 when first adding
+      quantity: 1,
       shippingMethod: product.shippingFeeMethod,
       extraShippingFee: 0,
       shippingFee: 0,
-      currency,
+      currency, // This locks the currency
     }
     addToCart(itemToAdd)
     toast.success(
-      // ` ${product.name} (${variant.size} / ${variant.color}) به کارت اضافه شد!`
       t('cart.addedToCart', {
         name: product.name,
         size: variant.size,
@@ -76,7 +91,6 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
       })
     )
   }
-
   const handleIncreaseQuantity = () => {
     if (existItem && existItem.quantity < variant.quantity) {
       updateProductQuantity(existItem, existItem.quantity + 1)
@@ -96,15 +110,41 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
     )
   }
 
+  if (isWrongCurrency && !existItem) {
+    return (
+      <div className="w-full space-y-2">
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-sm">
+          <p className="text-amber-800 text-sm text-center">
+            {t('cart.changeCurrencyWarning', {
+              locked: lockedCurrency,
+            })}
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => {
+            // Clear cart to allow new currency
+            if (confirm(t('cart.clearCartConfirm'))) {
+              useCartStore.getState().emptyCart()
+              toast.info(t('cart.cartCleared'))
+            }
+          }}
+        >
+          {t('cart.clearAndContinue')}
+        </Button>
+      </div>
+    )
+  }
+
   // console.log(cartItems)
   if (existItem) {
     return (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
-        <article className="flex  w-full h-full items-center justify-center">
+        <article className="flex w-full h-full items-center justify-center">
           <Button
             type="button"
             variant="outline"
-            // size={'icon'}
             className="rounded-md cursor-pointer w-7 h-7 sm:w-9 sm:h-9"
             onClick={handleDecreaseQuantity}
           >
@@ -117,7 +157,6 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
 
           <Button
             type="button"
-            // size={'icon'}
             variant="outline"
             className="rounded-md cursor-pointer w-7 h-7 sm:w-9 sm:h-9"
             onClick={handleIncreaseQuantity}
@@ -127,7 +166,7 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
             <Plus className="w-2 h-2 sm:w-4 sm:h-4" />
           </Button>
         </article>
-        <article className="flex  w-full h-full items-center justify-center">
+        <article className="flex w-full h-full items-center justify-center">
           {existItem.quantity >= variant.quantity ? (
             <span className="px-3 py-2 block text-center text-rose-300 text-xs">
               {t('cart.outOfStock')}
@@ -149,6 +188,9 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
       ? variant.price - variant.price * (variant.discount / 100)
       : variant.price
 
+  // NEW: Use locked currency for display if item is in cart
+  const displayCurrency = lockedCurrency || currency
+
   return (
     <Button
       disabled={variant.quantity <= 0}
@@ -163,27 +205,27 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
         <div className="flex items-center gap-1 text-lg">
           {variant.discount > 0 && (
             <p className="">
-              {/* {finalPrice} {t('currency')} */}
               <PriceDisplay
-                amount={convertCurrency(finalPrice, 'تومان', currency)}
-                currency={currency}
+                originalCurrency="تومان"
+                amount={finalPrice}
+                currency={displayCurrency}
               />
             </p>
           )}
           <p className={cn('text-red-300', variant.discount && 'line-through')}>
-            {/* {variant.price} {t('currency')} */}
             <PriceDisplay
-              amount={convertCurrency(variant.price, 'تومان', currency)}
-              currency={currency}
+              originalCurrency="تومان"
+              amount={variant.price}
+              currency={displayCurrency}
             />
           </p>
         </div>
       ) : (
         <p className={cn(' text-lg', variant.discount && 'line-through')}>
-          {/* {variant.price} {t('currency')} */}
           <PriceDisplay
-            amount={convertCurrency(variant.price, 'تومان', currency)}
-            currency={currency}
+            originalCurrency="تومان"
+            amount={variant.price}
+            currency={displayCurrency}
           />
         </p>
       )}

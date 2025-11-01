@@ -30,6 +30,11 @@
     "title": "Our Story Begins",
     "description": "Our small workshop is where leather dreams become reality. We started our journey with immense love and a vision for a bright future, designing and crafting bags and accessories. We believe that timeless design and exceptional quality are the core of creating products that are meant to be your lifelong companions."
   },
+  "currency": {
+    "cannotChangeWithItems": "Empty your cart first to change currency",
+    "locked": "Cart currency: {currency}",
+    "changeWarning": "Changing currency will clear your cart"
+  },
   "bestSellers": {
     "title": "Best Sellers",
     "description": "Our popular products"
@@ -106,7 +111,13 @@
       "buy": "Buy",
       "outOfStock": "Out of stock!",
       "itemsInStock": "{count} items in stock",
-      "viewCart": "View Cart"
+      "viewCart": "View Cart",
+        
+      "currencyMismatch": "Your cart is locked to {locked}. You cannot add items with {current}",
+      "changeCurrencyWarning": "Your cart is locked to {locked}. Empty your cart to change currency",
+      "clearCartConfirm": "Are you sure you want to clear your cart?",
+      "clearAndContinue": "Clear and Continue",
+      "cartCleared": "Cart cleared"
     },
     "keywords": "Keywords",
     "specifications": "Specifications & Dimensions",

@@ -1,6 +1,6 @@
 import { PriceDisplay } from '@/components/shared/price-display'
-import { useCurrencyStore } from '@/hooks/useCurrencyStore'
-import { CartProductType } from '@/lib/types/home'
+import { useCartStore } from '@/hooks/useCartStore'
+import { CartProductType, Currency } from '@/lib/types/home'
 import { useTranslations } from 'next-intl'
 
 type Props = {
@@ -13,8 +13,8 @@ const OrderSummary = ({ cartItems }: Props) => {
   }, 0)
 
   const t = useTranslations('cart')
-  const currency = useCurrencyStore((state) => state.currentCurrency)
-  const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
+  const getLockedCurrency = useCartStore((state) => state.getLockedCurrency)
+  const lockedCurrency = getLockedCurrency()
   return (
     <div className="mt-10 max-w-md mx-auto ">
       <div className="rounded-lg bg-muted px-4 py-6 sm:p-6 lg:p-8">
@@ -27,8 +27,9 @@ const OrderSummary = ({ cartItems }: Props) => {
               <dd className="font-medium ">
                 {/* {subtotal} {t('currency')} */}
                 <PriceDisplay
-                  amount={convertCurrency(subtotal, 'تومان', currency)}
-                  currency={currency}
+                  amount={subtotal}
+                  originalCurrency="تومان"
+                  currency={lockedCurrency as Currency}
                 />
               </dd>
             </div>

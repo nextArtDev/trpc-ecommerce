@@ -30,6 +30,11 @@
     "title": "Unsere Geschichte beginnt",
     "description": "Unsere kleine Werkstatt ist der Ort, wo Lederträume Wirklichkeit werden. Wir begannen unsere Reise mit immenser Liebe und einer Vision für eine strahlende Zukunft und entwarfen und fertigten Taschen und Accessoires. Wir glauben, dass zeitloses Design und außergewöhnliche Qualität der Kern für die Herstellung von Produkten sind, die Ihr lebenslanger Begleiter sein sollen."
   },
+   "currency": {
+    "cannotChangeWithItems": "Leeren Sie zuerst Ihren Warenkorb, um die Währung zu ändern",
+    "locked": "Warenkorbwährung: {currency}",
+    "changeWarning": "Das Ändern der Währung leert Ihren Warenkorb"
+  },
   "bestSellers": {
     "title": "Bestseller",
     "description": "Unsere beliebten Produkte"
@@ -106,7 +111,13 @@
       "buy": "Kaufen",
       "outOfStock": "Nicht vorrätig!",
       "itemsInStock": "{count} Artikel auf Lager",
-      "viewCart": "Warenkorb anzeigen"
+      "viewCart": "Warenkorb anzeigen",
+     
+      "currencyMismatch": "Ihr Warenkorb ist auf {locked} festgelegt. Sie können keine Artikel mit {current} hinzufügen",
+      "changeCurrencyWarning": "Ihr Warenkorb ist auf {locked} festgelegt. Leeren Sie Ihren Warenkorb, um die Währung zu ändern",
+      "clearCartConfirm": "Sind Sie sicher, dass Sie Ihren Warenkorb leeren möchten?",
+      "clearAndContinue": "Leeren und Fortfahren",
+      "cartCleared": "Warenkorb geleert"
     },
     "keywords": "Schlüsselwörter",
     "specifications": "Spezifikationen & Abmessungen",

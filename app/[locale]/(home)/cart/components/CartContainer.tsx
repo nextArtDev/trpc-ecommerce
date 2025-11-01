@@ -9,13 +9,11 @@ import OrderSummary from './OrderSummary'
 import ShoppingList from './ShoppingList'
 import { TransitionLink } from '@/components/home/shared/TransitionLink'
 import { useTranslations } from 'next-intl'
-import useFromStore from '@/hooks/useFromStore'
 
 function CartContainer({ locale }: { locale?: string }) {
   // const totalPrice = useCartStore((state) => state.totalPrice)
   const cartItems = useCartStore((state) => state.cart)
-  const cart = useFromStore(useCartStore, (state) => state.cart)
-  console.log({ cart })
+
   const { validateAndUpdatePrices } = useCartStore()
 
   const t = useTranslations('cart')

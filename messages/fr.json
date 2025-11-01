@@ -30,6 +30,11 @@
     "title": "Notre histoire commence",
     "description": "Notre petit atelier est l'endroit où les rêves en cuir deviennent réalité. Nous avons commencé notre voyage avec un amour immense et une vision pour un avenir radieux, concevant et fabriquant des sacs et des accessoires. Nous croyons que le design intemporel et la qualité exceptionnelle sont au cœur de la création de produits destinés à être vos compagnons de toute une vie."
   },
+  "currency": {
+    "cannotChangeWithItems": "Videz d'abord votre panier pour changer de devise",
+    "locked": "Devise du panier : {currency}",
+    "changeWarning": "Changer de devise videra votre panier"
+  },
   "bestSellers": {
     "title": "Meilleures Ventes",
     "description": "Nos produits populaires"
@@ -104,10 +109,16 @@
     "cart": {
       "addedToCart": "{name} ({size} / {color}) ajouté au panier!",
       "buy": "Acheter",
-      "outOfStock": "Rupture de stock!",
+      "outOfStock": "Rupture de stock!", 
+      "viewCart": "Voir le panier",
       "itemsInStock": "{count} articles en stock",
-      "viewCart": "Voir le panier"
-    },
+      "currencyMismatch": "Votre panier est verrouillé sur {locked}. Vous ne pouvez pas ajouter d'articles avec {current}",
+      "changeCurrencyWarning": "Votre panier est verrouillé sur {locked}. Videz votre panier pour changer de devise",
+      "clearCartConfirm": "Êtes-vous sûr de vouloir vider votre panier ?",
+      "clearAndContinue": "Vider et Continuer",
+      "cartCleared": "Panier vidé"
+      
+    }, 
     "keywords": "Mots-clés",
     "specifications": "Spécifications & Dimensions",
     "relatedProducts": "Produits connexes",

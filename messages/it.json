@@ -30,6 +30,11 @@
     "title": "La nostra storia inizia",
     "description": "Il nostro piccolo laboratorio è il luogo dove i sogni di pelle diventano realtà. Abbiamo iniziato il nostro viaggio con un amore immenso e una visione per un futuro radioso, progettando e creando borse e accessori. Crediamo che il design senza tempo e la qualità eccezionale siano il cuore della creazione di prodotti destinati a essere i tuoi compagni per tutta la vita."
   },
+  "currency": {
+    "cannotChangeWithItems": "Svuota prima il carrello per cambiare valuta",
+    "locked": "Valuta del carrello: {currency}",
+    "changeWarning": "Cambiare valuta svuoterà il carrello"
+  },
   "bestSellers": {
     "title": "Best Seller",
     "description": "I nostri prodotti popolari"
@@ -106,8 +111,15 @@
       "buy": "Acquista",
       "outOfStock": "Esaurito!",
       "itemsInStock": "{count} articoli in magazzino",
-      "viewCart": "Visualizza carrello"
-    },
+      "viewCart": "Visualizza carrello",
+      
+      "currencyMismatch": "Il tuo carrello è bloccato su {locked}. Non puoi aggiungere articoli con {current}",
+      "changeCurrencyWarning": "Il tuo carrello è bloccato su {locked}. Svuota il carrello per cambiare valuta",
+      "clearCartConfirm": "Sei sicuro di voler svuotare il carrello?",
+      "clearAndContinue": "Svuota e Continua",
+      "cartCleared": "Carrello svuotato"
+    }, 
+   
     "keywords": "Parole chiave",
     "specifications": "Specifiche & Dimensioni",
     "relatedProducts": "Prodotti correlati",
