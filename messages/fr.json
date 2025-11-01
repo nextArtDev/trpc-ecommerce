@@ -186,21 +186,36 @@
   },
   "cart": {
     "title": "Panier",
-    "itemsInCart": "Articles dans votre panier",
+    "description": "Articles dans votre panier",
+    "cartAriaLabel": "Panier avec {count} articles",
+    "totalPrice": "Prix total",
+    "currency": "€",
+    "viewCart": "Voir le panier",
+    "viewCartAriaLabel": "Voir le panier",
+    "continueShopping": "Continuer les achats",
+    "continueShoppingAriaLabel": "Continuer les achats",
     "emptyCart": "Votre panier est vide!",
-    "continueShopping": "Continuer vos achats",
+    "siteName": "Sarina Leather",
+    "meta": {
+      "title": "Panier - Sarina Leather",
+      "description": "Consultez et gérez votre panier. Produits en cuir de haute qualité aux meilleurs prix",
+      "ogImageAlt": "Panier - Sarina Leather"
+    },
+    
+    "itemsInCart": "Articles dans votre panier",
+     
     "checkout": "Commander",
     "or": "ou",
     "orderSummary": "Résumé de la commande",
     "subtotal": "Sous-total",
     "shipping": "Livraison",
     "calculatedNextStep": "Calculé à l'étape suivante",
-    "currency": "EUR",
+    
     "size": "Taille",
     "color": "Couleur",
     "quantity": "Quantité",
-    "unitPrice": "Prix unitaire",
-    "totalPrice": "Prix total"
+    "unitPrice": "Prix unitaire" 
+    
   },
   "shipping": {
     "title": "Informations de livraison et de contact",

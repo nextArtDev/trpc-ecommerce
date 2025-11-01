@@ -602,7 +602,7 @@ export interface CurrencyInfo {
 export const CURRENCY_INFO: Record<Currency, CurrencyInfo> = {
   تومان: {
     code: 'تومان',
-    name: 'Iranian Toman',
+    name: 'تومان',
     symbol: 'تومان',
     locale: 'fa-IR',
   },

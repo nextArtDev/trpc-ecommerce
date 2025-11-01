@@ -14,7 +14,7 @@ import { useInView } from 'framer-motion'
 import Autoplay from 'embla-carousel-autoplay'
 import { cn } from '@/lib/utils'
 import { TransitionLink } from '../home/shared/TransitionLink'
-import { useLocale, useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import {
   // createTranslationHelpers,
   ProductTranslationFields,
@@ -22,6 +22,7 @@ import {
   transformWithTranslations,
   TranslatableEntity,
 } from '@/lib/translation-utils'
+import { PriceDisplay } from '../shared/price-display'
 
 export type item = {
   id: string
@@ -39,7 +40,7 @@ type MainPageCarousel = {
 export default function MainPageCarousel({ items }: MainPageCarousel) {
   const carouselRef = useRef(null)
   const locale = useLocale()
-  const t = useTranslations('product')
+  // const t = useTranslations('product')
   // const { getTranslationField } = createTranslationHelpers()
 
   const isRTL = locale === 'fa'
@@ -129,8 +130,12 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                       <div className="flex items-center gap-1">
                         {discount > 0 && (
                           <p className="text-red-500">
-                            {discountedPrice.toLocaleString(locale)}{' '}
-                            {t('currency')}
+                            {/* {discountedPrice.toLocaleString(locale)}{' '}
+                            {t('currency')} */}
+                            <PriceDisplay
+                              amount={discountedPrice}
+                              originalCurrency="تومان"
+                            />
                           </p>
                         )}
                         <p
@@ -138,7 +143,11 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                             discount > 0 && 'line-through text-gray-500'
                           )}
                         >
-                          {price.toLocaleString(locale)} {t('currency')}
+                          {/* {price.toLocaleString(locale)} {t('currency')} */}
+                          <PriceDisplay
+                            amount={price}
+                            originalCurrency="تومان"
+                          />
                         </p>
                       </div>
                     )}

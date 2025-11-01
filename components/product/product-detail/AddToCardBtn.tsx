@@ -38,6 +38,8 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
   )
   const t = useTranslations('product')
   const currency = useCurrencyStore((state) => state.currentCurrency)
+  // console.log({ currency })
+  // console.log({ cart })
   const convertCurrency = useCurrencyStore((state) => state.convertCurrency)
 
   const existItem = cart?.find((item) => item.variantId === variant.id)

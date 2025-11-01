@@ -185,22 +185,37 @@
     }
   },
   "cart": {
-    "title": "Shopping Cart",
-    "itemsInCart": "Items in your shopping cart",
-    "emptyCart": "Your cart is empty!",
+     "title": "Shopping Cart",
+    "description": "Items in your shopping cart",
+    "cartAriaLabel": "Shopping cart with {count} items",
+    "totalPrice": "Total Price",
+    "currency": "$",
+    "viewCart": "View Cart",
+    "viewCartAriaLabel": "View shopping cart",
     "continueShopping": "Continue Shopping",
+    "continueShoppingAriaLabel": "Continue shopping",
+    "emptyCart": "Your cart is empty!",
+    "siteName": "Sarina Leather",
+    "meta": {
+      "title": "Shopping Cart - Sarina Leather",
+      "description": "Review and manage your shopping cart. High-quality leather products at the best prices",
+      "ogImageAlt": "Shopping Cart - Sarina Leather"
+    },
+     
+    "itemsInCart": "Items in your shopping cart",
+     
     "checkout": "Checkout",
     "or": "or",
     "orderSummary": "Order Summary",
     "subtotal": "Subtotal",
     "shipping": "Shipping",
     "calculatedNextStep": "Calculated at next step",
-    "currency": "$",
+     
     "size": "Size",
     "color": "Color",
     "quantity": "Quantity",
-    "unitPrice": "Unit Price",
-    "totalPrice": "Total Price"
+    "unitPrice": "Unit Price"
+     
   },
   "shipping": {
     "title": "Shipping and Contact Information",

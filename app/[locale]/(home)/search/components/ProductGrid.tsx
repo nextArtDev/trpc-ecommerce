@@ -65,7 +65,7 @@ export default function ProductGrid({
 
 function ProductCardSkeleton() {
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardContent className="p-4">
         <Skeleton className="w-full h-48 mb-4" />
         <Skeleton className="h-4 w-3/4 mb-2" />

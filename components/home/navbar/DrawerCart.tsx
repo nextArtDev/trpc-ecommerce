@@ -20,6 +20,8 @@ import ShoppingList from '@/app/[locale]/(home)/cart/components/ShoppingList'
 
 import { Badge } from '@/components/ui/badge'
 import { TransitionLink } from '../shared/TransitionLink'
+import { useTranslations } from 'next-intl'
+import { PriceDisplay } from '@/components/shared/price-display'
 
 type Props = {
   isOpen?: boolean
@@ -27,10 +29,14 @@ type Props = {
 }
 
 export default function DrawerCart({ isOpen, onClose }: Props) {
+  const t = useTranslations('cart')
+
   const cartItems = useCartStore((state) => state.cart)
   const totalPrice = useCartStore((state) => state.totalPrice)
+
   const { validateAndUpdatePrices } = useCartStore()
 
+  console.log({ cartItems })
   useEffect(() => {
     validateAndUpdatePrices()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,7 +50,7 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
         <Button
           variant="ghost"
           size="icon"
-          aria-label={`Shopping cart with ${cartItemCount} items`}
+          aria-label={t('cartAriaLabel', { count: cartItemCount })}
           className="relative"
         >
           <ShoppingBag className="h-4 w-4" />
@@ -63,9 +69,9 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
         <ScrollArea className="h-[80vh] sm:h-[60vh]">
           <div className="mx-auto w-full max-w-[90vw]" dir="rtl">
             <DrawerHeader>
-              <DrawerTitle>لیست خرید</DrawerTitle>
+              <DrawerTitle>{t('title')}</DrawerTitle>
               <DrawerDescription className="sr-only">
-                Items in your shopping cart
+                {t('description')}
               </DrawerDescription>
             </DrawerHeader>
 
@@ -77,13 +83,20 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
                   <div className="py-6 flex items-center justify-center">
                     <div className="flex items-center gap-2">
                       <span className="text-sm sm:text-base text-muted-foreground">
-                        قیمت مجموع:
+                        {t('totalPrice')}:
                       </span>
                       <Badge
                         variant="default"
                         className="text-sm sm:text-base px-2 py-1 bg-indigo-600 text-white"
                       >
-                        {totalPrice} تومان
+                        {/* {totalPrice} {t('currency')}
+                         */}
+                        <PriceDisplay
+                          amount={totalPrice}
+                          className=""
+                          originalCurrency="تومان"
+                          currency={cartItems.map((crt) => crt.currency)[0]}
+                        />
                       </Badge>
                     </div>
                   </div>
@@ -95,8 +108,11 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
                       asChild
                       className="w-full max-w-sm mx-auto bg-indigo-600 text-white"
                     >
-                      <TransitionLink aria-label="cart content" href="/cart">
-                        سبد خرید
+                      <TransitionLink
+                        aria-label={t('viewCartAriaLabel')}
+                        href="/cart"
+                      >
+                        {t('viewCart')}
                       </TransitionLink>
                     </Button>
                   </DrawerClose>
@@ -106,8 +122,11 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
                       variant="outline"
                       className="w-full max-w-sm mx-auto"
                     >
-                      <TransitionLink aria-label="continue shopping" href="/">
-                        ادامه &larr;
+                      <TransitionLink
+                        aria-label={t('continueShoppingAriaLabel')}
+                        href="/"
+                      >
+                        {t('continueShopping')}
                       </TransitionLink>
                     </Button>
                   </DrawerClose>
@@ -116,12 +135,15 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
             ) : (
               <div className="w-full h-full flex flex-col gap-8 items-center justify-center py-8">
                 <p className="text-center text-muted-foreground">
-                  سبد شما خالی است!
+                  {t('emptyCart')}
                 </p>
                 <DrawerClose asChild>
                   <Button asChild>
-                    <TransitionLink aria-label="continue shopping" href="/">
-                      ادامه خرید
+                    <TransitionLink
+                      aria-label={t('continueShoppingAriaLabel')}
+                      href="/"
+                    >
+                      {t('continueShopping')}
                     </TransitionLink>
                   </Button>
                 </DrawerClose>

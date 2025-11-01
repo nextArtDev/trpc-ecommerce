@@ -183,7 +183,7 @@ function SearchError() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Card>
+      <Card className="rounded-none">
         <CardContent className="py-12 text-center">
           <div className="text-lg font-medium mb-2">{t('error.title')}</div>
           <div className="text-muted-foreground">{t('error.description')}</div>
@@ -200,7 +200,7 @@ function SearchPageSkeleton() {
         {/* Sidebar Skeleton */}
         <div className="w-full lg:w-80 space-y-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}>
+            <Card className="rounded-none" key={i}>
               <CardContent className="p-4">
                 <Skeleton className="h-6 w-24 mb-4" />
                 <div className="space-y-2">
@@ -218,7 +218,7 @@ function SearchPageSkeleton() {
           <Skeleton className="h-12 w-full mb-6" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 12 }).map((_, i) => (
-              <Card key={i}>
+              <Card className="rounded-none" key={i}>
                 <CardContent className="p-4">
                   <Skeleton className="w-full h-48 mb-4" />
                   <Skeleton className="h-4 w-3/4 mb-2" />

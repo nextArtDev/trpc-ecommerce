@@ -185,22 +185,37 @@
     }
   },
   "cart": {
-    "title": "Warenkorb",
-    "itemsInCart": "Artikel in Ihrem Warenkorb",
+     "title": "Warenkorb",
+    "description": "Artikel in Ihrem Warenkorb",
+    "cartAriaLabel": "Warenkorb mit {count} Artikeln",
+    "totalPrice": "Gesamtpreis",
+    "currency": "€",
+    "viewCart": "Warenkorb ansehen",
+    "viewCartAriaLabel": "Warenkorb ansehen",
+    "continueShopping": "Einkauf fortsetzen",
+    "continueShoppingAriaLabel": "Einkauf fortsetzen",
     "emptyCart": "Ihr Warenkorb ist leer!",
-    "continueShopping": "Weiter einkaufen",
+    "siteName": "Sarina Leather",
+    "meta": {
+      "title": "Warenkorb - Sarina Leather",
+      "description": "Überprüfen und verwalten Sie Ihren Warenkorb. Hochwertige Lederprodukte zu den besten Preisen",
+      "ogImageAlt": "Warenkorb - Sarina Leather"
+    },
+    
+    "itemsInCart": "Artikel in Ihrem Warenkorb",
+    
+     
     "checkout": "Kasse",
     "or": "oder",
     "orderSummary": "Bestellübersicht",
     "subtotal": "Zwischensumme",
     "shipping": "Versand",
     "calculatedNextStep": "Im nächsten Schritt berechnet",
-    "currency": "EUR",
+    
     "size": "Größe",
     "color": "Farbe",
     "quantity": "Menge",
-    "unitPrice": "Einzelpreis",
-    "totalPrice": "Gesamtpreis"
+    "unitPrice": "Einzelpreis"
   },
   "shipping": {
     "title": "Versand- und Kontaktinformationen",

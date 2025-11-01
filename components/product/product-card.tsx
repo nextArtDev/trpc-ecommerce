@@ -16,6 +16,7 @@ import { TransitionLink } from '../home/shared/TransitionLink'
 import { SearchProduct } from '@/lib/types/home'
 import { getName } from '@/lib/translation-utils'
 import { useLocale, useTranslations } from 'next-intl'
+import { PriceDisplay } from '../shared/price-display'
 
 type Props = {
   product: SearchProduct
@@ -141,12 +142,18 @@ const ProductCard = ({ product }: Props) => {
           <p className="font-bold">{getName(product.translations)}</p>
           <div className="flex items-center gap-1">
             {discount > 0 && (
-              <p className="text-red-500">
-                {discountedPrice.toLocaleString(locale)} {t('currency')}
-              </p>
+              // <p className="text-red-500">
+              //   {discountedPrice.toLocaleString(locale)} {t('currency')}
+              // </p>
+              <PriceDisplay
+                className="text-red-500"
+                amount={discountedPrice}
+                originalCurrency="تومان"
+              />
             )}
             <p className={cn(discount > 0 && 'line-through text-gray-500')}>
-              {price.toLocaleString(locale)} {t('currency')}
+              {/* {price.toLocaleString(locale)} {t('currency')} */}
+              <PriceDisplay amount={price} originalCurrency="تومان" />
             </p>
           </div>
           <div className="flex gap-0.5 items-center">

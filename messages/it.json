@@ -184,23 +184,37 @@
       "sizePrefix": "taglia"
     }
   },
-  "cart": {
+  "cart": { 
     "title": "Carrello",
-    "itemsInCart": "Articoli nel tuo carrello",
-    "emptyCart": "Il tuo carrello è vuoto!",
+    "description": "Articoli nel tuo carrello",
+    "cartAriaLabel": "Carrello con {count} articoli",
+    "totalPrice": "Prezzo totale",
+    "currency": "€",
+    "viewCart": "Visualizza carrello",
+    "viewCartAriaLabel": "Visualizza carrello",
     "continueShopping": "Continua lo shopping",
+    "continueShoppingAriaLabel": "Continua lo shopping",
+    "emptyCart": "Il tuo carrello è vuoto!",
+    "siteName": "Sarina Leather",
+    "meta": {
+      "title": "Carrello - Sarina Leather",
+      "description": "Rivedi e gestisci il tuo carrello. Prodotti in pelle di alta qualità ai migliori prezzi",
+      "ogImageAlt": "Carrello - Sarina Leather"
+    },
+    "itemsInCart": "Articoli nel tuo carrello",
+    
     "checkout": "Cassa",
     "or": "o",
     "orderSummary": "Riepilogo ordine",
     "subtotal": "Subtotale",
     "shipping": "Spedizione",
     "calculatedNextStep": "Calcolato al passaggio successivo",
-    "currency": "EUR",
+   
     "size": "Taglia",
     "color": "Colore",
     "quantity": "Quantità",
-    "unitPrice": "Prezzo unitario",
-    "totalPrice": "Prezzo totale"
+    "unitPrice": "Prezzo unitario" 
+    
   },
   "shipping": {
     "title": "Informazioni di spedizione e contatto",
