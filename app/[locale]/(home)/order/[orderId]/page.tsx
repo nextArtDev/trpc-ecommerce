@@ -2,13 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import OrderDetailsTable from './components/order-details-table1'
 import { getOrderById } from '@/lib/home/queries/order'
-import {
-  Country,
-  Order,
-  OrderItem,
-  ShippingAddress,
-  State,
-} from '@/lib/generated/prisma'
+import { Order, OrderItem, ShippingAddress } from '@/lib/generated/prisma'
 import { Suspense } from 'react'
 import { OrderDetailsSkeleton } from './components/Skeletons'
 import { getCurrentUser } from '@/lib/auth-helpers'
@@ -33,10 +27,10 @@ function OrderDetailsTableWrapper({
   isAdmin,
 }: {
   order: Order & { items: OrderItem[] } & {
-    shippingAddress: ShippingAddress & { province: { name: string | null } } & {
-      city: { name: string | null }
-    } & { country: Country | null } & {
-      state: State | null
+    shippingAddress: ShippingAddress & { province: { name: string } | null } & {
+      city: { name: string } | null
+    } & { country: { name: string } | null } & {
+      state: { name: string } | null
     }
   } & { paymentDetails: { transactionId: string | null } | null } & {
     user: { name: string; phoneNumber: string | null }
@@ -52,9 +46,9 @@ function OrderDetailsTableWrapper({
         shippingAddress: {
           ...order.shippingAddress,
           province: order.shippingAddress?.province,
-          city: order.shippingAddress.city,
-          country: order.shippingAddress.country,
-          state: order.shippingAddress.state,
+          city: order.shippingAddress?.city,
+          country: order.shippingAddress?.country,
+          state: order.shippingAddress?.state,
         },
         user: {
           name: order.user.name,

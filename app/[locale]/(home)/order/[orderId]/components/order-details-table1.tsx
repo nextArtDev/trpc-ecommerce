@@ -18,11 +18,9 @@ import { useActionState, useEffect, useMemo, useTransition } from 'react'
 
 import {
   AddressType,
-  Country,
   Order,
   OrderItem,
   ShippingAddress,
-  State,
 } from '@/lib/generated/prisma'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { deliverOrder, updateOrderToPaidCOD } from '@/lib/home/actions/order'
@@ -49,10 +47,10 @@ const errorMessages: Record<string, string> = {
 
 interface OrderDetailsTableProps {
   order: Order & { items: OrderItem[] } & {
-    shippingAddress: ShippingAddress & { province: { name: string | null } } & {
-      city: { name: string | null }
-    } & { country: Country | null } & {
-      state: State | null
+    shippingAddress: ShippingAddress & { province: { name: string } | null } & {
+      city: { name: string } | null
+    } & { country: { name: string } | null } & {
+      state: { name: string } | null
     }
   } & { paymentDetails: { transactionId: string | null } | null } & {
     user: { name: string; phoneNumber: string | null }
@@ -109,14 +107,15 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
     paymentStatus,
     paidAt: rawPaidAt,
     paymentDetails,
+    currency: orderCurrency,
   } = order
 
   const isDelivered = orderStatus === 'Delivered'
   const isPaid = paymentStatus === 'Paid'
   const paidAt = parseDate(rawPaidAt)
   const transactionId = paymentDetails?.transactionId
-
   const isIranianAddress = shippingAddress.addressType === AddressType.IRANIAN
+
   // Payment action state
   const [actionState, zarinpalPaymentAction, isPending] = useActionState(
     zarinpalPayment.bind(null, `/order/${id}`, id),
@@ -159,6 +158,17 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
         {t('title', { orderId: formatId(id) })}
       </h1>
 
+      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-blue-800">
+            {t('currencyInfo')}: <strong>{orderCurrency}</strong>
+          </span>
+          <span className="text-xs text-blue-600">
+            {orderCurrency === 'تومان' ? '(زرین‌پال)' : '(PayPal)'}
+          </span>
+        </div>
+      </div>
+
       <div className="grid md:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="md:col-span-2 space-y-4">
@@ -194,7 +204,7 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
             isDelivered={isDelivered}
             orderId={id}
             paidAt={paidAt}
-            currency={order.currency}
+            currency={orderCurrency}
             isIranianAddress={isIranianAddress}
           />
         </div>
@@ -477,7 +487,7 @@ const OrderSummaryCard = ({
           </Badge>
         ) : (
           <div className="flex flex-col gap-4">
-            {isIranianAddress ? (
+            {isIranianAddress || currency === 'تومان' ? (
               <form action={zarinpalPaymentAction} className="space-y-2">
                 <Button
                   type="submit"
