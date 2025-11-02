@@ -6,6 +6,7 @@ import WorkVideo from '@/components/home/shared/WorkVideo'
 import TestimonialCarousel from '@/components/home/testemonial/Testemonial'
 import BestSellers from '@/components/product/best-sellers'
 import Newest from '@/components/product/newest'
+// import { seed } from '@/lib/home/actions/seed'
 
 import {
   getBestSellers,
@@ -113,6 +114,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 export default async function Home() {
+  // await seed()
   const t = await getTranslations('home')
   // const tBestSellers = await getTranslations('bestSellers')
   const tNewestSellers = await getTranslations('newestSellers')

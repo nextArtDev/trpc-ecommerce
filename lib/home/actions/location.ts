@@ -74,12 +74,8 @@ export const getProvinceById = async (provinceId: string | number) => {
   }
 }
 
-export const getStatesByCountryId = async (countryId: string) => {
+export async function getStatesByCountryId(countryId: string) {
   try {
-    if (!countryId) {
-      return []
-    }
-
     const states = await prisma.state.findMany({
       where: {
         countryId,
@@ -88,29 +84,37 @@ export const getStatesByCountryId = async (countryId: string) => {
         name: 'asc',
       },
     })
-
     return states
   } catch (error) {
-    console.error('getStatesByCountryId error:', error)
+    console.error('Error fetching states:', error)
     return []
   }
 }
 
-export const getStateById = async (stateId: string) => {
+export async function getStateById(stateId: string) {
   try {
-    if (!stateId) {
-      return null
-    }
-
-    const state = await prisma.state.findFirst({
+    const state = await prisma.state.findUnique({
       where: {
         id: stateId,
       },
     })
-
     return state
   } catch (error) {
-    console.error('getStateById error:', error)
+    console.error('Error fetching state:', error)
     return null
+  }
+}
+
+export async function getAllCountries() {
+  try {
+    const countries = await prisma.country.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    })
+    return countries
+  } catch (error) {
+    console.error('Error fetching countries:', error)
+    return []
   }
 }

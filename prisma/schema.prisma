@@ -399,8 +399,7 @@ model QuestionTranslation {
 
 model Country {
   id                String            @id @default(uuid())
-  code2             String            @unique
-  code3             String            @unique
+  sortname          String            @unique // 2-letter code (AF, US, etc.)
   name              String
   states            State[]
   shippingRates     ShippingRate[]    @relation("CountryShippingRates")
@@ -408,22 +407,23 @@ model Country {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([sortname])
 }
 
 model State {
   id   String @id @default(cuid())
-  code String
   name String
 
   countryId         String
-  country           Country           @relation(fields: [countryId], references: [id])
+  country           Country           @relation(fields: [countryId], references: [id], onDelete: Cascade)
   shippingAddresses ShippingAddress[] @relation("StateToShippingAddress")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([code, countryId])
   @@index([countryId])
+  @@index([name, countryId])
 }
 
 model ShippingRate {
@@ -573,7 +573,7 @@ model ShippingAddress {
   address2 String?
   // state     String
   // city      String
-  zip_code String
+  zip_code String?
   default  Boolean @default(false)
 
   addressType AddressType @default(IRANIAN)

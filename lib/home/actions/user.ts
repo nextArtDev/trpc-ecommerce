@@ -23,6 +23,7 @@ interface CreateShippingAddressFormState {
     state?: string[]
     cityInt?: string[]
     zip_code?: string[]
+    phoneNumber?: string[]
     _form?: string[]
   }
 }
@@ -40,12 +41,8 @@ export async function createShippingAddress(
     }
   }
 
-  // console.log('phone', phone)
-  // console.log('result.data', result.data)
   try {
     const cUser = await currentUser()
-    // console.log('cUser', cUser)
-    // if (!cUser || !cUser.phoneNumber) {
     if (!cUser || !cUser.name) {
       return {
         errors: {
@@ -54,12 +51,8 @@ export async function createShippingAddress(
       }
     }
 
-    const { addressType } = result.data
-
     const userAddress = await prisma.user.findFirst({
-      where: {
-        id: cUser.id,
-      },
+      where: { id: cUser.id },
     })
 
     if (cUser.id !== userAddress?.id) {
@@ -69,6 +62,9 @@ export async function createShippingAddress(
         },
       }
     }
+
+    const { addressType } = result.data
+
     // Prepare address data based on type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const addressData: any = {
@@ -87,19 +83,16 @@ export async function createShippingAddress(
       // Clear international fields
       addressData.countryId = null
       addressData.stateId = null
-      // addressData.state = null
-      // addressData.cityInt = null
+      addressData.cityInt = null
     } else {
       addressData.countryId = result.data.countryId
       addressData.stateId = result.data.stateId || null
-      // addressData.state = result.data.state
-      addressData.cityInt = result.data.cityInt || ''
+      addressData.cityInt = result.data.cityInt || null
       // Clear Iranian fields
       addressData.provinceId = null
       addressData.cityId = null
     }
 
-    // console.log(user)
     const shippingAddress = await prisma.shippingAddress.create({
       data: addressData,
       include: {
@@ -124,21 +117,22 @@ export async function createShippingAddress(
       },
     })
 
-    let AddressToSaveForUser: string
+    let addressToSaveForUser: string
     if (addressType === AddressType.IRANIAN) {
-      AddressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+      addressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
     } else {
-      AddressToSaveForUser = `${shippingAddress?.country?.name}, ${
-        shippingAddress?.state?.name || shippingAddress.state
-      }, ${shippingAddress.cityInt} | ${shippingAddress.address1} - ${
-        shippingAddress.zip_code || 'N/A'
-      }`
+      const stateName = shippingAddress?.state?.name || result.data.state || ''
+      addressToSaveForUser = `${
+        shippingAddress?.country?.name
+      }, ${stateName}, ${shippingAddress.cityInt || ''} | ${
+        shippingAddress.address1
+      } - ${shippingAddress.zip_code || 'N/A'}`
     }
 
     await prisma.user.update({
       where: { id: cUser.id },
       data: {
-        address: AddressToSaveForUser,
+        address: addressToSaveForUser,
         name: result.data.name,
         phoneNumber: result.data.phoneNumber,
       },
@@ -148,8 +142,6 @@ export async function createShippingAddress(
       shippingAddress.user.cart?.id as string,
       shippingAddress.id
     )
-    // console.log({ shippingFee })
-    // updateCartWithShipping(cart)
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : 'مشکلی در سرور پیش آمده.'
@@ -158,6 +150,7 @@ export async function createShippingAddress(
   revalidatePath(path)
   redirect(`/place-order`)
 }
+
 interface EditShippingAddressFormState {
   success?: string
   errors: {
@@ -171,6 +164,7 @@ interface EditShippingAddressFormState {
     state?: string[]
     cityInt?: string[]
     zip_code?: string[]
+    phoneNumber?: string[]
     _form?: string[]
   }
 }
@@ -196,9 +190,9 @@ export async function editShippingAddress(
       },
     }
   }
+
   try {
     const cUser = await currentUser()
-    // if (!cUser || !cUser.phoneNumber) {
     if (!cUser || !cUser.name) {
       return {
         errors: {
@@ -206,6 +200,7 @@ export async function editShippingAddress(
         },
       }
     }
+
     const isExisting = await prisma.shippingAddress.findFirst({
       where: {
         id: shippingAddressId,
@@ -232,23 +227,6 @@ export async function editShippingAddress(
         },
       }
     }
-    // await prisma.user.findFirst({
-    //   where: {
-    //     id: cUser.id,
-    //   },
-    //   include: {
-    //     shippingAddresses: {
-    //       include: {
-    //         city: true,
-    //         province: true,
-    //         country: true,
-    //         state: true,
-    //       },
-    //     },
-    //   },
-    // })
-
-    // console.log(user)
 
     const { addressType } = result.data
 
@@ -263,20 +241,38 @@ export async function editShippingAddress(
     }
 
     if (addressType === AddressType.IRANIAN) {
+      // Set Iranian fields
       addressData.provinceId = result.data.provinceId
       addressData.cityId = result.data.cityId
-      // Clear international fields
-      addressData.country = { disconnect: true }
-      addressData.state = { disconnect: true }
+
+      // Clear international fields using nested operations
+      if (isExisting.countryId) {
+        addressData.country = { disconnect: true }
+      }
+      if (isExisting.stateId) {
+        addressData.state = { disconnect: true }
+      }
+      addressData.cityInt = null
     } else {
-      // For international addresses, use the correct field names
+      // Set international fields using nested operations
       addressData.country = { connect: { id: result.data.countryId } }
+
       if (result.data.stateId) {
         addressData.state = { connect: { id: result.data.stateId } }
+      } else if (isExisting.stateId) {
+        // Disconnect existing state if no new state provided
+        addressData.state = { disconnect: true }
       }
-      // Clear Iranian fields
-      addressData.province = { disconnect: true }
-      addressData.city = { disconnect: true }
+
+      addressData.cityInt = result.data.cityInt || null
+
+      // Clear Iranian fields using nested operations
+      if (isExisting.provinceId) {
+        addressData.province = { disconnect: true }
+      }
+      if (isExisting.cityId) {
+        addressData.city = { disconnect: true }
+      }
     }
 
     const shippingAddress = await prisma.shippingAddress.update({
@@ -309,27 +305,26 @@ export async function editShippingAddress(
       shippingAddress.id
     )
 
-    // console.log({ shippingAddress })
-    let AddressToSaveForUser: string
+    let addressToSaveForUser: string
     if (addressType === AddressType.IRANIAN) {
-      AddressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
+      addressToSaveForUser = `${shippingAddress?.province?.name}-${shippingAddress?.city?.name} | ${shippingAddress.address1} - ${shippingAddress.zip_code}`
     } else {
-      AddressToSaveForUser = `${shippingAddress?.country?.name}, ${
-        shippingAddress?.state?.name
-      }, ${shippingAddress.cityInt} | ${shippingAddress.address1} - ${
-        shippingAddress.zip_code || 'N/A'
-      }`
+      const stateName = shippingAddress?.state?.name || result.data.state || ''
+      addressToSaveForUser = `${
+        shippingAddress?.country?.name
+      }, ${stateName}, ${shippingAddress.cityInt || ''} | ${
+        shippingAddress.address1
+      } - ${shippingAddress.zip_code || 'N/A'}`
     }
 
     await prisma.user.update({
       where: { id: userAddress.id },
       data: {
-        address: AddressToSaveForUser,
+        address: addressToSaveForUser,
         name: result.data.name,
         phoneNumber: result.data.phoneNumber,
       },
     })
-    // console.log(res)
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : 'مشکلی در سرور پیش آمده.'
