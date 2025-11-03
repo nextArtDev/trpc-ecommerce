@@ -36,7 +36,6 @@ export default function DrawerCart({ isOpen, onClose }: Props) {
 
   const { validateAndUpdatePrices } = useCartStore()
 
-  console.log({ cartItems })
   useEffect(() => {
     validateAndUpdatePrices()
     // eslint-disable-next-line react-hooks/exhaustive-deps

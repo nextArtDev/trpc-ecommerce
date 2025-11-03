@@ -487,8 +487,7 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         message: 'سبد خرید یافت نشد.',
       }
     }
-    console.log('cart.cartItems', cart.displayCurrency)
-    console.log('cart.cartItems', cart.cartItems)
+
     if (cart.cartItems.length === 0) {
       return {
         success: false,
@@ -637,6 +636,7 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         color: item.color,
       })
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       recalculatedSubTotal += validatedTotalPrice
     }
 

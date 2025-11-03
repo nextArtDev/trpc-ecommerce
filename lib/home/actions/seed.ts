@@ -1,8 +1,8 @@
 'use server'
 
 import prisma from '@/lib/prisma'
-import provincesData from '@/constants/cities.json'
-import countries from '@/constants/countries.json'
+// import provincesData from '@/constants/cities.json'
+// import countries from '@/constants/countries.json'
 import countriesData from '@/constants/country.json'
 import statesData from '@/constants/state.json'
 export async function seed() {

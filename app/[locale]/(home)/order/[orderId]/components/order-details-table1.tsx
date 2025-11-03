@@ -253,6 +253,7 @@ const ShippingAddressCard = ({
   shippingAddress,
   formattedAddress,
   isDelivered,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isIranianAddress,
 }: {
   shippingAddress: ShippingAddress

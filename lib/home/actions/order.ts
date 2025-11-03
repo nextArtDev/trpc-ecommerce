@@ -117,8 +117,9 @@ export async function createOrder(currency?: Currency) {
 
     const paymentRoute =
       cartCurrency === 'تومان'
-        ? `/payment/${insertedOrderId}` // Iranian payment
-        : `/payment/paypal/${insertedOrderId}` // International payment
+        ? `/order/${insertedOrderId}` // Iranian payment
+        : // : `/payment/paypal/${insertedOrderId}` // International payment
+          `/order/${insertedOrderId}` // International payment
 
     return {
       success: true,
@@ -127,7 +128,7 @@ export async function createOrder(currency?: Currency) {
       redirectTo: paymentRoute,
     }
   } catch (error) {
-    console.log({ error })
+    console.error({ error })
     if (isRedirectError(error)) throw error
     return { success: false, message: error }
   }

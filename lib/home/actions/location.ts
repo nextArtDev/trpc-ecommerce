@@ -69,7 +69,7 @@ export const getProvinceById = async (provinceId: string | number) => {
 
     return province
   } catch (error) {
-    console.log('getProvinceById error:', error)
+    console.error('getProvinceById error:', error)
     return null
   }
 }
