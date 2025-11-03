@@ -30,7 +30,8 @@ export interface SaveCartResult {
 }
 
 export async function saveAllToCart(
-  items: CartProductType[]
+  items: CartProductType[],
+  currency: Currency
 ): Promise<SaveCartResult> {
   // 1. Authentication check
   const user = await currentUser()
@@ -48,7 +49,21 @@ export async function saveAllToCart(
       message: 'محصولی برای خرید انتخاب نشده است.',
     }
   }
+  const itemCurrencies = new Set(items.map((item) => item.currency))
+  if (itemCurrencies.size > 1) {
+    return {
+      success: false,
+      message: 'محصولات با واحدهای پولی مختلف در سبد خرید وجود دارد.',
+    }
+  }
 
+  const firstItemCurrency = items[0]?.currency
+  if (firstItemCurrency && firstItemCurrency !== currency) {
+    return {
+      success: false,
+      message: `خطا: واحد پول درخواستی (${currency}) با واحد پول محصولات (${firstItemCurrency}) مطابقت ندارد.`,
+    }
+  }
   const locale = await getCurrentLocale()
 
   try {
@@ -144,6 +159,7 @@ export async function saveAllToCart(
           price,
           totalPrice,
           weight: variant.weight || 0,
+          currency: cartProduct.currency,
         })
       }
 
@@ -170,6 +186,7 @@ export async function saveAllToCart(
           userId: user.id,
           subTotal,
           total: subTotal, // Will be updated after shipping calculation
+          displayCurrency: currency,
           cartItems: {
             create: validatedCartItemsData.map((item) => ({
               // variantId: item.variantId,
@@ -185,7 +202,7 @@ export async function saveAllToCart(
               totalPrice: item.totalPrice,
               weight: item.weight,
               color: item.color,
-              // currency:item.cu
+              currency: item.currency,
             })),
           },
         },
@@ -464,13 +481,14 @@ export async function getValidatedCart(): Promise<CartValidationResult> {
         cartItems: true,
       },
     })
-
     if (!cart) {
       return {
         success: false,
         message: 'سبد خرید یافت نشد.',
       }
     }
+    console.log('cart.cartItems', cart.displayCurrency)
+    console.log('cart.cartItems', cart.cartItems)
     if (cart.cartItems.length === 0) {
       return {
         success: false,

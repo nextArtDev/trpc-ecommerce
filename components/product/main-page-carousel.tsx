@@ -129,16 +129,16 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                     {firstVariant && (
                       <div className="flex items-center gap-1">
                         {discount > 0 && (
-                          <p className="text-red-500">
+                          <span className="text-red-500">
                             {/* {discountedPrice.toLocaleString(locale)}{' '}
                             {t('currency')} */}
                             <PriceDisplay
                               amount={discountedPrice}
                               originalCurrency="تومان"
                             />
-                          </p>
+                          </span>
                         )}
-                        <p
+                        <span
                           className={cn(
                             discount > 0 && 'line-through text-gray-500'
                           )}
@@ -148,7 +148,7 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                             amount={price}
                             originalCurrency="تومان"
                           />
-                        </p>
+                        </span>
                       </div>
                     )}
                     {/* <p>

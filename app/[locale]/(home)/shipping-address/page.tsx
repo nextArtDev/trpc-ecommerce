@@ -35,6 +35,9 @@ const page = async () => {
       user: true,
     },
   })
+
+  // console.log({ shippingAddress })
+  // console.log(cart.displayCurrency)
   return (
     <section>
       <div className="py-4">

@@ -151,10 +151,10 @@ const ProductCard = ({ product }: Props) => {
                 originalCurrency="تومان"
               />
             )}
-            <p className={cn(discount > 0 && 'line-through text-gray-500')}>
+            <span className={cn(discount > 0 && 'line-through text-gray-500')}>
               {/* {price.toLocaleString(locale)} {t('currency')} */}
               <PriceDisplay amount={price} originalCurrency="تومان" />
-            </p>
+            </span>
           </div>
           <div className="flex gap-0.5 items-center">
             {product.variants?.map((vr) => (

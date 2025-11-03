@@ -82,14 +82,14 @@ const ShoppingList = ({ cartItems, mutable = false }: Props) => {
                         <span className="text-sm text-muted-foreground">
                           {t('unitPrice')}:
                         </span>
-                        <p className="text-xs px-0.5 py-1">
+                        <span className="text-xs px-0.5 py-1">
                           {/* {item.price} {t('currency')} */}
                           <PriceDisplay
                             amount={item.price}
                             originalCurrency="تومان"
                             currency={lockedCurrency as Currency}
                           />
-                        </p>
+                        </span>
                       </>
                     )}
                   </div>

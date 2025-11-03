@@ -82,6 +82,7 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
       shippingFee: 0,
       currency, // This locks the currency
     }
+    // console.log({ cart })
     addToCart(itemToAdd)
     toast.success(
       t('cart.addedToCart', {
@@ -204,30 +205,30 @@ const AddToCardBtn: FC<AddToCardBtnProps> = ({ product, variant }) => {
       {!!variant.discount ? (
         <div className="flex items-center gap-1 text-lg">
           {variant.discount > 0 && (
-            <p className="">
-              <PriceDisplay
-                originalCurrency="تومان"
-                amount={finalPrice}
-                currency={displayCurrency}
-              />
-            </p>
+            <PriceDisplay
+              originalCurrency="تومان"
+              amount={finalPrice}
+              currency={displayCurrency}
+            />
           )}
-          <p className={cn('text-red-300', variant.discount && 'line-through')}>
+          <span
+            className={cn('text-red-300', variant.discount && 'line-through')}
+          >
             <PriceDisplay
               originalCurrency="تومان"
               amount={variant.price}
               currency={displayCurrency}
             />
-          </p>
+          </span>
         </div>
       ) : (
-        <p className={cn(' text-lg', variant.discount && 'line-through')}>
+        <span className={cn(' text-lg', variant.discount && 'line-through')}>
           <PriceDisplay
             originalCurrency="تومان"
             amount={variant.price}
             currency={displayCurrency}
           />
-        </p>
+        </span>
       )}
     </Button>
   )

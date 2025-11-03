@@ -1,3 +1,5 @@
+import { useCartStore } from '@/hooks/useCartStore'
+import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import { saveAllToCart } from '@/lib/home/actions/cart'
 import { CartProductType } from '@/lib/types/home'
 import { Loader } from 'lucide-react'
@@ -17,12 +19,30 @@ const CheckoutBtn = ({ cartItems, locale }: Props) => {
   const t = useTranslations('cart')
   const router = useRouter()
   // const { toast } = useToast()
+  const getLockedCurrency = useCartStore((state) => state.getLockedCurrency)
+  const lockedCurrency = getLockedCurrency()
+  const currency = useCurrencyStore((state) => state.currentCurrency)
 
   const [isPending, startTransition] = useTransition()
 
   const handleSaveCart = async () => {
+    const itemCurrencies = new Set(cartItems.map((item) => item.currency))
+    //  if (itemCurrencies.size > 1) {
+    //    toast.error('محصولات با واحدهای پولی مختلف در سبد خرید وجود دارد.')
+    //    return
+    //  }
+    if (
+      (lockedCurrency && lockedCurrency !== currency) ||
+      itemCurrencies.size > 1
+    ) {
+      toast.error('Mismatch Currency')
+      return
+    }
     startTransition(async () => {
-      const res = await saveAllToCart(cartItems)
+      const res = await saveAllToCart(
+        cartItems,
+        lockedCurrency || cartItems[0]?.currency || currency
+      )
       // console.log(res)
       if (!res.success) {
         toast.error(res.message)

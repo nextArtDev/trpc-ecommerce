@@ -40,7 +40,7 @@ const OrderPayment: FC<Props> = ({ amount, orderId, currency }) => {
           <PaypalWrapper>
             <PaypalPayment
               orderId={orderId}
-              amount={amount}
+              amount={Number(amount)}
               currency={currency}
             />
           </PaypalWrapper>
