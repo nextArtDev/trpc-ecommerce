@@ -6,6 +6,7 @@ import { SearchProductsResult } from '@/lib/types/home'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FC, useState, useTransition } from 'react'
 import Pagination from './pagination'
+import { useTranslations } from 'next-intl'
 
 interface BookmarkedPageClientProps {
   products: SearchProductsResult
@@ -20,6 +21,7 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
   const [loadingPage, setLoadingPage] = useState<number | null>(null)
+  const t = useTranslations('user.bookmarks')
 
   const handlePageChange = (page: number) => {
     if (page === currentPage || page < 1 || page > products.pagination.pages) {
@@ -50,7 +52,7 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
   return (
     <div className="relative min-h-screen pt-16 overflow-x-hidden">
       <h1 className="text-xl lg:text-3xl font-bold text-center pb-8">
-        لیست علاقه‌مندی‌ها
+        {t('title')}
       </h1>
       <div className="container mx-auto px-4">
         {/* Product Grid */}
@@ -59,9 +61,7 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
         {/* No products message */}
         {products.products.length === 0 && !isLoading && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              هیچ محصولی در لیست علاقه‌مندی‌های شما یافت نشد.
-            </p>
+            <p className="text-muted-foreground">{t('noBookmarks')}</p>
           </div>
         )}
 
@@ -86,7 +86,7 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
               disabled={isLoading}
               className="w-full max-w-sm"
             >
-              {isLoading ? 'در حال بارگذاری...' : 'مشاهده بیشتر'}
+              {isLoading ? t('loading') : t('loadMore')}
             </Button>
           </div>
         )}
@@ -103,12 +103,14 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
                 disabled={!products.pagination.hasPrev || isLoading}
                 className="flex-1 max-w-[120px]"
               >
-                قبلی
+                {t('previous')}
               </Button>
 
               <span className="text-sm text-muted-foreground px-4">
-                صفحه {products.pagination.current} از{' '}
-                {products.pagination.pages}
+                {t('pageInfo', {
+                  current: products.pagination.current,
+                  total: products.pagination.pages,
+                })}
               </span>
 
               <Button
@@ -119,7 +121,7 @@ const BookmarkedPageClient: FC<BookmarkedPageClientProps> = ({
                 disabled={!products.pagination.hasNext || isLoading}
                 className="flex-1 max-w-[120px]"
               >
-                بعدی
+                {t('next')}
               </Button>
             </div>
           </div>

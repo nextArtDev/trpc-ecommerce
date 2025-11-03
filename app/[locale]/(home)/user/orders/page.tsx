@@ -1,6 +1,5 @@
-import { format } from 'date-fns-jalali'
-// import { getAllOrders } from '../../lib/queries'
-// import { DataTable } from '../../components/shared/DataTable'
+import { format as IranianFormat } from 'date-fns-jalali'
+import { format as InternationalFormat } from 'date-fns'
 // import { columns, OrderTypeColumn } from './components/columns'
 
 import { Separator } from '@/components/ui/separator'
@@ -19,6 +18,7 @@ import { columns, OrderTypeColumn } from './components/columns'
 import { getMyOrders } from '@/lib/home/queries/order'
 import { notFound } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth-helpers'
+import { getTranslations } from 'next-intl/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,18 +46,24 @@ function OrdersDataTable({
 }
 
 async function AdminOrdersPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>
   searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
   const user = await getCurrentUser()
+  const t = await getTranslations('user.orders')
+  const locale = (await params).locale
 
   if (!user) {
     notFound()
   }
-  const params = await searchParams
-  const page = params.page ? +params.page : 1
-  const pageSize = params.pageSize ? +params.pageSize : 50
+  const searchParamsPromise = await searchParams
+  const page = searchParamsPromise.page ? +searchParamsPromise.page : 1
+  const pageSize = searchParamsPromise.pageSize
+    ? +searchParamsPromise.pageSize
+    : 50
 
   const orders = await getMyOrders({ page, pageSize, userId: user.id })
   // console.log(orders.order?.map((t) => t.shippingAddressId))
@@ -75,14 +81,18 @@ async function AdminOrdersPage({
     total: item.total || undefined,
     items: item.items as OrderItem[],
     shippingFees: item.shippingFees,
-    paidAt: item?.paidAt ? format(item.paidAt, 'dd MMMM yyyy HH:mm:ss') : null,
+    paidAt: item?.paidAt
+      ? locale === 'fa'
+        ? IranianFormat(item.paidAt, 'dd MMMM yyyy HH:mm:ss')
+        : InternationalFormat(item.paidAt, 'dd MMMM yyyy HH:mm:ss')
+      : null,
   }))
 
   return (
     <div className="flex-col w-full  max-w-5xl mx-auto">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading
-          title={`سفارشات شما (${formattedOrders?.length})`}
+          title={t('title', { count: formattedOrders?.length })}
           description=""
         />
 

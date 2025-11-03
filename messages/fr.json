@@ -330,6 +330,53 @@
       "description": "Payer en toute sécurité avec votre carte de crédit"
     }
   },
+  "user": {
+    "title": "Compte Utilisateur",
+    "nav": {
+      "profile": "Profil",
+      "orders": "Commandes",
+      "bookmarks": "Signets"
+    },
+    "profile": {
+      "title": "Profil",
+      "name": "Nom Complet",
+      "phoneNumber": "Numéro de Téléphone",
+      "save": "Enregistrer",
+      "saving": "Enregistrement..."
+    },
+    "orders": {
+      "title": "Vos Commandes ({count})",
+      "transactionId": "ID de Transaction",
+      "payment": "Paiement",
+      "shippingStatus": "Statut de Livraison",
+      "total": "Total",
+      "orderDetails": "Détails de la Commande",
+      "paymentTime": "Heure de Paiement",
+      "address": "Adresse",
+      "customer": "Client",
+      "sku": "SKU du Produit",
+      "size": "Taille",
+      "quantity": "Quantité",
+      "price": "Prix",
+      "shippingFee": "Frais de Livraison"
+    },
+    "bookmarks": {
+      "title": "Signets",
+      "noBookmarks": "Aucun produit trouvé dans vos signets.",
+      "loading": "Chargement...",
+      "loadMore": "Charger Plus",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pageInfo": "Page {current} sur {total}",
+      "firstPage": "Première Page",
+      "previousPage": "Page Précédente",
+      "nextPage": "Page Suivante",
+      "lastPage": "Dernière Page",
+      "page": "Page",
+      "errorTitle": "Erreur de Chargement",
+      "errorMessage": "Une erreur s'est produite lors du chargement des résultats de recherche. Veuillez réessayer."
+    }
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

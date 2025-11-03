@@ -330,6 +330,53 @@
       "description": "Paga in modo sicuro con la tua carta di credito"
     }
   },
+  "user": {
+    "title": "Account Utente",
+    "nav": {
+      "profile": "Profilo",
+      "orders": "Ordini",
+      "bookmarks": "Segnalibri"
+    },
+    "profile": {
+      "title": "Profilo",
+      "name": "Nome Completo",
+      "phoneNumber": "Numero di Telefono",
+      "save": "Salva",
+      "saving": "Salvataggio..."
+    },
+    "orders": {
+      "title": "I Tuoi Ordini ({count})",
+      "transactionId": "ID Transazione",
+      "payment": "Pagamento",
+      "shippingStatus": "Stato Spedizione",
+      "total": "Totale",
+      "orderDetails": "Dettagli Ordine",
+      "paymentTime": "Ora Pagamento",
+      "address": "Indirizzo",
+      "customer": "Cliente",
+      "sku": "SKU Prodotto",
+      "size": "Taglia",
+      "quantity": "Quantità",
+      "price": "Prezzo",
+      "shippingFee": "Costo Spedizione"
+    },
+    "bookmarks": {
+      "title": "Segnalibri",
+      "noBookmarks": "Nessun prodotto trovato nei tuoi segnalibri.",
+      "loading": "Caricamento...",
+      "loadMore": "Carica Altro",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "pageInfo": "Pagina {current} di {total}",
+      "firstPage": "Prima Pagina",
+      "previousPage": "Pagina Precedente",
+      "nextPage": "Pagina Successiva",
+      "lastPage": "Ultima Pagina",
+      "page": "Pagina",
+      "errorTitle": "Errore di Caricamento",
+      "errorMessage": "Si è verificato un errore durante il caricamento dei risultati di ricerca. Riprova."
+    }
+  },
   "metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",

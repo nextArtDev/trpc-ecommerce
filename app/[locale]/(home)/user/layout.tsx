@@ -1,12 +1,14 @@
-// import Image from 'next/image'
-// import Link from 'next/link'
-
+import { Metadata } from 'next'
 import MainNav from './components/main-nav'
-// import Menu from './components/menu'
 import ModalProvider from '@/providers/modal-provider'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata = {
-  title: 'حساب کاربری',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('user')
+
+  return {
+    title: t('title'),
+  }
 }
 
 export default function UserLayout({
@@ -30,9 +32,6 @@ export default function UserLayout({
               </Link>
             </article> */}
             <MainNav className="mx-2" />
-            {/* <div className="  items-center flex space-x-4">
-              <Menu />
-            </div> */}
           </div>
         </div>
 

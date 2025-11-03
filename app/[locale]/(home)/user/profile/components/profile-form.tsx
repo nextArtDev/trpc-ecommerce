@@ -1,6 +1,4 @@
 'use client'
-// import { updateProfile } from '@/app/(home)/lib/actions/user.action'
-// import { updateProfileSchema } from '@/app/(home)/lib/validators/home'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -15,6 +13,7 @@ import { updateProfile } from '@/lib/home/actions/user'
 import { updateProfileSchema } from '@/lib/home/schemas'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslations } from 'next-intl'
 
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -28,6 +27,7 @@ type Props = {
 }
 const ProfileForm = ({ initialData }: Props) => {
   const { data: session } = authClient.useSession()
+  const t = useTranslations('user.profile')
 
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
@@ -67,7 +67,7 @@ const ProfileForm = ({ initialData }: Props) => {
                 <FormControl>
                   <Input
                     disabled
-                    placeholder="شماره موبایل"
+                    placeholder={t('phoneNumber')}
                     className="input-field text-right"
                     {...field}
                     dir="ltr"
@@ -85,7 +85,7 @@ const ProfileForm = ({ initialData }: Props) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder="نام و نام‌خانوادگی"
+                    placeholder={t('name')}
                     className="input-field"
                     {...field}
                     defaultValue={session?.user.name ?? ''}
@@ -102,7 +102,7 @@ const ProfileForm = ({ initialData }: Props) => {
           className="button col-span-2 w-full my-12"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? 'درحال تایید' : 'ویرایش'}
+          {form.formState.isSubmitting ? t('saving') : t('save')}
         </Button>
       </form>
     </Form>

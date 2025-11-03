@@ -1,15 +1,9 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-
 import { Expand } from 'lucide-react'
 import { useModal } from '@/providers/modal-provider'
 import { OrderStatus, PaymentStatus } from '@/lib/types/home'
-
-// import OrderStatusSelect from './order-status-select'
-// import StoreOrderSummary from './store-order-summary'
-// import CustomModal from '../../../components/custom-modal'
-// import PaymentStatusTag from './payment-status'
 import {
   City,
   OrderItem,
@@ -21,6 +15,7 @@ import CustomModal from '@/app/(dashboard)/dashboard/components/custom-modal'
 import PaymentStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/components/payment-status'
 import StoreOrderSummary from './store-order-summary'
 import OrderStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/components/order-status'
+import { useTranslations } from 'next-intl'
 
 export type OrderTypeColumn = {
   transactionId: string
@@ -35,42 +30,22 @@ export type OrderTypeColumn = {
   shippingFees: number | null
   total: number | undefined
   paidAt: string | null
-  // name: string | null
-  // isPending: boolean
-  // description: string | null
+}
+
+const ColumnHeader: React.FC<{ id: string }> = ({ id }) => {
+  const t = useTranslations('user.orders')
+  return <span>{t(id)}</span>
 }
 
 export const columns: ColumnDef<OrderTypeColumn>[] = [
   {
     accessorKey: 'transactionId',
-    header: 'کد رهگیری',
+    header: () => <ColumnHeader id="transactionId" />,
     cell: ({ row }) => <span>{row.original.transactionId}</span>,
   },
-  // {
-  //   accessorKey: 'products',
-  //   header: 'محصولات',
-  //   cell: ({ row }) => {
-  //     const images = row.original.items.map((product) => product.image)
-  //     return (
-  //       <div className="flex flex-wrap gap-1">
-  //         {images.map((img, i) => (
-  //           <Image
-  //             key={`${img}-${i}`}
-  //             src={img}
-  //             alt=""
-  //             width={100}
-  //             height={100}
-  //             className="w-7 h-7 object-cover rounded-full"
-  //             style={{ transform: `translateX(-${i * 15}px)` }}
-  //           />
-  //         ))}
-  //       </div>
-  //     )
-  //   },
-  // },
   {
     accessorKey: 'paymentStatus',
-    header: 'پرداخت',
+    header: () => <ColumnHeader id="payment" />,
     cell: ({ row }) => {
       return (
         <PaymentStatusTag
@@ -82,30 +57,20 @@ export const columns: ColumnDef<OrderTypeColumn>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'وضعیت ارسال',
+    header: () => <ColumnHeader id="shippingStatus" />,
     cell: ({ row }) => {
       return (
         <div className="">
-          {/* <OrderStatusSelect
-            orderId={row.original.id}
-            status={row.original.orderStatus as OrderStatus}
-          /> */}
-
-          <OrderStatusTag
-            status={row.original.orderStatus as OrderStatus}
-            // isTable
-          />
-
-          {/* {row.original.orderStatus} */}
+          <OrderStatusTag status={row.original.orderStatus as OrderStatus} />
         </div>
       )
     },
   },
   {
     accessorKey: 'total',
-    header: 'مجموع',
+    header: () => <ColumnHeader id="total" />,
     cell: ({ row }) => {
-      return <span> {row.original.total}</span>
+      return <span>{row.original.total}</span>
     },
   },
   {
@@ -116,27 +81,27 @@ export const columns: ColumnDef<OrderTypeColumn>[] = [
     },
   },
 ]
-
 interface ViewOrderButtonProps {
   order: OrderTypeColumn
 }
 
 const ViewOrderButton: React.FC<ViewOrderButtonProps> = ({ order }) => {
   const { setOpen } = useModal()
+  const t = useTranslations('user.orders')
 
   return (
     <Button
       variant={'secondary'}
       onClick={() => {
         setOpen(
-          <CustomModal maxWidth="!max-w-3xl" heading="جزئیات سفارشات">
+          <CustomModal maxWidth="!max-w-3xl" heading={t('orderDetails')}>
             <StoreOrderSummary order={order} />
           </CustomModal>
         )
       }}
     >
-      <span className="w-7 h-7 rounded-full  grid place-items-center">
-        <Expand className="w-5 " />
+      <span className="w-7 h-7 rounded-full grid place-items-center">
+        <Expand className="w-5" />
       </span>
     </Button>
   )

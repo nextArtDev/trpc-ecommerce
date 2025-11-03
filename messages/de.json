@@ -331,6 +331,53 @@
       "description": "Sicher mit Ihrer Kreditkarte bezahlen"
     }
   },
+  "user": {
+    "title": "Benutzerkonto",
+    "nav": {
+      "profile": "Profil",
+      "orders": "Bestellungen",
+      "bookmarks": "Lesezeichen"
+    },
+    "profile": {
+      "title": "Profil",
+      "name": "Vollständiger Name",
+      "phoneNumber": "Telefonnummer",
+      "save": "Speichern",
+      "saving": "Speichern..."
+    },
+    "orders": {
+      "title": "Ihre Bestellungen ({count})",
+      "transactionId": "Transaktions-ID",
+      "payment": "Zahlung",
+      "shippingStatus": "Versandstatus",
+      "total": "Gesamt",
+      "orderDetails": "Bestelldetails",
+      "paymentTime": "Zahlungszeit",
+      "address": "Adresse",
+      "customer": "Kunde",
+      "sku": "Produkt-SKU",
+      "size": "Größe",
+      "quantity": "Menge",
+      "price": "Preis",
+      "shippingFee": "Versandkosten"
+    },
+    "bookmarks": {
+      "title": "Lesezeichen",
+      "noBookmarks": "Keine Produkte in Ihren Lesezeichen gefunden.",
+      "loading": "Wird geladen...",
+      "loadMore": "Mehr laden",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pageInfo": "Seite {current} von {total}",
+      "firstPage": "Erste Seite",
+      "previousPage": "Vorherige Seite",
+      "nextPage": "Nächste Seite",
+      "lastPage": "Letzte Seite",
+      "page": "Seite",
+      "errorTitle": "Ladefehler",
+      "errorMessage": "Beim Laden der Suchergebnisse ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",

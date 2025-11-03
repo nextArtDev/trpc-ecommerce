@@ -1,3 +1,4 @@
+// app/[locale]/(user)/bookmarks/components/pagination.tsx
 import { Button } from '@/components/ui/button'
 import { SearchPagination } from '@/lib/types/home'
 import {
@@ -7,6 +8,7 @@ import {
   ChevronsRight,
   Loader2,
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface PaginationProps {
   pagination: SearchPagination
@@ -21,6 +23,8 @@ export default function Pagination({
   loading = false,
   loadingPage = null,
 }: PaginationProps) {
+  const t = useTranslations('user.bookmarks')
+
   if (pagination.pages <= 1) return null
 
   const getPageNumbers = () => {
@@ -74,7 +78,7 @@ export default function Pagination({
         onClick={() => onPageChange(1)}
         disabled={pagination.current === 1 || loading}
         className="hidden sm:flex"
-        title="صفحه اول"
+        title={t('firstPage')}
       >
         <ChevronsRight className="w-4 h-4" />
       </Button>
@@ -85,10 +89,10 @@ export default function Pagination({
         size="sm"
         onClick={() => onPageChange(pagination.current - 1)}
         disabled={!pagination.hasPrev || loading}
-        title="صفحه قبل"
+        title={t('previousPage')}
       >
         <ChevronRight className="w-4 h-4" />
-        <span className="hidden sm:inline mr-1">قبلی</span>
+        <span className="hidden sm:inline mr-1">{t('previous')}</span>
       </Button>
 
       {/* Page Numbers */}
@@ -106,7 +110,7 @@ export default function Pagination({
               onClick={() => isNumber && onPageChange(page)}
               disabled={!isNumber || loading || pageIsLoading}
               className="min-w-10 relative"
-              title={isNumber ? `صفحه ${page}` : ''}
+              title={isNumber ? `${t('page')} ${page}` : ''}
             >
               {pageIsLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -124,9 +128,9 @@ export default function Pagination({
         size="sm"
         onClick={() => onPageChange(pagination.current + 1)}
         disabled={!pagination.hasNext || loading}
-        title="صفحه بعد"
+        title={t('nextPage')}
       >
-        <span className="hidden sm:inline ml-1">بعدی</span>
+        <span className="hidden sm:inline ml-1">{t('next')}</span>
         <ChevronLeft className="w-4 h-4" />
       </Button>
 
@@ -137,7 +141,7 @@ export default function Pagination({
         onClick={() => onPageChange(pagination.pages)}
         disabled={pagination.current === pagination.pages || loading}
         className="hidden sm:flex"
-        title="صفحه آخر"
+        title={t('lastPage')}
       >
         <ChevronsLeft className="w-4 h-4" />
       </Button>

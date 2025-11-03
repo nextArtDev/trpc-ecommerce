@@ -330,6 +330,53 @@
       "description": "Pay securely with your credit card"
     }
   },
+  "user": {
+    "title": "User Account",
+    "nav": {
+      "profile": "Profile",
+      "orders": "Orders",
+      "bookmarks": "Bookmarks"
+    },
+    "profile": {
+      "title": "Profile",
+      "name": "Full Name",
+      "phoneNumber": "Phone Number",
+      "save": "Save",
+      "saving": "Saving..."
+    },
+    "orders": {
+      "title": "Your Orders ({count})",
+      "transactionId": "Transaction ID",
+      "payment": "Payment",
+      "shippingStatus": "Shipping Status",
+      "total": "Total",
+      "orderDetails": "Order Details",
+      "paymentTime": "Payment Time",
+      "address": "Address",
+      "customer": "Customer",
+      "sku": "Product SKU",
+      "size": "Size",
+      "quantity": "Quantity",
+      "price": "Price",
+      "shippingFee": "Shipping Fee"
+    },
+    "bookmarks": {
+      "title": "Bookmarks",
+      "noBookmarks": "No products found in your bookmarks.",
+      "loading": "Loading...",
+      "loadMore": "Load More",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {current} of {total}",
+      "firstPage": "First Page",
+      "previousPage": "Previous Page",
+      "nextPage": "Next Page",
+      "lastPage": "Last Page",
+      "page": "Page",
+      "errorTitle": "Loading Error",
+      "errorMessage": "An error occurred while loading search results. Please try again."
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",

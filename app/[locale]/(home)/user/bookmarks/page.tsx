@@ -3,6 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { userBookmarkedProducts } from '@/lib/home/queries/products'
 import React, { Suspense } from 'react'
 import BookmarkedPageClient from './components/BookmarkedPageClient'
+import { getTranslations } from 'next-intl/server'
 
 interface PageProps {
   searchParams: Promise<{
@@ -13,6 +14,7 @@ interface PageProps {
 const BookmarkedPageContent = async ({ searchParams }: PageProps) => {
   const resolvedSearchParams = await searchParams
   const page = resolvedSearchParams.page
+  const t = await getTranslations('user.bookmarks')
 
   try {
     const products = await userBookmarkedProducts({
@@ -27,23 +29,17 @@ const BookmarkedPageContent = async ({ searchParams }: PageProps) => {
     )
   } catch (error) {
     console.error('Search page error:', error)
-    return <PageResultError />
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <div className="text-lg font-medium mb-2">{t('errorTitle')}</div>
+            <div className="text-muted-foreground">{t('errorMessage')}</div>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
-}
-
-function PageResultError() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Card>
-        <CardContent className="py-12 text-center">
-          <div className="text-lg font-medium mb-2">خطا در بارگذاری</div>
-          <div className="text-muted-foreground">
-            مشکلی در بارگذاری نتایج جستجو رخ داده است. لطفاً دوباره تلاش کنید.
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
 }
 
 function SearchPageSkeleton() {
