@@ -246,6 +246,11 @@
       "general": "مشکلی پیش آمده، لطفا دوباره امتحان کنید!"
     }
   },
+  "checkout": {
+    "step1": "عضویت",
+    "step2": "آدرس ارسال",
+    "step3": "ثبت سفارش"
+  },
   "placeOrder": {
     "title": "تایید سفارش",
     "shippingAddress": "آدرس ارسال",
@@ -259,10 +264,16 @@
     "edit": "ویرایش",
     "invalidCart": "سبد خرید معتبر نیست",
     "backToCart": "برگشت به سبد خرید",
-    "confirm": "تایید سفارش"
+    "confirm": "تایید سفارش",
+     "paymentMethod": "روش پرداخت",
+    "zarinpalPayment": "پرداخت از طریق زرین‌پال",
+    "paypalPayment": "پرداخت از طریق پی‌پال",
+    "paymentVia": "پرداخت از طریق {gateway}"
+    
   },
   "order": {
     "title": "جزئیات سفارش",
+    "currencyInfo": "واحد پولی سفارش",
     "paymentStatus": {
       "title": "وضعیت پرداخت",
       "paid": "پرداخت شده",

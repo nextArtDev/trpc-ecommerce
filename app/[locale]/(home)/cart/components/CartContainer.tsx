@@ -17,7 +17,7 @@ function CartContainer({ locale }: { locale?: string }) {
   const { validateAndUpdatePrices } = useCartStore()
 
   const t = useTranslations('cart')
-  console.log({ cartItems })
+  // console.log({ cartItems })
   useEffect(() => {
     validateAndUpdatePrices()
     // eslint-disable-next-line react-hooks/exhaustive-deps

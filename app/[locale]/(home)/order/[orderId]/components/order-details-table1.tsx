@@ -242,7 +242,7 @@ const PaymentStatusCard = ({
             )}
           </div>
         ) : (
-          <Badge variant="destructive">{t('payment.unpaid')}</Badge>
+          <Badge variant="destructive">{t('paymentStatus.unpaid')}</Badge>
         )}
       </CardContent>
     </Card>
@@ -398,7 +398,8 @@ const OrderSummaryCard = ({
           })
         }
       >
-        {isPending ? t('actions.loading') : t('actions.markAsPaid')}
+        {/* {isPending ? t('actions.loading') : t('actions.markAsPaid')} */}
+        {isPending ? t('actions.loading') : 'تغییر به پرداخت شده'}
       </Button>
     )
   }
@@ -431,7 +432,7 @@ const OrderSummaryCard = ({
           })
         }
       >
-        {isPending ? t('actions.loading') : t('actions.markAsDelivered')}
+        {isPending ? t('actions.loading') : 'تغییر به تحویل شده'}
       </Button>
     )
   }
@@ -497,7 +498,7 @@ const OrderSummaryCard = ({
                 >
                   {isPending
                     ? t('payment.processing')
-                    : t('payment.payWithZarinpal')}
+                    : t('paymentStatus.zarinpalPayment')}
                 </Button>
               </form>
             ) : (

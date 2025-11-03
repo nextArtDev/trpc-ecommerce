@@ -249,6 +249,11 @@
       "general": "An error occurred, please try again!"
     }
   },
+  "checkout": {
+    "step1": "Sign In",
+    "step2": "Shipping Address",
+    "step3": "Place Order"
+  },
     "placeOrder": {
     "title": "Place Order",
     "shippingAddress": "Shipping Address",
@@ -262,10 +267,15 @@
     "edit": "Edit",
     "invalidCart": "Invalid Cart",
     "backToCart": "Back to Cart",
-    "confirm": "Confirm Order"
+    "confirm": "Confirm Order",
+     "paymentMethod": "Payment Method",
+    "zarinpalPayment": "Payment via Zarinpal",
+    "paypalPayment": "Payment via PayPal",
+    "paymentVia": "Payment via {gateway}"
   },
   "order": {
     "title": "Order Details",
+     "currencyInfo": "Order Currency",
     "paymentStatus": {
       "title": "Payment Status",
       "paid": "Paid",

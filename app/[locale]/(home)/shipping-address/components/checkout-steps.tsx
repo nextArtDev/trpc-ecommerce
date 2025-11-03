@@ -1,14 +1,25 @@
+'use client'
+
 import React from 'react'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react' // Using an icon for completed steps
+import { useTranslations } from 'next-intl'
 
 const CheckoutSteps = ({ current = 0 }) => {
-  const steps = ['عضویت', 'آدرس ارسال', 'ثبت سفارش']
+  // 2. GET THE TRANSLATION FUNCTION FOR THE 'checkout' NAMESPACE
+  const t = useTranslations('checkout')
+
+  // 3. DEFINE THE KEYS FOR YOUR STEPS
+  const stepKeys = ['step1', 'step2', 'step3'] as const
+
+  // 4. MAP OVER THE KEYS TO GET THE TRANSLATED TEXT
+  const steps = stepKeys.map((key) => t(key))
 
   return (
     <div className="flex w-full items-start max-w-xl mx-auto py-4">
       {steps.map((step, index) => (
-        <React.Fragment key={step}>
+        // 5. USE THE ORIGINAL KEY FOR THE FRAGMENT KEY TO AVOID ISSUES
+        <React.Fragment key={stepKeys[index]}>
           {/* Step Item: Circle + Label */}
           <div
             className="flex flex-col items-center gap-2"

@@ -249,6 +249,11 @@
       "general": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut!"
     }
   },
+  "checkout": {
+    "step1": "Anmelden",
+    "step2": "Lieferadresse",
+    "step3": "Bestellung Aufgeben"
+  },
   "placeOrder": {
     "title": "Bestellung aufgeben",
     "shippingAddress": "Lieferadresse",
@@ -262,16 +267,22 @@
     "edit": "Bearbeiten",
     "invalidCart": "Ungültiger Warenkorb",
     "backToCart": "Zurück zum Warenkorb",
-    "confirm": "Bestellung bestätigen"
+    "confirm": "Bestellung bestätigen",
+    "paymentVia": "Zahlung via {gateway}"
   },
   "order": {
     "title": "Bestelldetails",
+    "currencyInfo": "Bestellungswährung",
     "paymentStatus": {
       "title": "Zahlungsstatus",
       "paid": "Bezahlt",
       "unpaid": "Nicht bezahlt",
       "paidAt": "Bezahlt am {date}",
-      "transactionId": "Transaktions-ID: "
+      "transactionId": "Transaktions-ID: ",
+      "paymentMethod": "Zahlungsmethode",
+    "zarinpalPayment": "Zahlung via Zarinpal",
+    "paypalPayment": "Zahlung via PayPal" 
+    
     },
     "shippingAddress": {
       "title": "Lieferadresse",
