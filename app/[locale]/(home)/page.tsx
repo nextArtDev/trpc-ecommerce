@@ -345,13 +345,13 @@ export default async function Home() {
       </div>
       {!!bestSellers && <BestSellers items={bestSellers} />}
       {!!products && <Newest items={products} />}
-      <section className="py-8">
+      <section className="py-16">
         <WorkVideo />
       </section>
-      <section className=" ">
+      <section className="py-16 ">
         <Commitments />
       </section>
-      <section className="w-full h-full">
+      <section className="w-full h-full pt-16">
         <DiscoverMoreCarousel subCategories={subCategories} />
       </section>
 

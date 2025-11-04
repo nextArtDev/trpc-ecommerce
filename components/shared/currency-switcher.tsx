@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { Check, ChevronDown, AlertTriangle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Check, DollarSign, Loader2, AlertTriangle } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuLabel,
+  // DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
@@ -16,20 +16,20 @@ import { useCurrencyStore } from '@/hooks/useCurrencyStore'
 import { useCartStore } from '@/hooks/useCartStore'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-
-interface CurrencySelectorProps {
+import { motion } from 'framer-motion'
+interface CurrencySwitcherProps {
   className?: string
-  showLabels?: boolean
   variant?: 'default' | 'compact' | 'icon'
 }
 
-export function CurrencySelector({
+export default function CurrencySwitcher({
   className,
-  showLabels = true,
   variant = 'default',
-}: CurrencySelectorProps) {
+}: CurrencySwitcherProps) {
   const { currentCurrency, setCurrency } = useCurrencyStore()
   const { getLockedCurrency } = useCartStore()
+  const [isPending, setIsPending] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const t = useTranslations('currency')
 
@@ -37,100 +37,94 @@ export function CurrencySelector({
   const isLocked = !!lockedCurrency
   const current = CURRENCY_INFO[currentCurrency]
 
-  const handleSelect = (currency: Currency) => {
-    if (isLocked) {
-      // Don't allow changing if currency is locked
-      return
-    }
+  // Ensure component is mounted before accessing localStorage
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleCurrencyChange = (currency: Currency) => {
+    if (currency === currentCurrency || isLocked) return
+
+    setIsPending(true)
     setCurrency(currency)
-    setIsOpen(false)
+
+    // Simulate a brief loading state for better UX
+    setTimeout(() => {
+      setIsPending(false)
+      setIsOpen(false)
+    }, 300)
   }
 
   const currencies = Object.values(CURRENCY_INFO)
 
-  // Shared dropdown content
-  const DropdownContent = (
-    <DropdownMenuContent
-      align="end"
-      className={cn(
-        'w-fit px-1',
-        'max-h-[70vh] overflow-y-auto',
-        'border rounded-lg shadow-lg'
-      )}
-    >
-      {isLocked && (
-        <>
-          <div className="px-2 py-1.5 text-xs font-semibold text-amber-600 bg-amber-50 rounded-md flex items-center gap-2">
-            <AlertTriangle className="h-3.5 w-3.5" />
-            {t('locked', { currency: lockedCurrency })}
-          </div>
-          <DropdownMenuSeparator />
-        </>
-      )}
-      <DropdownMenuLabel className="px-0.5 py-1.5 text-xs font-semibold text-muted-foreground">
-        {isLocked ? t('changeWarning') : 'Select Currency'}
-      </DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      {currencies.map((currency) => (
-        <DropdownMenuItem
-          key={currency.code}
-          onSelect={() => handleSelect(currency.code)}
-          disabled={isLocked && currency.code !== currentCurrency}
-          className={cn(
-            'w-fit flex items-center justify-between gap-3 px-0.5 py-2.5 rounded-md cursor-pointer',
-            'text-sm transition-colors',
-            currentCurrency === currency.code && 'bg-accent',
-            isLocked &&
-              currency.code !== currentCurrency &&
-              'opacity-50 cursor-not-allowed'
-          )}
-        >
-          <div className="w-full flex items-center text-center justify-center   gap-2.5 min-w-0">
-            <span className="text-lg font-medium">{currency.symbol}</span>
-            {showLabels && (
-              <div className="flex flex-col min-w-0">
-                <span className="font-medium truncate">{currency.name}</span>
-                {/* <span className="text-xs text-muted-foreground">
-                  {currency.code}
-                </span> */}
-              </div>
-            )}
-          </div>
-          {currentCurrency === currency.code && (
-            <Check className="h-4 w-4 text-primary shrink-0" />
-          )}
-        </DropdownMenuItem>
-      ))}
-    </DropdownMenuContent>
-  )
+  if (!mounted) {
+    // Return a placeholder to avoid hydration mismatch
+    return (
+      <Button variant="outline" size="sm" disabled>
+        <DollarSign className="h-4 w-4 mr-2" />
+        <Loader2 className="animate-spin" />
+      </Button>
+    )
+  }
 
-  // === ICON VARIANT (Ultra compact) ===
+  // === ICON VARIANT ===
   if (variant === 'icon') {
     return (
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
+            disabled={isPending}
             className={cn(
-              'h-9 w-9 p-0 relative',
-              isLocked && 'text-amber-600',
+              'flex items-center justify-center px-1',
+              isLocked && 'border-amber-300 text-amber-600',
               className
             )}
-            aria-label={`Current currency: ${current.name}`}
           >
-            <span className="text-base font-bold">{current.symbol}</span>
+            <DollarSign className="h-4 w-4" />
             {isLocked && (
               <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
             )}
           </Button>
         </DropdownMenuTrigger>
-        {DropdownContent}
+        <DropdownMenuContent align="end">
+          {isLocked && (
+            <>
+              <div className="px-2 py-1.5 text-xs font-semibold text-amber-600 bg-amber-50 rounded-md flex items-center gap-2">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                {t('locked', { currency: lockedCurrency })}
+              </div>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          {currencies.map((currency) => (
+            <DropdownMenuItem
+              key={currency.code}
+              onClick={() => handleCurrencyChange(currency.code)}
+              disabled={isLocked && currency.code !== currentCurrency}
+              className={cn(
+                currentCurrency === currency.code ? 'bg-accent' : '',
+                isLocked &&
+                  currency.code !== currentCurrency &&
+                  'opacity-50 cursor-not-allowed'
+              )}
+            >
+              <span className="mr-2 text-lg font-medium">
+                {currency.symbol}
+              </span>
+              <span className="mr-auto">{currency.name}</span>
+              {currentCurrency === currency.code && (
+                <Check className="ml-auto h-4 w-4" />
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
       </DropdownMenu>
     )
   }
 
-  // === COMPACT VARIANT (Mobile-friendly badge style) ===
+  // === COMPACT VARIANT ===
   if (variant === 'compact') {
     return (
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -138,55 +132,123 @@ export function CurrencySelector({
           <Button
             variant="outline"
             size="sm"
+            disabled={isPending}
             className={cn(
-              'h-fit py-0.5 text-center px-2.5 text-sm font-medium relative',
+              'flex items-center justify-center px-2 py-0.5',
               isLocked && 'border-amber-300 text-amber-600',
               className
             )}
           >
-            <span className="flex items-center gap-1.5">
-              <span>{current.symbol}</span>
-              <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-            </span>
+            <DollarSign className="h-4 w-4 mr-1" />
+            <span className="text-base font-bold">{current.symbol}</span>
             {isLocked && (
               <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
             )}
           </Button>
         </DropdownMenuTrigger>
-        {DropdownContent}
+        <DropdownMenuContent align="end">
+          {isLocked && (
+            <>
+              <div className="px-2 py-1.5 text-xs font-semibold text-amber-600 bg-amber-50 rounded-md flex items-center gap-2">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                {t('locked', { currency: lockedCurrency })}
+              </div>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          {currencies.map((currency) => (
+            <DropdownMenuItem
+              key={currency.code}
+              onClick={() => handleCurrencyChange(currency.code)}
+              disabled={isLocked && currency.code !== currentCurrency}
+              className={cn(
+                currentCurrency === currency.code ? 'bg-accent' : '',
+                isLocked &&
+                  currency.code !== currentCurrency &&
+                  'opacity-50 cursor-not-allowed'
+              )}
+            >
+              <span className="mr-2 text-lg font-medium">
+                {currency.symbol}
+              </span>
+              <span className="mr-auto">{currency.name}</span>
+              {currentCurrency === currency.code && (
+                <Check className="ml-auto h-4 w-4" />
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
       </DropdownMenu>
     )
   }
 
-  // === DEFAULT VARIANT (Full with label, responsive) ===
+  // === DEFAULT VARIANT ===
   return (
-    <div className={cn('flex items-center gap-2 px-1', className)}>
-      {/* <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
-        Currency:
-      </span> */}
-
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenuTrigger asChild>
+        <button
+          disabled={isPending}
+          className={cn(
+            'relative w-12 h-12 flex items-center justify-center ',
+            isLocked && 'border-amber-300 text-amber-600',
+            className
+          )}
+        >
+          {/* <DollarSign className="h-4 w-4" /> */}
+          <motion.svg
+            whileInView={{ rotate: '360deg' }}
+            transition={{
+              duration: 1.5,
+              delay: 1.5,
+              ease: [0, 0.71, 0.2, 1.01],
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            style={{
+              fill: !isLocked ? '#f7a944' : '#58575745',
+            }}
+          >
+            <g data-name="Currency Circulating">
+              <path d="M321.159 256a67.468 67.468 0 1 0-67.468 67.472A67.468 67.468 0 0 0 321.159 256zM220.3 278.037l-.655-1.533 15.066-6.384.645 1.536c2.318 5.503 10.354 9.656 18.69 9.656 3.737 0 15.926-.681 15.926-9.417 0-4.551-5.22-7.288-16.422-8.618-12.033-1.343-30.234-3.378-30.234-22.69 0-11.804 8.784-20.06 23.584-22.284v-9.054h16.226v9.094c6.882 1.227 15.91 4.262 20.977 14.607l.748 1.526-13.872 6.417-.765-1.273c-2.31-3.817-9.376-6.923-15.763-6.923-5.413 0-14.49 1.024-14.49 7.89 0 5.091 6.544 6.275 15.096 7.295 13.575 1.673 32.166 3.964 32.166 24.013 0 14.687-11.857 22.45-24.093 23.871v10.317h-16.226v-9.825c-12.819-1.553-22.231-7.984-26.604-18.22z" />
+              <path d="m413.304 236.21-24.692 25.916a136.726 136.726 0 0 0-115.19-144.149 137.388 137.388 0 0 0-140.525 68.093l17.39 9.775a117.361 117.361 0 0 1 120.035-58.163 116.764 116.764 0 0 1 98.327 123.856l-24.817-23.651-15.196 15.933 35.588 33.899-.013.006 15.949 15.185 15.182-15.916v-.01l33.906-35.578zM241.68 374.318a116.766 116.766 0 0 1-98.326-123.856l24.818 23.654 15.195-15.937-35.587-33.899.013-.007-15.95-15.184-15.182 15.916v.01l-33.909 35.58 15.944 15.195 24.692-25.915a136.624 136.624 0 0 0 136.225 145.793 137.52 137.52 0 0 0 119.494-69.738l-17.39-9.775a117.362 117.362 0 0 1-120.036 58.163z" />
+            </g>
+          </motion.svg>
+          {/* <span className="ml-1 text-base font-bold">{current.symbol}</span> */}
+          {isLocked && (
+            <div className="absolute top-2.5 right-2.5 h-2 w-2 bg-amber-400 rounded-full" />
+          )}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {isLocked && (
+          <>
+            <div className="px-2 py-1.5 text-xs font-semibold text-amber-400 bg-amber-50 rounded-md flex items-center gap-2">
+              <AlertTriangle className="h-3.5 w-3.5" />
+              {t('locked', { currency: lockedCurrency })}
+            </div>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        {currencies.map((currency) => (
+          <DropdownMenuItem
+            key={currency.code}
+            onClick={() => handleCurrencyChange(currency.code)}
+            disabled={isLocked && currency.code !== currentCurrency}
             className={cn(
-              'w-full sm:w-auto justify-start sm:justify-between relative',
-              'h-fit py-0.5 px-3  font-normal text-center',
-              'max-w-[180px] sm:max-w-none',
-              isLocked && 'border-amber-300 text-amber-600'
+              currentCurrency === currency.code ? 'bg-accent' : '',
+              isLocked &&
+                currency.code !== currentCurrency &&
+                'opacity-50 cursor-not-allowed'
             )}
           >
-            <span className="flex items-center gap-2 truncate">
-              <span className="text-base font-bold">{current.symbol}</span>
-            </span>
-            <ChevronDown className="h-2 w-2 opacity-50 shrink-0" />
-            {isLocked && (
-              <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
+            <span className="mr-2 text-lg font-medium">{currency.symbol}</span>
+            <span className="mr-auto">{currency.name}</span>
+            {currentCurrency === currency.code && (
+              <Check className="ml-auto h-4 w-4" />
             )}
-          </Button>
-        </DropdownMenuTrigger>
-        {DropdownContent}
-      </DropdownMenu>
-    </div>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

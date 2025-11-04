@@ -1,51 +1,66 @@
+// components/shared/SignOutBtn.tsx
 'use client'
-import { Button, buttonVariants } from '@/components/ui/button'
+
+import { Button } from '@/components/ui/button'
+import { LogOut } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { authClient } from '@/lib/auth-client'
-import { signOutServerAction } from '@/lib/home/actions/user'
-import { type VariantProps } from 'class-variance-authority'
-import React, { FormEvent, useTransition } from 'react'
-import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
+import { Loader2 } from 'lucide-react'
 
-type ButtonVariant = VariantProps<typeof buttonVariants>['variant']
-
-const SignOutBtn = ({
-  className,
-  variant = 'ghost',
-}: {
+interface SignOutBtnProps {
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
   className?: string
-  variant?: ButtonVariant
-}) => {
+  children?: React.ReactNode
+}
+
+export default function SignOutBtn({
+  variant = 'default',
+  className = '',
+  children,
+}: SignOutBtnProps) {
   const [isPending, startTransition] = useTransition()
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
+  const router = useRouter()
+  const t = useTranslations('profile')
+
+  const handleSignOut = async () => {
     startTransition(async () => {
       await authClient.signOut({
         fetchOptions: {
-          onSuccess: async () => {
-            await signOutServerAction()
-          },
-          onError: () => {
-            toast.error('مشکلی پیش آمده، لطفا بعدا دوباره امتحان کنید!')
+          onSuccess: () => {
+            router.push('/')
           },
         },
       })
     })
   }
+
   return (
-    <article dir="rtl" className={className}>
-      <form onSubmit={handleSubmit}>
-        <input className="hidden" />
-        <Button
-          disabled={isPending}
-          variant={variant}
-          type="submit"
-          className="w-full text-right"
-        >
-          خروج
-        </Button>
-      </form>
-    </article>
+    <Button
+      variant={variant}
+      className={className}
+      onClick={handleSignOut}
+      disabled={isPending}
+    >
+      {isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <>
+          {children || (
+            <>
+              <LogOut className="h-4 w-4" />
+              <span>{t('signOut')}</span>
+            </>
+          )}
+        </>
+      )}
+    </Button>
   )
 }
-
-export default SignOutBtn

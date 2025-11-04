@@ -398,6 +398,17 @@
       "errorMessage": "Beim Laden der Suchergebnisse ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
     }
   },
+  "profile": {
+    "title": "Benutzerkonto",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "account": "Konto",
+    "nav": {
+      "profile": "Profil",
+      "orders": "Bestellungen",
+      "bookmarks": "Lesezeichen"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",

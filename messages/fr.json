@@ -397,6 +397,17 @@
       "errorMessage": "Une erreur s'est produite lors du chargement des résultats de recherche. Veuillez réessayer."
     }
   },
+  "profile": {
+    "title": "Compte Utilisateur",
+    "signIn": "Se Connecter",
+    "signOut": "Se Déconnecter",
+    "account": "Compte",
+    "nav": {
+      "profile": "Profil",
+      "orders": "Commandes",
+      "bookmarks": "Signets"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",

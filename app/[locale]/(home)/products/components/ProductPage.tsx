@@ -11,7 +11,7 @@ import ReviewList from './ReviewList'
 import RelatedProductCarousel from '@/components/product/related-products-carousel'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
+
 import FAQItem from '../../faq/components/FAQItem'
 import Countdown from './count-down'
 import ProductProperties from './ProductProperties'
@@ -23,6 +23,7 @@ import ProductDescription from './ProductDescription'
 import { ShareButton } from './share-button'
 import { useTranslations, useLocale } from 'next-intl'
 import { getName } from '@/lib/translation-utils'
+import { Link } from '@/i18n/navigation'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -96,7 +97,7 @@ const ProductPage: FC<ProductPageProp> = ({
   }, [variants])
 
   return (
-    <section className="pb-24 w-full h-full">
+    <section className="pl-2 pb-24 w-full h-full">
       <ProductBreadcrumb
         links={[
           { id: '1', label: t('breadcrumb.home'), href: `/${locale}` },
@@ -212,7 +213,13 @@ const ProductPage: FC<ProductPageProp> = ({
                         style={{ backgroundColor: color.hex }}
                       />
                       {selectedColorId === color.id && (
-                        <Check className="absolute inset-0 -left-1/2 top-1/2 -translate-x-1/5 -translate-y-1/2 bg-transparent text-indigo-500" />
+                        <Check
+                          className={cn(
+                            'absolute inset-0 -right-1/2 top-1/2  translate-x-1/5 -translate-y-1/2 bg-transparent text-indigo-300',
+                            locale === 'fa' &&
+                              '-left-1/2 top-1/2 -translate-x-1/5 -translate-y-1/2'
+                          )}
+                        />
                       )}
                     </Link>
                   )

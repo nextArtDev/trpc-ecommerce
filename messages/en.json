@@ -397,6 +397,17 @@
       "errorMessage": "An error occurred while loading search results. Please try again."
     }
   },
+  "profile": {
+    "title": "User Account",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "account": "Account",
+    "nav": {
+      "profile": "Profile",
+      "orders": "Orders",
+      "bookmarks": "Bookmarks"
+    }
+  },
   "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",
