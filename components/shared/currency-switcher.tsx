@@ -187,6 +187,7 @@ export default function CurrencySwitcher({
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <button
+          aria-label="currency-switcher"
           disabled={isPending}
           className={cn(
             'relative w-12 h-12 flex items-center justify-center ',

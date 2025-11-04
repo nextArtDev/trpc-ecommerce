@@ -64,6 +64,7 @@ export default function LanguageSwitcherAdvanced() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
+          aria-label="language-switcher"
           disabled={isPending}
           className="cursor-pointer flex items-center justify-center px-px! w-8 h-8"
         >
