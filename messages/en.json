@@ -145,7 +145,27 @@
     "reviews": {
       "beFirst": "Be the first to review!",
       "signInPrompt": "Please",
-      "signInLink": "sign in to your account"
+      "signInLink": "sign in to your account",
+       "writeReview": "Write a review for this product",
+      "editReview": "Edit your review",
+      "dialogTitle": "Write your review",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Write a title",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Write your description...",
+      "ratingLabel": "Rating out of 5",
+      "submit": "Submit",
+      "submitSuccess": "Your review has been submitted successfully",
+      "editSuccess": "Your review has been updated successfully",
+      "submitError": "An error occurred, please try again!",
+      "validation": {
+        "titleMin": "Title must be at least 2 characters!",
+        "titleMax": "Title must be no more than 20 characters",
+        "descriptionMin": "Description must be at least 3 characters.",
+        "descriptionMax": "Description must be no more than 200 characters.",
+        "ratingMin": "Rating must be at least 1.",
+        "ratingMax": "Rating must be no more than 5."
+      }
     },
     "share": {
       "title": "Check out this product",

@@ -42,12 +42,12 @@ function StarRating({
         const styledIconProps: LucideProps = {
           onClick: () => !showcase && !disabled && setValue!(i + 1),
           className: cn(
-            'fill-[#45f88a] stroke-[#45f88a] size-6',
+            'fill-[#f39200] stroke-[#382b2070] size-6',
             {
               'opacity-70 pointer-events-none ': disabled,
               'transition-transform duration-300 hover:scale-110 cursor-pointer ':
                 !disabled && !showcase,
-              '!fill-transparent !stroke-muted/30': !isRated,
+              '!fill-transparent !stroke-[#f3920050]': !isRated,
             },
             iconClassName
           ),

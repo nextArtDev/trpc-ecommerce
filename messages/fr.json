@@ -145,7 +145,27 @@
     "reviews": {
       "beFirst": "Soyez le premier à donner votre avis !",
       "signInPrompt": "Veuillez",
-      "signInLink": "vous connecter à votre compte"
+      "signInLink": "vous connecter à votre compte",
+       "writeReview": "Rédigez un avis pour ce produit",
+      "editReview": "Modifiez votre avis",
+      "dialogTitle": "Rédigez votre avis",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Écrivez un titre",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Écrivez votre description...",
+      "ratingLabel": "Note sur 5",
+      "submit": "Soumettre",
+      "submitSuccess": "Votre avis a été soumis avec succès",
+      "editSuccess": "Votre avis a été mis à jour avec succès",
+      "submitError": "Une erreur s'est produite, veuillez réessayer!",
+      "validation": {
+        "titleMin": "Le titre doit contenir au moins 2 caractères!",
+        "titleMax": "Le titre ne doit pas dépasser 20 caractères",
+        "descriptionMin": "La description doit contenir au moins 3 caractères.",
+        "descriptionMax": "La description ne doit pas dépasser 200 caractères.",
+        "ratingMin": "La note doit être d'au moins 1.",
+        "ratingMax": "La note ne doit pas dépasser 5."
+      }
     },
     "share": {
       "title": "Découvrez ce produit",

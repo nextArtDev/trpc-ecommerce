@@ -18,16 +18,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, StarIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -38,6 +38,8 @@ import { ReviewFormSchema } from '@/lib/home/schemas'
 import { usePathname } from 'next/navigation'
 import { handleServerErrors } from '@/app/(dashboard)/dashboard/lib/server-utils'
 import { createReview, editReview } from '@/lib/home/actions/review'
+import { useTranslations } from 'next-intl'
+import { StarRating } from '@/components/home/testemonial/StarRating'
 // import {
 //   createUpdateReview,
 //   getReviewByProductId,
@@ -53,13 +55,14 @@ const ReviewForm = ({
   const [open, setOpen] = useState(false)
   const path = usePathname()
   const [isPending, startTransition] = useTransition()
+  const t = useTranslations('product.reviews')
 
   const form = useForm<z.infer<typeof ReviewFormSchema>>({
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: {
       title: initialData?.title || '',
       description: initialData?.description || '',
-      rating: initialData?.rating || 1, // Keep as number, z.coerce will handle the conversion
+      rating: initialData?.rating || 5, // Keep as number, z.coerce will handle the conversion
     },
   })
 
@@ -88,15 +91,17 @@ const ReviewForm = ({
         if (initialData) {
           const res = await editReview(data, initialData.id, path)
           if (res?.errors) handleServerErrors(res.errors, form.setError)
+          else toast.success(t('editSuccess'))
         } else {
           const res = await createReview(data, productId, path)
           if (res?.errors) handleServerErrors(res.errors, form.setError)
+          else toast.success(t('submitSuccess'))
         }
       } catch (error) {
         if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
           return
         }
-        toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
+        toast.error(t('submitError'))
       }
     })
 
@@ -110,16 +115,16 @@ const ReviewForm = ({
           onClick={handleOpenForm}
           variant={initialData ? 'link' : 'default'}
         >
-          {initialData
-            ? 'نظر خود را ویرایش کنید'
-            : 'نظر خود راجع به این محصول را بنویسید'}
+          {initialData ? t('editReview') : t('writeReview')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form method="post" onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>نظر خود را بنویسید</DialogTitle>
+              <DialogTitle className="text-center">
+                {t('dialogTitle')}
+              </DialogTitle>
               {/* <DialogDescription>
                 Share your thoughts with other customers
               </DialogDescription> */}
@@ -130,10 +135,11 @@ const ReviewForm = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>عنوان</FormLabel>
+                    <FormLabel>{t('titleLabel')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="عنوان را بنویسید" {...field} />
+                      <Input placeholder={t('titlePlaceholder')} {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -143,13 +149,14 @@ const ReviewForm = ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>توضیحات</FormLabel>
+                      <FormLabel>{t('descriptionLabel')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="توضیحات را بنویسید...."
+                          placeholder={t('descriptionPlaceholder')}
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )
                 }}
@@ -160,9 +167,13 @@ const ReviewForm = ({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>ستاره از 5</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))} // Convert to number here
+                      <FormLabel>{t('ratingLabel')}</FormLabel>
+                      <StarRating
+                        value={field.value}
+                        setValue={field.onChange}
+                      />
+                      {/* <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
                         value={field.value?.toString() || '1'}
                       >
                         <FormControl>
@@ -171,6 +182,9 @@ const ReviewForm = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          <StarRating
+                          
+                          />
                           {Array.from({ length: 5 }).map((_, index) => (
                             <SelectItem
                               key={index}
@@ -181,7 +195,7 @@ const ReviewForm = ({
                             </SelectItem>
                           ))}
                         </SelectContent>
-                      </Select>
+                      </Select> */}
                       <FormMessage />
                     </FormItem>
                   )
@@ -195,7 +209,7 @@ const ReviewForm = ({
                 className="w-full"
                 disabled={isPending}
               >
-                {isPending ? <Loader2 className="animate-spin" /> : 'تایید'}
+                {isPending ? <Loader2 className="animate-spin" /> : t('submit')}
               </Button>
             </DialogFooter>
           </form>

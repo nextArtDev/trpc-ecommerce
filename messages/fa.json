@@ -142,7 +142,27 @@
     "reviews": {
       "beFirst": "اولین نفری باشید که نظر می‌دهید!",
       "signInPrompt": "لطفا",
-      "signInLink": "وارد حساب خود شوید"
+      "signInLink": "وارد حساب خود شوید",
+       "writeReview": "نظر خود راجع به این محصول را بنویسید",
+      "editReview": "نظر خود را ویرایش کنید",
+      "dialogTitle": "نظر خود را بنویسید",
+      "titleLabel": "عنوان",
+      "titlePlaceholder": "عنوان را بنویسید",
+      "descriptionLabel": "توضیحات",
+      "descriptionPlaceholder": "توضیحات را بنویسید....",
+      "ratingLabel": "ستاره از 5",
+      "submit": "تایید",
+      "submitSuccess": "نظر شما با موفقیت ثبت شد",
+      "editSuccess": "نظر شما با موفقیت ویرایش شد",
+      "submitError": "مشکلی پیش آمده، لطفا دوباره امتحان کنید!",
+      "validation": {
+        "titleMin": "عنوان نباید کمتر از 2 حرف باشد!",
+        "titleMax": "عنوان نباید بیشتر از 20 حرف باشد",
+        "descriptionMin": "توضیحات نمی‌تواند کمتر از 3 حرف باشد.",
+        "descriptionMax": "توضیحات نمی‌تواند بیشتر از 200 حرف باشد.",
+        "ratingMin": "ستاره باید حداقل 1 باشد.",
+        "ratingMax": "ستاره‌ها باید حداکثر 5 باشد."
+      }
     },
     "share": {
       "title": "این محصول را بررسی کنید",
