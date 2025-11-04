@@ -40,15 +40,18 @@ const OrderPayment: FC<Props> = ({ amount, orderId, currency }) => {
           <PaypalWrapper>
             <PaypalPayment
               orderId={orderId}
-              amount={Number(amount)}
-              currency={currency}
+              // amount={Number(amount)}
+              // currency={currency}
             />
           </PaypalWrapper>
         </div>
 
         <div className="border-t pt-4">
           <h4 className="font-medium mb-2">{t('stripe.title')}</h4>
-          <StripeWrapper amount={amount} currency={currency}>
+          <StripeWrapper
+            amount={amount}
+            // currency={currency}
+          >
             <StripePayment orderId={orderId} />
           </StripeWrapper>
         </div>

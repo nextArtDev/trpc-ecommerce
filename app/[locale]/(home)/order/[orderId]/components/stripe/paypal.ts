@@ -143,7 +143,6 @@ export const capturePayPalPayment = async (
     },
     data: {
       paymentStatus: captureData.status === 'COMPLETED' ? 'Paid' : 'Failed',
-      paymentMethod: 'Paypal',
       paymentDetails: {
         connect: {
           id: newPaymentDetails.id,

@@ -35,11 +35,11 @@ const Hero = async ({
           className="object-cover origin-top"
         />
       </FadeIn>
-      <div className="relative flex h-screen flex-col justify-center items-center">
+      <div className="relative flex h-screen flex-col justify-center items-center ">
         <RevealText
           text={t('title')}
           id="hero-heading"
-          className="font-display max-w-xl text-4xl leading-none text-neutral-50 md:text-5xl lg:text-6xl"
+          className="font-display text-center! max-w-xl text-4xl leading-none text-neutral-50 md:text-5xl lg:text-6xl"
           staggerAmount={0.2}
           duration={1.7}
         />

@@ -6,12 +6,13 @@ const WorkVideo = async () => {
   const workVideo = await getTranslations('workVideo')
 
   return (
-    <section className="w-full py-12 flex flex-col items-center justify-center mx-auto gap-12  text-center">
-      <div className="  w-[90vw] m-w-xl flex flex-col items-center mx-auto gap-4">
+    <section className="w-full flex flex-col items-center  mx-auto gap-12  text-center">
+      <div className="  w-[90vw]  flex flex-col items-center justify-center mx-auto gap-4">
         <RevealText
           text={workVideo('title')}
           id="work-video"
-          className="text-xl pt-12 md:text-3xl font-bold uppercase  text-center"
+          className="text-xl w-full mx-auto  md:text-3xl font-bold uppercase  text-center! "
+          textClasses="py-0!"
           staggerAmount={0.2}
           duration={0.8}
         />

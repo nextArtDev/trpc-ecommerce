@@ -13,6 +13,7 @@ export default function StripePayment({ orderId }: { orderId: string }) {
 
   useEffect(() => {
     getClientSecret()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId])
 
   const getClientSecret = async () => {
@@ -50,8 +51,8 @@ export default function StripePayment({ orderId }: { orderId: string }) {
           const res = await createStripePayment(orderId, paymentIntent)
           if (!res.paymentDetails?.transactionId) throw new Error('Failed')
           router.refresh()
-        } catch (error: unknown) {
-          setErrorMessage(error)
+        } catch (error) {
+          setErrorMessage(error as string)
         }
       }
     }
@@ -62,7 +63,7 @@ export default function StripePayment({ orderId }: { orderId: string }) {
     return (
       <div className="flex items-center justify-center">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white">
-          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+          <span className="absolute! -m-px! h-px! w-px! overflow-hidden! whitespace-nowrap! border-0! p-0! [clip:rect(0,0,0,0)]!">
             Loading...
           </span>
         </div>

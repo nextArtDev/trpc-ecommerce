@@ -701,11 +701,11 @@ model PaymentDetails {
   id String @id @default(uuid())
 
   // paymentInetntId String
-  // paymentMethod   String
+  paymentMethod String?
   status        String?
   amount        Float?
   Authority     String? @db.Text
-  // currency        String
+  currency      String?
   transactionId String?
   orderId       String  @unique
   order         Order   @relation("PaymentDetailsToOrder", fields: [orderId], references: [id])

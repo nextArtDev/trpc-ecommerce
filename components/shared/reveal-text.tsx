@@ -7,6 +7,7 @@ import clsx from 'clsx'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { cn } from '@/lib/utils'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -21,6 +22,7 @@ type RevealTextProps = {
   align?: 'center' | 'start' | 'end'
   triggerStart?: string
   triggerEnd?: string
+  textClasses?: string
 }
 
 export const RevealText = ({
@@ -34,6 +36,7 @@ export const RevealText = ({
   staggerAmount = 0.1, // time between each word
   triggerStart = 'top 80%',
   triggerEnd = 'bottom 20%',
+  textClasses,
 }: RevealTextProps) => {
   const componentRef = useRef<HTMLDivElement>(null)
 
@@ -85,10 +88,17 @@ export const RevealText = ({
         <span
           key={`${word}-${index}-${id}`}
           // overflow-hidden does the job that it seems it pushed up from a box, adding border to span show that, this span is like a picture frame
-          className="mb-0 inline-block overflow-hidden pb-4 "
+          className="mb-0 inline-block overflow-hidden "
         >
           {/* translate-y-[120%]: to fix the edges when we add pb-4 in parent, we add that instead of translate-y-full  */}
-          <span className="reveal-text-word mt-0 inline-block translate-y-[120%] will-change-transform  ">
+
+          <span
+            className={cn(
+              'reveal-text-word mt-0 py-0 font-bold inline-block  text-center ',
+              'bg-size animate-bg-position bg-linear-to-r from-yellow-500 from-30% via-yellow-700 via-50% to-[#f8e19b] to-80% bg-size-[200%_auto] bg-clip-text text-transparent',
+              textClasses
+            )}
+          >
             {word}
             {index < words.length - 1 ? <>&nbsp;</> : null}
           </span>

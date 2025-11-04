@@ -42,10 +42,16 @@ export default function Commitments() {
 
   return (
     <section className="flex flex-col items-center gap-6">
-      {/* 6. USE THE TRANSLATED TITLE */}
-      <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
+      {/* <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
         {t('title')}
-      </h2>
+      </h2> */}
+      <RevealText
+        text={t('title')}
+        id="commitments-sellers-heading"
+        className="w-full mx-auto font-display text-center! max-w-xl text-2xl leading-none   md:text-3xl lg:text-4xl "
+        staggerAmount={0.1}
+        duration={1.0}
+      />
       <Carousel
         opts={{
           align: 'start',
@@ -92,7 +98,7 @@ export default function Commitments() {
                       id={item.title}
                       className={cn(
                         'font-bold ',
-                        isRtl ? 'text-lg' : 'text-base'
+                        isRtl ? 'text-lg text-right' : 'text-base text-left!'
                       )}
                       staggerAmount={0.2}
                       duration={0.8}

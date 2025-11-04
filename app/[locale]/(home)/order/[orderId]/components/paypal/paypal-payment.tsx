@@ -8,6 +8,7 @@ import { capturePayPalPayment, createPayPalPayment } from '../stripe/paypal'
 export default function PaypalPayment({ orderId }: { orderId: string }) {
   const router = useRouter()
   const paymentIdRef = useRef('')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
   const createOrder = async (data: any, actions: any) => {
     const response = await createPayPalPayment(orderId)
     paymentIdRef.current = response.id
@@ -26,7 +27,7 @@ export default function PaypalPayment({ orderId }: { orderId: string }) {
       <PayPalButtons
         createOrder={createOrder}
         onApprove={onApprove}
-        onError={(err) => {}}
+        onError={() => {}}
       />
     </div>
   )

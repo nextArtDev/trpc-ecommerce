@@ -53,7 +53,7 @@ export function CurrencySelector({
     <DropdownMenuContent
       align="end"
       className={cn(
-        'w-[180px] sm:w-[220px] p-1',
+        'w-fit px-1',
         'max-h-[70vh] overflow-y-auto',
         'border rounded-lg shadow-lg'
       )}
@@ -67,7 +67,7 @@ export function CurrencySelector({
           <DropdownMenuSeparator />
         </>
       )}
-      <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+      <DropdownMenuLabel className="px-0.5 py-1.5 text-xs font-semibold text-muted-foreground">
         {isLocked ? t('changeWarning') : 'Select Currency'}
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
@@ -77,7 +77,7 @@ export function CurrencySelector({
           onSelect={() => handleSelect(currency.code)}
           disabled={isLocked && currency.code !== currentCurrency}
           className={cn(
-            'flex items-center justify-between gap-3 px-2 py-2.5 rounded-md cursor-pointer',
+            'w-fit flex items-center justify-between gap-3 px-0.5 py-2.5 rounded-md cursor-pointer',
             'text-sm transition-colors',
             currentCurrency === currency.code && 'bg-accent',
             isLocked &&
@@ -85,14 +85,14 @@ export function CurrencySelector({
               'opacity-50 cursor-not-allowed'
           )}
         >
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-full flex items-center text-center justify-center   gap-2.5 min-w-0">
             <span className="text-lg font-medium">{currency.symbol}</span>
             {showLabels && (
               <div className="flex flex-col min-w-0">
                 <span className="font-medium truncate">{currency.name}</span>
-                <span className="text-xs text-muted-foreground">
+                {/* <span className="text-xs text-muted-foreground">
                   {currency.code}
-                </span>
+                </span> */}
               </div>
             )}
           </div>
@@ -139,7 +139,7 @@ export function CurrencySelector({
             variant="outline"
             size="sm"
             className={cn(
-              'h-8 px-2.5 text-sm font-medium relative',
+              'h-fit py-0.5 text-center px-2.5 text-sm font-medium relative',
               isLocked && 'border-amber-300 text-amber-600',
               className
             )}
@@ -160,10 +160,10 @@ export function CurrencySelector({
 
   // === DEFAULT VARIANT (Full with label, responsive) ===
   return (
-    <div className={cn('flex items-center gap-2', className)}>
-      <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
+    <div className={cn('flex items-center gap-2 px-1', className)}>
+      {/* <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
         Currency:
-      </span>
+      </span> */}
 
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
@@ -171,7 +171,7 @@ export function CurrencySelector({
             variant="outline"
             className={cn(
               'w-full sm:w-auto justify-start sm:justify-between relative',
-              'h-9 px-3 text-left font-normal',
+              'h-fit py-0.5 px-3  font-normal text-center',
               'max-w-[180px] sm:max-w-none',
               isLocked && 'border-amber-300 text-amber-600'
             )}
@@ -179,7 +179,7 @@ export function CurrencySelector({
             <span className="flex items-center gap-2 truncate">
               <span className="text-base font-bold">{current.symbol}</span>
             </span>
-            <ChevronDown className="h-4 w-4 opacity-50 shrink-0 ml-2" />
+            <ChevronDown className="h-2 w-2 opacity-50 shrink-0" />
             {isLocked && (
               <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
             )}
