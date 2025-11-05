@@ -103,7 +103,7 @@ export async function generateMetadata({
       site: t('twitter.site'),
       creator: t('twitter.creator'),
     },
-    manifest: '/manifest.json',
+    // manifest: './manifest.json',
     other: {
       'msapplication-TileColor': t('other.msapplicationTileColor'),
       'apple-mobile-web-app-capable': 'yes',

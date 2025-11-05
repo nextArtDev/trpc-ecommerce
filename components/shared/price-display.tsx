@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { Currency } from '@/lib/types/home'
@@ -23,7 +23,13 @@ export function PriceDisplay({
   variant = 'default',
   currency,
 }: PriceDisplayProps) {
+  const [mounted, setMounted] = useState(false)
   const { currentCurrency, formatPrice, convertCurrency } = useCurrencyStore()
+
+  // Wait for client-side hydration to complete
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const targetCurrency = currency || currentCurrency
 
@@ -41,16 +47,31 @@ export function PriceDisplay({
     }
   })()
 
-  const formattedPrice = formatPrice(convertedAmount)
-  const originalFormattedPrice =
-    showOriginalPrice && originalCurrency ? formatPrice(amount) : null
-
   const variantClasses = {
     default: 'text-lg font-semibold',
     large: 'text-2xl font-bold',
     small: 'text-sm font-medium',
     badge: 'text-sm font-medium px-2 py-1 bg-muted rounded',
   }
+
+  // Server-side render: Show simple format without currency conversion
+  if (!mounted) {
+    return (
+      <div
+        className={cn('flex items-center gap-2', className)}
+        suppressHydrationWarning
+      >
+        <span className={cn(variantClasses[variant])}>
+          {amount.toLocaleString('en-US')} {originalCurrency}
+        </span>
+      </div>
+    )
+  }
+
+  // Client-side render: Show full formatted price with currency conversion
+  const formattedPrice = formatPrice(convertedAmount)
+  const originalFormattedPrice =
+    showOriginalPrice && originalCurrency ? formatPrice(amount) : null
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
