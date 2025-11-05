@@ -38,8 +38,8 @@ const TopBanner = () => {
     <div className="bg-primary text-primary-foreground">
       <div className="flex items-center justify-between gap-4 px-6 text-sm md:px-8 lg:px-12">
         <div className=" flex items-center justify-center gap-2">
-          <LanguageSwitcherAdvanced />
           <CurrencySwitcher />
+          <LanguageSwitcherAdvanced />
         </div>
         <UserSession />
       </div>

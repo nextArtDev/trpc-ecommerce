@@ -205,3 +205,163 @@ input[type='tel'],
     animation-duration: 0.001s;
   }
 }
+
+/*  Typography variables and styles */
+:root {
+  /* Font variables */
+  --font-vazir: 'Vazirmatn', system-ui, sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+
+  /* Typography scale */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+
+  /* Line heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Letter spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+}
+
+/* Base styles */
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Font classes */
+.font-vazir {
+  font-family: var(--font-vazir);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+/* Typography utilities */
+.font-serif {
+  font-family: var(--font-playfair);
+}
+
+.font-sans {
+  font-family: var(--font-vazir);
+}
+
+/* Persian specific styles */
+html[dir='rtl'] {
+  font-family: var(--font-vazir);
+}
+
+html[dir='rtl'] .font-serif {
+  font-family: var(--font-vazir);
+}
+
+html[dir='rtl'] .font-sans {
+  font-family: var(--font-vazir);
+}
+
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+html[dir='rtl'] h1,
+html[dir='rtl'] h2,
+html[dir='rtl'] h3,
+html[dir='rtl'] h4,
+html[dir='rtl'] h5,
+html[dir='rtl'] h6 {
+  font-family: var(--font-vazir);
+  font-weight: 700;
+}
+
+/* Body text */
+p,
+span,
+div {
+  font-family: var(--font-playfair);
+  line-height: var(--leading-normal);
+}
+
+html[dir='rtl'] p,
+html[dir='rtl'] span,
+html[dir='rtl'] div {
+  font-family: var(--font-vazir);
+}
+
+/* Custom components */
+.product-title {
+  font-family: var(--font-playfair);
+  font-weight: 600;
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+}
+
+html[dir='rtl'] .product-title {
+  font-family: var(--font-vazir);
+  font-weight: 700;
+}
+
+.price-tag {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  font-size: var(--text-lg);
+}
+
+html[dir='rtl'] .price-tag {
+  font-family: var(--font-vazir);
+  font-weight: 700;
+}
+
+.button-text {
+  font-family: var(--font-vazir);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Fix for font opacity issues */
+@supports (font-variation-settings: normal) {
+  .font-playfair {
+    font-variation-settings: 'wght' 400;
+    font-weight: 400;
+  }
+}
+
+/* Ensure proper font rendering */
+.text-rendering-optimize-legibility {
+  text-rendering: optimizeLegibility;
+}
+
+/* Add font-display: swap to prevent invisible text */
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/PlayfairDisplay-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/vazirmatn-v16-arabic-regular.woff2') format('truetype');
+  font-display: swap;
+}

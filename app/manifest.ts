@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'کارگاه چرم سارینا',
     short_name: 'سارینا',
     description: 'فروش محصولات چرمی دست‌ساز',
-    start_url: '/fa',
+    start_url: '/',
     // name: 'Sarina Leather Workshop',
     // short_name: 'Sarina',
     // description: 'Handmade leather products - کارگاه چرم سارینا',

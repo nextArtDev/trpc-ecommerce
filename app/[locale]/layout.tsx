@@ -15,17 +15,21 @@ import localFont from 'next/font/local'
 
 const vazirFont = localFont({
   src: '../../public/fonts/vazirmatn-v16-arabic-regular.woff2',
-
   variable: '--font-vazir',
-  // weight: 'variable',
   weight: '100 900',
+  display: 'swap',
+  preload: true,
 })
 
 const PlayfairFont = localFont({
-  src: '../../public/fonts/PlayfairDisplay-Regular.woff2',
-  variable: '--font-playFair',
-  // weight: 'variable',
+  src: '../../public/fonts/PlayfairDisplay-Regular.ttf',
+  variable: '--font-playfair',
   weight: '100 900',
+  display: 'swap',
+  preload: true,
+  // subsets: ['latin'],
+
+  fallback: ['Georgia', 'serif'],
 })
 // const montserrat = Playfair_Display({
 //   subsets: ['latin'],

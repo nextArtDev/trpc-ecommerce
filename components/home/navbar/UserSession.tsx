@@ -1,7 +1,7 @@
 // components/layout/user-session.tsx
 'use client'
 
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +41,7 @@ export default function UserSession() {
         href={'/sign-in'}
         className="flex items-center gap-2 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
       >
-        <User className="h-5 w-5" />
+        <User className="h-5 w-5 text-[#f7a944]" />
         <span className="hidden sm:inline">{t('signIn')}</span>
       </TransitionLink>
     )
@@ -61,19 +61,18 @@ export default function UserSession() {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2 h-auto p-1.5 data-[state=open]:bg-accent"
+        <button
+          className="py-0.5 flex items-center gap-2 h-fit px-1.5 data-[state=open]:bg-accent"
           aria-label={t('account')}
         >
           <Avatar className="h-8 w-8">
             <AvatarImage src={session.image || ''} alt={session.name || ''} />
-            <AvatarFallback className="text-xs">
+            <AvatarFallback className="text-xs text-[#f7a944]">
               {getInitials(session.name)}
             </AvatarFallback>
           </Avatar>
           <div className="hidden md:flex flex-col items-start">
-            <span className="text-sm font-medium truncate max-w-[100px]">
+            <span className="text-sm font-medium truncate max-w-[100px] text-[#f7a944]">
               {session.name}
             </span>
             {session.phoneNumber && (
@@ -88,7 +87,7 @@ export default function UserSession() {
               isOpen && 'rotate-180'
             )}
           />
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56 rounded-lg bg-background/95 backdrop-blur-md border shadow-lg"

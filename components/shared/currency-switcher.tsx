@@ -1,13 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, DollarSign, Loader2, AlertTriangle } from 'lucide-react'
+import {
+  Check,
+  BadgeEuro,
+  Loader2,
+  AlertTriangle,
+  EllipsisVertical,
+} from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  // DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
@@ -60,8 +65,13 @@ export default function CurrencySwitcher({
   if (!mounted) {
     // Return a placeholder to avoid hydration mismatch
     return (
-      <Button variant="outline" size="sm" disabled>
-        <DollarSign className="h-4 w-4 mr-2" />
+      <Button
+        variant="outline"
+        className="text-primary rounded-none flex items-center justify-center"
+        size="sm"
+        disabled
+      >
+        <BadgeEuro className="h-4 w-4 mr-2" />
         <Loader2 className="animate-spin" />
       </Button>
     )
@@ -77,12 +87,12 @@ export default function CurrencySwitcher({
             size="sm"
             disabled={isPending}
             className={cn(
-              'flex items-center justify-center px-1',
+              'text-primary rounded-none flex items-center justify-center px-1',
               isLocked && 'border-amber-300 text-amber-600',
               className
             )}
           >
-            <DollarSign className="h-4 w-4" />
+            <BadgeEuro className="h-4 w-4" />
             {isLocked && (
               <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
             )}
@@ -104,7 +114,7 @@ export default function CurrencySwitcher({
               onClick={() => handleCurrencyChange(currency.code)}
               disabled={isLocked && currency.code !== currentCurrency}
               className={cn(
-                currentCurrency === currency.code ? 'bg-accent' : '',
+                currentCurrency === currency.code ? 'bg-muted' : '',
                 isLocked &&
                   currency.code !== currentCurrency &&
                   'opacity-50 cursor-not-allowed'
@@ -134,12 +144,12 @@ export default function CurrencySwitcher({
             size="sm"
             disabled={isPending}
             className={cn(
-              'flex items-center justify-center px-2 py-0.5',
+              'text-primary rounded-none flex items-center justify-center px-2 py-0.5',
               isLocked && 'border-amber-300 text-amber-600',
               className
             )}
           >
-            <DollarSign className="h-4 w-4 mr-1" />
+            <BadgeEuro className="h-4 w-4 mr-1" />
             <span className="text-base font-bold">{current.symbol}</span>
             {isLocked && (
               <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
@@ -162,7 +172,7 @@ export default function CurrencySwitcher({
               onClick={() => handleCurrencyChange(currency.code)}
               disabled={isLocked && currency.code !== currentCurrency}
               className={cn(
-                currentCurrency === currency.code ? 'bg-accent' : '',
+                currentCurrency === currency.code ? 'bg-muted' : '',
                 isLocked &&
                   currency.code !== currentCurrency &&
                   'opacity-50 cursor-not-allowed'
@@ -186,17 +196,19 @@ export default function CurrencySwitcher({
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <button
-          aria-label="currency-switcher"
+        <Button
+          variant="default"
+          size="sm"
           disabled={isPending}
           className={cn(
-            'relative w-12 h-12 flex items-center justify-center ',
+            'bg-background  text-foreground rounded-none flex items-center justify-center ',
             isLocked && 'border-amber-300 text-amber-600',
             className
           )}
         >
-          {/* <DollarSign className="h-4 w-4" /> */}
+          {/* <BadgeEuro className="h-4 w-4" /> */}
           <motion.svg
+            className="shrink-0 scale-150"
             whileInView={{ rotate: '360deg' }}
             transition={{
               duration: 1.5,
@@ -214,16 +226,18 @@ export default function CurrencySwitcher({
               <path d="m413.304 236.21-24.692 25.916a136.726 136.726 0 0 0-115.19-144.149 137.388 137.388 0 0 0-140.525 68.093l17.39 9.775a117.361 117.361 0 0 1 120.035-58.163 116.764 116.764 0 0 1 98.327 123.856l-24.817-23.651-15.196 15.933 35.588 33.899-.013.006 15.949 15.185 15.182-15.916v-.01l33.906-35.578zM241.68 374.318a116.766 116.766 0 0 1-98.326-123.856l24.818 23.654 15.195-15.937-35.587-33.899.013-.007-15.95-15.184-15.182 15.916v.01l-33.909 35.58 15.944 15.195 24.692-25.915a136.624 136.624 0 0 0 136.225 145.793 137.52 137.52 0 0 0 119.494-69.738l-17.39-9.775a117.362 117.362 0 0 1-120.036 58.163z" />
             </g>
           </motion.svg>
-          {/* <span className="ml-1 text-base font-bold">{current.symbol}</span> */}
+
+          <span className="ml-1 text-base font-bold">{current.symbol}</span>
           {isLocked && (
-            <div className="absolute top-2.5 right-2.5 h-2 w-2 bg-amber-400 rounded-full" />
+            <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
           )}
-        </button>
+          <EllipsisVertical className="text-foreground" />
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="rounded-none">
         {isLocked && (
           <>
-            <div className="px-2 py-1.5 text-xs font-semibold text-amber-400 bg-amber-50 rounded-md flex items-center gap-2">
+            <div className="px-2 py-1.5 text-xs font-semibold text-amber-600 bg-amber-50 rounded-md flex items-center gap-2">
               <AlertTriangle className="h-3.5 w-3.5" />
               {t('locked', { currency: lockedCurrency })}
             </div>
@@ -236,7 +250,7 @@ export default function CurrencySwitcher({
             onClick={() => handleCurrencyChange(currency.code)}
             disabled={isLocked && currency.code !== currentCurrency}
             className={cn(
-              currentCurrency === currency.code ? 'bg-accent' : '',
+              currentCurrency === currency.code ? 'bg-muted' : '',
               isLocked &&
                 currency.code !== currentCurrency &&
                 'opacity-50 cursor-not-allowed'
