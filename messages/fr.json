@@ -408,16 +408,40 @@
       "bookmarks": "Signets"
     }
   },
-  "metadata": {
+"metadata": {
     "home": {
       "title": "Atelier de Cuir Sarina",
-      "description": "Atelier de fabrication de sacs et produits en cuir naturel. {categories} {rating} Livraison rapide, produits de haute qualité et utilisation garantie de cuir naturel."
+      "description": "Atelier de cuir artisanal. {categories} {rating} Livraison rapide, produits de haute qualité et cuir véritable garanti.",
+      "keywords": "cuir naturel, sac en cuir femme, cuir véritable, produits en cuir faits à la main, boutique en ligne de cuir"
     },
     "siteName": "Atelier de Cuir Sarina",
+    "title": "Atelier de Cuir Sarina - Produits en Cuir Artisanaux",
+    "description": "L'Atelier de Cuir Sarina est spécialisé dans les produits en cuir faits à la main, y compris des sacs, des portefeuilles et des accessoires. Tous les produits sont fabriqués à partir de cuir véritable avec un artisanat traditionnel.",
     "keywords": {
       "naturalLeather": "cuir naturel",
       "womenLeatherBag": "sac en cuir femme",
-      "common": "cuir naturel, sac en cuir naturel femme, sac en cuir femme, cuir naturel garanti, boutique en ligne, atelier de cuir fait main, magasin de cuir"
+      "common": "cuir naturel, sac en cuir femme, cuir véritable, produits en cuir faits à la main, boutique en ligne de cuir"
+    },
+    "author": "Atelier de Cuir Sarina",
+    "creator": "Atelier de Cuir Sarina",
+    "publisher": "Atelier de Cuir Sarina",
+    "robots": "index,follow",
+    "openGraph": {
+      "siteName": "Atelier de Cuir Sarina",
+      "type": "website",
+      "locale": "fr_FR",
+      "image": "/og-image-fr.jpg",
+      "imageAlt": "Atelier de Cuir Sarina - Produits en Cuir Artisanaux"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@sarina_leather",
+      "creator": "@sarina_leather"
+    },
+    "other": {
+      "appleMobileWebAppTitle": "Sarina",
+      "applicationName": "Sarina",
+      "msapplicationTileColor": "#000000"
     }
   },
   "home": {

@@ -408,16 +408,40 @@
       "bookmarks": "Bookmarks"
     }
   },
-  "metadata": {
+ "metadata": {
     "home": {
       "title": "Sarina Leather Workshop",
-      "description": "Workshop for making bags and natural leather products. {categories} {rating} Fast shipping, high-quality products and guaranteed use of natural leather."
+      "description": "Handmade leather workshop. {categories} {rating} Fast shipping, high-quality products and guaranteed genuine leather.",
+      "keywords": "natural leather, women leather bag, genuine leather, handmade leather products, online leather store"
     },
     "siteName": "Sarina Leather Workshop",
-    "keywords": {
+    "title": "Sarina Leather Workshop - Handmade Leather Products",
+    "description": "Sarina Leather Workshop specializes in handmade leather products including bags, wallets, and accessories. All products are made from genuine leather with traditional craftsmanship.",
+     "keywords": {
       "naturalLeather": "natural leather",
       "womenLeatherBag": "women leather bag",
-      "common": "natural leather, women natural leather bag, women leather bag, guaranteed natural leather, online store, handmade leather workshop, leather store"
+      "common": "natural leather, women leather bag, genuine leather, handmade leather products, online leather store"
+    },
+    "author": "Sarina Leather Workshop",
+    "creator": "Sarina Leather Workshop",
+    "publisher": "Sarina Leather Workshop",
+    "robots": "index,follow",
+    "openGraph": {
+      "siteName": "Sarina Leather Workshop",
+      "type": "website",
+      "locale": "en_US",
+      "image": "/og-image-en.jpg",
+      "imageAlt": "Sarina Leather Workshop - Handmade Leather Products"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@sarina_leather",
+      "creator": "@sarina_leather"
+    },
+    "other": {
+      "appleMobileWebAppTitle": "Sarina",
+      "applicationName": "Sarina",
+      "msapplicationTileColor": "#000000"
     }
   },
   "home": {

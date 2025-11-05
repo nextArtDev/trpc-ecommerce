@@ -409,16 +409,40 @@
       "bookmarks": "Lesezeichen"
     }
   },
-  "metadata": {
+ "metadata": {
     "home": {
       "title": "Sarina Lederwerkstatt",
-      "description": "Werkstatt zur Herstellung von Taschen und Naturlederprodukten. {categories} {rating} Schneller Versand, hochwertige Produkte und garantierte Verwendung von Naturleder."
+      "description": "Handgefertigte Lederwerkstatt. {categories} {rating} Schneller Versand, hochwertige Produkte und garantiertes Echtleder.",
+      "keywords": "Naturleder, Damenledertasche, Echtleder, handgefertigte Lederprodukte, Online-Lederladen"
     },
     "siteName": "Sarina Lederwerkstatt",
-    "keywords": {
+    "title": "Sarina Lederwerkstatt - Handgefertigte Lederprodukte",
+    "description": "Sarina Lederwerkstatt ist spezialisiert auf handgefertigte Lederprodukte einschließlich Taschen, Geldbörsen und Accessoires. Alle Produkte werden aus Echtleider mit traditionellem Handwerk hergestellt.",
+   "keywords": {
       "naturalLeather": "Naturleder",
       "womenLeatherBag": "Damenledertasche",
-      "common": "Naturleder, Damen Naturledertasche, Damenledertasche, garantiertes Naturleder, Online-Shop, handgefertigte Lederwerkstatt, Ledergeschäft"
+      "common": "Naturleder, Damenledertasche, Echtleder, handgefertigte Lederprodukte, Online-Lederladen"
+    },
+    "author": "Sarina Lederwerkstatt",
+    "creator": "Sarina Lederwerkstatt",
+    "publisher": "Sarina Lederwerkstatt",
+    "robots": "index,follow",
+    "openGraph": {
+      "siteName": "Sarina Lederwerkstatt",
+      "type": "website",
+      "locale": "de_DE",
+      "image": "/og-image-de.jpg",
+      "imageAlt": "Sarina Lederwerkstatt - Handgefertigte Lederprodukte"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@sarina_leather",
+      "creator": "@sarina_leather"
+    },
+    "other": {
+      "appleMobileWebAppTitle": "Sarina",
+      "applicationName": "Sarina",
+      "msapplicationTileColor": "#000000"
     }
   },
   "home": {

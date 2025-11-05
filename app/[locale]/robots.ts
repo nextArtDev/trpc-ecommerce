@@ -1,7 +1,9 @@
 import { MetadataRoute } from 'next'
+import { routing } from '@/i18n/routing'
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://'
+  const locales = routing.locales
 
   return {
     rules: [
@@ -10,20 +12,26 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: [
           '/dashboard/',
-          // '/admin/',
           '/api/',
           '/_next/',
-          // '/private/',
+          '/user/',
+          '/sign-in',
+          '/place-order',
+          '/payment/',
           '*.json',
         ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/dashboard/', '/api/'],
+        disallow: ['/dashboard/', '/api/', '/user/'],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [
+      `${baseUrl}/sitemap.xml`,
+      // Optional: Add hreflang sitemap references
+      ...locales.map((locale) => `${baseUrl}/sitemap-${locale}.xml`),
+    ],
     host: baseUrl,
   }
 }

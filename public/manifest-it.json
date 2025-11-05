@@ -1,9 +1,9 @@
 
 {
-  "name": "کارگاه چرم سارینا",
-  "short_name": "سارینا",
-  "description": "فروش محصولات چرمی دست‌ساز",
-  "start_url": "/",
+  "name": "'Laboratorio di Pelle Sarina",
+  "short_name": "Sarina",
+  "description": "Prodotti in pelle fatti a mano",
+  "start_url": "/it",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",

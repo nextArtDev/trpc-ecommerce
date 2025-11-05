@@ -406,16 +406,40 @@
       "bookmarks": "علاقه‌مندی‌ها"
     }
   },
-  "metadata": {
+ "metadata": {
     "home": {
       "title": "کارگاه چرم سارینا",
-      "description": "کارگاه ساخت کیف و محصولات چرم طبیعی. {categories} {rating} ارسال سریع، محصولات با کیفیت بالا و تضمین استفاده از چرم طبیعی."
+      "description": "کارگاه ساخت کیف و محصولات چرم طبیعی. {categories} {rating} ارسال سریع، محصولات با کیفیت بالا و تضمین استفاده از چرم طبیعی.",
+      "keywords": "چرم طبیعی, کیف چرمی زنانه, کیف چرم دست‌دوز, محصولات چرمی, فروشگاه آنلاین چرم"
     },
     "siteName": "کارگاه چرم سارینا",
+    "title": "کارگاه چرم سارینا - محصولات چرمی دست‌ساز",
+    "description": "کارگاه چرم سارینا specializes in handmade leather products including bags, wallets, and accessories. All products are made from genuine leather with traditional craftsmanship.",
     "keywords": {
       "naturalLeather": "چرم طبیعی",
       "womenLeatherBag": "کیف چرمی زنانه",
       "common": "چرم طبیعی, کیف چرم طبیعی زنانه, کیف چرمی زنانه, چرم طبیعی تضمین شده, فروشگاه آنلاین, کارگاه چرم دست‌دوز, فروشگاه چرم"
+    },
+    "author": "کارگاه چرم سارینا",
+    "creator": "کارگاه چرم سارینا",
+    "publisher": "کارگاه چرم سارینا",
+    "robots": "index,follow",
+    "openGraph": {
+      "siteName": "کارگاه چرم سارینا",
+      "type": "website",
+      "locale": "fa_IR",
+      "image": "/og-image-fa.jpg",
+      "imageAlt": "کارگاه چرم سارینا - محصولات چرمی دست‌ساز"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@sarina_leather",
+      "creator": "@sarina_leather"
+    },
+    "other": {
+      "appleMobileWebAppTitle": "سارینا",
+      "applicationName": "سارینا",
+      "msapplicationTileColor": "#000000"
     }
   },
   "home": {

@@ -10,7 +10,15 @@ export async function proxy(request: NextRequest) {
 
   if (
     pathname.startsWith('/api') ||
-    request.nextUrl.pathname.startsWith('/api') ||
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/icon-') ||
+    pathname.startsWith('/screenshot-') ||
+    // pathname.includes('.') ||
+    pathname === '/manifest.json' ||
+    pathname === '/favicon.ico' ||
+    pathname === '/icon.svg' ||
+    pathname === '/mask-icon.svg' ||
+    pathname === '/browserconfig.xml' ||
     pathname.startsWith('/dashboard')
   ) {
     return NextResponse.next()

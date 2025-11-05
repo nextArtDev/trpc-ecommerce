@@ -408,16 +408,41 @@
       "bookmarks": "Segnalibri"
     }
   },
-  "metadata": {
+"metadata": {
     "home": {
       "title": "Laboratorio di Pelle Sarina",
-      "description": "Laboratorio per la produzione di borse e prodotti in pelle naturale. {categories} {rating} Spedizione veloce, prodotti di alta qualità e uso garantito di pelle naturale."
+      "description": "Laboratorio di pelle artigianale. {categories} {rating} Spedizione veloce, prodotti di alta qualità e pelle vera garantita.",
+      "keywords": "pelle naturale, borsa in pelle donna, pelle vera, prodotti in pelle fatti a mano, negozio online di pelle"
     },
     "siteName": "Laboratorio di Pelle Sarina",
-    "keywords": {
+    "title": "Laboratorio di Pelle Sarina - Prodotti in Pelle Fatti a Mano",
+    "description": "Il Laboratorio di Pelle Sarina è specializzato in prodotti in pelle fatti a mano, inclusi borse, portafogli e accessori. Tutti i prodotti sono realizzati in pelle vera con artigianato tradizionale.",
+     "keywords": {
       "naturalLeather": "pelle naturale",
-      "womenLeatherBag": "borsetta in pelle donna",
-      "common": "pelle naturale, borsetta in pelle naturale donna, borsetta in pelle donna, pelle naturale garantita, negozio online, laboratorio di pelle fatto a mano, negozio di pelle"
+      "womenLeatherBag": "borsa in pelle donna",
+      "common": "pelle naturale, borsa in pelle donna, pelle vera, prodotti in pelle fatti a mano, negozio online di pelle"
+    },
+    
+    "author": "Laboratorio di Pelle Sarina",
+    "creator": "Laboratorio di Pelle Sarina",
+    "publisher": "Laboratorio di Pelle Sarina",
+    "robots": "index,follow",
+    "openGraph": {
+      "siteName": "Laboratorio di Pelle Sarina",
+      "type": "website",
+      "locale": "it_IT",
+      "image": "/og-image-it.jpg",
+      "imageAlt": "Laboratorio di Pelle Sarina - Prodotti in Pelle Fatti a Mano"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@sarina_leather",
+      "creator": "@sarina_leather"
+    },
+    "other": {
+      "appleMobileWebAppTitle": "Sarina",
+      "applicationName": "Sarina",
+      "msapplicationTileColor": "#000000"
     }
   },
   "home": {

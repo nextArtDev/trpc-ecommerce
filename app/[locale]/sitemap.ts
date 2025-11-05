@@ -1,9 +1,11 @@
+// app/sitemap.ts
 import {
   getCategoriesWithStats,
   getHomepageProducts,
   getSubCategories,
 } from '@/lib/home/queries/products'
 import { MetadataRoute } from 'next'
+import { routing } from '@/i18n/routing'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://'
@@ -15,118 +17,112 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getSubCategories(),
     ])
 
-    let allEntries: MetadataRoute.Sitemap = [
-      {
-        url: baseUrl,
+    // Get all supported locales
+    const locales = routing.locales
+
+    // Create entries for each locale
+    const allEntries: MetadataRoute.Sitemap = []
+
+    // Add homepage for each locale
+    locales.forEach((locale) => {
+      allEntries.push({
+        url: `${baseUrl}/${locale}`,
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 1.0,
-      },
+      })
+    })
+
+    // Add static pages for each locale
+    const staticPages = [
+      { path: 'about-us', priority: 0.8, changeFrequency: 'monthly' as const },
       {
-        url: `${baseUrl}/about-us`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
+        path: 'contact-us',
         priority: 0.8,
+        changeFrequency: 'monthly' as const,
       },
+      { path: 'faq', priority: 0.7, changeFrequency: 'weekly' as const },
+      { path: 'products', priority: 0.9, changeFrequency: 'daily' as const },
       {
-        url: `${baseUrl}/contact-us`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
+        path: 'sub-categories',
         priority: 0.8,
+        changeFrequency: 'daily' as const,
       },
-      {
-        url: `${baseUrl}/faq`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      },
-      {
-        url: `${baseUrl}/products`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.9,
-      },
-      {
-        url: `${baseUrl}/sub-categories`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/categories`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.7,
-      },
+      { path: 'categories', priority: 0.7, changeFrequency: 'daily' as const },
+      { path: 'sign-in', priority: 0.5, changeFrequency: 'monthly' as const },
+      { path: 'cart', priority: 0.6, changeFrequency: 'daily' as const },
     ]
 
-    // Add doctor pages
+    locales.forEach((locale) => {
+      staticPages.forEach((page) => {
+        allEntries.push({
+          url: `${baseUrl}/${locale}/${page.path}`,
+          lastModified: new Date(),
+          changeFrequency: page.changeFrequency,
+          priority: page.priority,
+        })
+      })
+    })
+
+    // Add product pages for each locale
     if (products?.length) {
-      const doctorEntries: MetadataRoute.Sitemap = products.map((product) => ({
-        url: `${baseUrl}/products/${product.slug}`,
-        lastModified: new Date(product.updatedAt),
-        changeFrequency: 'daily' as const,
-        priority: 0.8,
-      }))
-      allEntries = [...allEntries, ...doctorEntries]
+      products.forEach((product) => {
+        locales.forEach((locale) => {
+          allEntries.push({
+            url: `${baseUrl}/${locale}/products/${product.slug}`,
+            lastModified: new Date(product.updatedAt),
+            changeFrequency: 'daily' as const,
+            priority: 0.8,
+          })
+        })
+      })
     }
 
-    // Add specialization pages
+    // Add category pages for each locale
     if (categories?.length) {
-      const categoryEntries: MetadataRoute.Sitemap = categories.map(
-        (category) => ({
-          url: `${baseUrl}/categories/${category.url}`,
-          lastModified: new Date(category.updatedAt),
-          changeFrequency: 'weekly' as const,
-          priority: 0.7,
+      categories.forEach((category) => {
+        locales.forEach((locale) => {
+          allEntries.push({
+            url: `${baseUrl}/${locale}/categories/${category.url}`,
+            lastModified: new Date(category.updatedAt),
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+          })
         })
-      )
-      allEntries = [...allEntries, ...categoryEntries]
+      })
     }
 
-    // Add illness pages
+    // Add subcategory pages for each locale
     if (subCategories?.length) {
-      const illnessEntries: MetadataRoute.Sitemap = subCategories.map(
-        (sub) => ({
-          url: `${baseUrl}/sub-categories/${sub.id}`,
-          lastModified: new Date(sub.updatedAt),
-          changeFrequency: 'weekly' as const,
-          priority: 0.6,
+      subCategories.forEach((sub) => {
+        locales.forEach((locale) => {
+          allEntries.push({
+            url: `${baseUrl}/${locale}/sub-categories/${sub.id}`,
+            lastModified: new Date(sub.updatedAt),
+            changeFrequency: 'weekly' as const,
+            priority: 0.6,
+          })
         })
-      )
-      allEntries = [...allEntries, ...illnessEntries]
+      })
     }
 
     return allEntries
   } catch (error) {
     console.error('Error generating sitemap:', error)
 
-    // Return basic sitemap if database queries fail
-    return [
-      {
-        url: baseUrl,
+    // Return basic sitemap with locales if database queries fail
+    const locales = routing.locales
+    const basicEntries: MetadataRoute.Sitemap = []
+
+    locales.forEach((locale) => {
+      basicEntries.push({
+        url: `${baseUrl}/${locale}`,
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 1.0,
-      },
-      {
-        url: `${baseUrl}/about-us`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/contact-us`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/faq`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      },
-    ]
+      })
+    })
+
+    return basicEntries
   }
 }
