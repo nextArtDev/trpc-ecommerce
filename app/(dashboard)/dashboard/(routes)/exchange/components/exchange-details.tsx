@@ -35,9 +35,8 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
   const form = useForm<z.infer<typeof ExchangeFormSchema>>({
     resolver: zodResolver(ExchangeFormSchema),
     defaultValues: {
-      tomanToDollar: initialData.tomanToDollar || 0.000023,
-      tomanToEuro: initialData.tomanToEuro || 0.000021,
-      dollarToEuro: 0.92,
+      dollarToToman: initialData.dollarToToman || 0.000023,
+      euroToToman: initialData.euroToToman || 0.000021,
     },
   })
 
@@ -49,12 +48,12 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
           toast.success(result.message)
 
           // Sync with client-side store
-          if (typeof window !== 'undefined') {
-            const { syncExchangeRatesFromDB } = await import(
-              '@/hooks/useCurrencyStore'
-            )
-            await syncExchangeRatesFromDB()
-          }
+          // if (typeof window !== 'undefined') {
+          //   const { syncExchangeRatesFromDB } = await import(
+          //     '@/hooks/useCurrencyStore'
+          //   )
+          //   await syncExchangeRatesFromDB()
+          // }
         } else if (result?.errors)
           handleServerErrors(result.errors, form.setError)
       } catch (error) {
@@ -83,26 +82,26 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
             >
               <FormField
                 control={form.control}
-                name="tomanToDollar"
+                name="dollarToToman"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      نرخ تومان به دلار <span className="text-rose-500">*</span>
+                      نرخ دلار به تومان <span className="text-rose-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
                         value={field.value}
                         onValueChange={field.onChange}
-                        step={0.00000001}
-                        placeholder="مثال: 0.000023"
+                        step={100}
+                        placeholder="مثال: 120000"
                         min={0}
                         className="shadow-none rounded-md"
                       />
                     </FormControl>
                     <p className="text-xs text-muted-foreground">
-                      1 تومان = {field.value} دلار
+                      1 دلار = {field.value.toLocaleString('fa-IR')} تومان
                       {field.value > 0 &&
-                        ` | 1 دلار = ${(1 / field.value).toFixed(0)} تومان`}
+                        ` | 1 تومان = ${(1 / field.value).toFixed(8)} دلار`}
                     </p>
                     <FormMessage />
                   </FormItem>
@@ -111,54 +110,26 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
 
               <FormField
                 control={form.control}
-                name="tomanToEuro"
+                name="euroToToman"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      نرخ تومان به یورو <span className="text-rose-500">*</span>
+                      نرخ یورو به تومان <span className="text-rose-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <NumberInput
                         value={field.value}
                         onValueChange={field.onChange}
-                        placeholder="مثال: 0.000021"
-                        step={0.00000001}
+                        placeholder="مثال: 150000"
+                        step={100}
                         min={0}
                         className="shadow-none rounded-md"
                       />
                     </FormControl>
                     <p className="text-xs text-muted-foreground">
-                      1 تومان = {field.value} یورو
+                      1 یورو = {field.value.toLocaleString('fa-IR')} تومان
                       {field.value > 0 &&
-                        ` | 1 یورو = ${(1 / field.value).toFixed(0)} تومان`}
-                    </p>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="dollarToEuro"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      نرخ دلار به یورو <span className="text-rose-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <NumberInput
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="مثال: 0.92"
-                        step={0.0001}
-                        min={0}
-                        className="shadow-none rounded-md"
-                      />
-                    </FormControl>
-                    <p className="text-xs text-muted-foreground">
-                      1 دلار = {field.value} یورو
-                      {field.value > 0 &&
-                        ` | 1 یورو = ${(1 / field.value).toFixed(4)} دلار`}
+                        ` | 1 تومان = ${(1 / field.value).toFixed(8)} یورو`}
                     </p>
                     <FormMessage />
                   </FormItem>

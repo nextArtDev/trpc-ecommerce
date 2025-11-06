@@ -7,18 +7,16 @@ import { revalidatePath } from 'next/cache'
 import { ExchangeFormSchema } from '../schemas'
 
 interface ExchangeRateData {
-  tomanToDollar: number
-  tomanToEuro: number
-  dollarToEuro: number
+  dollarToToman: number
+  euroToToman: number
 }
 
 interface ExchangeRateResult {
   success?: boolean
   message?: string
   errors?: {
-    tomanToDollar?: string[]
-    tomanToEuro?: string[]
-    dollarToEuro?: string[]
+    dollarToToman?: string[]
+    euroToToman?: string[]
     _form?: string[]
   }
 }
@@ -33,7 +31,11 @@ export async function createOrUpdateExchangeRates(
     console.error(result.error.flatten().fieldErrors)
     return {
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      errors: {
+        _form: [
+          (result.error.flatten().fieldErrors as string) || 'خطایی رخ داده است',
+        ],
+      },
     }
   }
   //   console.log(result?.data)
@@ -49,11 +51,8 @@ export async function createOrUpdateExchangeRates(
       }
     }
   }
-  if (
-    data.tomanToDollar <= 0 ||
-    data.tomanToEuro <= 0 ||
-    data.dollarToEuro <= 0
-  ) {
+
+  if (data.dollarToToman <= 0 || data.euroToToman <= 0) {
     return {
       success: false,
       message: 'نرخ‌ها باید مثبت باشند',
@@ -64,31 +63,11 @@ export async function createOrUpdateExchangeRates(
   }
 
   try {
-    // Calculate inverse rates
-    const dollarToToman = 1 / data.tomanToDollar
-    const euroToToman = 1 / data.tomanToEuro
-    const euroToDollar = 1 / data.dollarToEuro
+    const tomanToDollar = 1 / data.dollarToToman
+    const tomanToEuro = 1 / data.euroToToman
 
     await prisma.$transaction(async (tx) => {
-      // تومان به دلار
-      await tx.exchangeRate.upsert({
-        where: {
-          from_to: {
-            from: 'تومان' as Currency,
-            to: 'dollar' as Currency,
-          },
-        },
-        update: {
-          rate: data.tomanToDollar,
-        },
-        create: {
-          from: 'تومان' as Currency,
-          to: 'dollar' as Currency,
-          rate: data.tomanToDollar,
-        },
-      })
-
-      // دلار به تومان
+      // دلار به تومان (user input)
       await tx.exchangeRate.upsert({
         where: {
           from_to: {
@@ -97,34 +76,34 @@ export async function createOrUpdateExchangeRates(
           },
         },
         update: {
-          rate: dollarToToman,
+          rate: data.dollarToToman,
         },
         create: {
           from: 'dollar' as Currency,
           to: 'تومان' as Currency,
-          rate: dollarToToman,
+          rate: data.dollarToToman,
         },
       })
 
-      // تومان به یورو
+      // تومان به دلار (calculated)
       await tx.exchangeRate.upsert({
         where: {
           from_to: {
             from: 'تومان' as Currency,
-            to: 'euro' as Currency,
+            to: 'dollar' as Currency,
           },
         },
         update: {
-          rate: data.tomanToEuro,
+          rate: tomanToDollar,
         },
         create: {
           from: 'تومان' as Currency,
-          to: 'euro' as Currency,
-          rate: data.tomanToEuro,
+          to: 'dollar' as Currency,
+          rate: tomanToDollar,
         },
       })
 
-      // یورو به تومان
+      // یورو به تومان (user input)
       await tx.exchangeRate.upsert({
         where: {
           from_to: {
@@ -133,48 +112,30 @@ export async function createOrUpdateExchangeRates(
           },
         },
         update: {
-          rate: euroToToman,
+          rate: data.euroToToman,
         },
         create: {
           from: 'euro' as Currency,
           to: 'تومان' as Currency,
-          rate: euroToToman,
+          rate: data.euroToToman,
         },
       })
 
-      // دلار به یورو
+      // تومان به یورو (calculated)
       await tx.exchangeRate.upsert({
         where: {
           from_to: {
-            from: 'dollar' as Currency,
+            from: 'تومان' as Currency,
             to: 'euro' as Currency,
           },
         },
         update: {
-          rate: data.dollarToEuro,
+          rate: tomanToEuro,
         },
         create: {
-          from: 'dollar' as Currency,
+          from: 'تومان' as Currency,
           to: 'euro' as Currency,
-          rate: data.dollarToEuro,
-        },
-      })
-
-      // یورو به دلار
-      await tx.exchangeRate.upsert({
-        where: {
-          from_to: {
-            from: 'euro' as Currency,
-            to: 'dollar' as Currency,
-          },
-        },
-        update: {
-          rate: euroToDollar,
-        },
-        create: {
-          from: 'euro' as Currency,
-          to: 'dollar' as Currency,
-          rate: euroToDollar,
+          rate: tomanToEuro,
         },
       })
 
@@ -243,9 +204,8 @@ export async function getExchangeRates() {
     const rates = await prisma.exchangeRate.findMany({
       where: {
         OR: [
-          { from: 'تومان' as Currency, to: 'dollar' as Currency },
-          { from: 'تومان' as Currency, to: 'euro' as Currency },
-          { from: 'dollar' as Currency, to: 'euro' as Currency },
+          { from: 'dollar' as Currency, to: 'تومان' as Currency },
+          { from: 'euro' as Currency, to: 'تومان' as Currency },
         ],
       },
     })
@@ -258,11 +218,8 @@ export async function getExchangeRates() {
     return {
       success: true,
       rates: {
-        id: rateMap['id'],
-        createdAt: rateMap['createdAt'],
-        tomanToDollar: rateMap['تومان_dollar'] || 0.000023,
-        tomanToEuro: rateMap['تومان_euro'] || 0.000021,
-        dollarToEuro: rateMap['dollar_euro'] || 0.92,
+        dollarToToman: rateMap['dollar_تومان'] || 110000,
+        euroToToman: rateMap['euro_تومان'] || 150000,
       },
     }
   } catch (error) {
@@ -270,9 +227,8 @@ export async function getExchangeRates() {
     return {
       success: false,
       rates: {
-        tomanToDollar: 0.000023,
-        tomanToEuro: 0.000021,
-        dollarToEuro: 0.92,
+        dollarToToman: 110000,
+        euroToToman: 150000,
       },
     }
   }

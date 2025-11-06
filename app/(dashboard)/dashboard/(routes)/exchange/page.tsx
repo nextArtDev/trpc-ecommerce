@@ -1,19 +1,14 @@
-import { Plus } from 'lucide-react'
 import { columns, ExchangeColumn } from './components/columns'
 
 // import DataTable from '../../components/data-table'
-import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import { format } from 'date-fns-jalali'
-import Link from 'next/link'
+import { currentUser } from '@/lib/auth'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { DataTable } from '../../components/shared/DataTable'
 import { DataTableSkeleton } from '../../components/shared/DataTableSkeleton'
 import { Heading } from '../../components/shared/Heading'
-import { currentUser } from '@/lib/auth'
-import { notFound } from 'next/navigation'
-import { Metadata } from 'next'
 import { getExchangeRates } from '../../lib/actions/exchanges'
 import ExchangeDetails from './components/exchange-details'
 
@@ -36,7 +31,7 @@ function ExchangesDataTable({
   return (
     <div className="flex flex-col w-full h-full">
       <DataTable
-        searchKey="code"
+        searchKey="id"
         columns={columns}
         data={formattedExchanges}
         pageNumber={page}
@@ -49,16 +44,13 @@ function ExchangesDataTable({
   )
 }
 
-export default async function AdminExchangesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | undefined }>
-}) {
+export default async function AdminExchangesPage() {
   const user = await currentUser()
 
   if (!user || user?.role !== 'admin') return notFound()
 
   const exchanges = await getExchangeRates()
+
   // if (!exchanges)
   //   return (
   //     <section className="w-full h-full min-h-screen">موردی یافت نشد!</section>
@@ -66,11 +58,11 @@ export default async function AdminExchangesPage({
 
   const formattedExchanges: ExchangeColumn[] = [
     {
-      id: exchanges.rates.id,
-      tomanToDollar: 1 / exchanges.rates.tomanToDollar,
-      tomanToEuro: 1 / exchanges.rates.tomanToEuro,
+      // id: String(exchanges.rates.id),
+      dollarToToman: exchanges.rates.dollarToToman ?? 120000,
+      euroToToman: exchanges.rates.euroToToman ?? 150000,
 
-      createdAt: format(new Date(), 'dd MMMM yyyy'),
+      // createdAt: format(new Date(), 'dd MMMM yyyy'),
     },
   ]
   return (

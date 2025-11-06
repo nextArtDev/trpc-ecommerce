@@ -105,7 +105,7 @@ const CouponDetails = () => {
                         onValueChange={field.onChange}
                         placeholder="%"
                         min={1}
-                        className="!shadow-none rounded-md !text-sm"
+                        className="shadow-none! rounded-md text-sm!"
                       />
                     </FormControl>
                     <FormMessage />

@@ -238,9 +238,8 @@ export const CouponFormSchema = z.object({
 })
 
 export const ExchangeFormSchema = z.object({
-  tomanToDollar: z.number().positive('نرخ باید مثبت باشد'),
-  tomanToEuro: z.number().positive('نرخ باید مثبت باشد'),
-  dollarToEuro: z.number().positive('نرخ باید مثبت باشد'),
+  dollarToToman: z.number().positive('نرخ باید مثبت باشد'),
+  euroToToman: z.number().positive('نرخ باید مثبت باشد'),
 })
 // export const UpdateOrderGroupStatusFormSchema = z.object({
 //   status: z.string(),
