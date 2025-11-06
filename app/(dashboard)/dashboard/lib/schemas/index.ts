@@ -238,15 +238,9 @@ export const CouponFormSchema = z.object({
 })
 
 export const ExchangeFormSchema = z.object({
-  tomanToDollar: z.number(),
-  // .min(1, { message: 'تخفیف باید حداقل 1% باشد' })
-  // .max(100, { message: 'تخفیف نمی‌تواند بیش از 100% باشد.' }),
-  tomanToEuro: z.number(),
-  // .min(1, { message: 'تخفیف باید حداقل 1% باشد' })
-  // .max(100, { message: 'تخفیف نمی‌تواند بیش از 100% باشد.' }),
-  dollarToEuro: z.number(),
-  // .min(1, { message: 'تخفیف باید حداقل 1% باشد' })
-  // .max(100, { message: 'تخفیف نمی‌تواند بیش از 100% باشد.' }),
+  tomanToDollar: z.number().positive('نرخ باید مثبت باشد'),
+  tomanToEuro: z.number().positive('نرخ باید مثبت باشد'),
+  dollarToEuro: z.number().positive('نرخ باید مثبت باشد'),
 })
 // export const UpdateOrderGroupStatusFormSchema = z.object({
 //   status: z.string(),

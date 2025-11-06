@@ -1,6 +1,6 @@
 import { Bounded } from '@/components/shared/Bounded'
 import Image from 'next/image'
-import heroImage from '@/public/images/hero-image.webp'
+import heroImage from '@/public/images/hero-image1.webp'
 import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'

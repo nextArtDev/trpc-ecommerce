@@ -30,59 +30,27 @@ import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns-jalali'
 import { getTimeUntil } from '../../../lib/utils'
 import { usePathname } from 'next/navigation'
-import { deleteCoupon } from '../../../lib/actions/coupons'
 
-export type CouponColumn = {
+export type ExchangeColumn = {
   id: string
-  code: string
-  startDate: string
-  endDate: string
-  discount: number
+  tomanToDollar: number
+  tomanToEuro: number
+
   createdAt: string
 }
-export const columns: ColumnDef<CouponColumn>[] = [
+export const columns: ColumnDef<ExchangeColumn>[] = [
   {
-    accessorKey: 'code',
-    header: 'کد',
+    accessorKey: 'tomanToDollar',
+    header: 'تومان به دلار',
     cell: ({ row }) => {
-      return <span>{row.original.code}</span>
+      return <span>{row.original.tomanToDollar}</span>
     },
   },
   {
-    accessorKey: 'startDate',
-    header: 'شروع',
+    accessorKey: 'tomanToEuro',
+    header: 'تومان به یورو',
     cell: ({ row }) => {
-      return <span>{format(row.original.startDate, 'hh:mm:ss y/LL/dd')}</span>
-    },
-  },
-  {
-    accessorKey: 'endDate',
-    header: 'پایان',
-    cell: ({ row }) => {
-      return <span>{format(row.original.endDate, 'hh:mm:ss y/LL/dd')}</span>
-    },
-  },
-  {
-    accessorKey: 'timeLeft',
-    header: 'زمان مانده',
-    cell: ({ row }) => {
-      const { days, hours } = getTimeUntil(row.original.endDate)
-      return (
-        <span>
-          {/* {days} days and {hours} hours */}
-          {days} روز و {hours} ساعت
-        </span>
-      )
-    },
-  },
-
-  {
-    accessorKey: 'discount',
-    header: 'تخفیف',
-    cell: ({ row }) => {
-      return (
-        <span className="text-red-500 font-bold">{row.original.discount}%</span>
-      )
+      return <span>{row.original.tomanToEuro}</span>
     },
   },
 
@@ -91,29 +59,22 @@ export const columns: ColumnDef<CouponColumn>[] = [
     cell: ({ row }) => {
       const rowData = row.original
 
-      return <CellActions couponId={rowData.id} />
+      return <CellActions exchangeId={rowData.id} />
     },
   },
 ]
 
 // Define props interface for CellActions component
 interface CellActionsProps {
-  couponId: string
+  exchangeId: string
 }
 
 // CellActions component definition
-const CellActions: React.FC<CellActionsProps> = ({ couponId }) => {
+const CellActions: React.FC<CellActionsProps> = ({ exchangeId }) => {
   const { setClose } = useModal()
-  const path = usePathname()
+  // const path = usePathname()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, deleteAction, pending] = useActionState(
-    deleteCoupon.bind(null, path, couponId as string),
-    {
-      errors: {},
-    }
-  )
-  if (!couponId) return null
+  if (!exchangeId) return null
   return (
     <AlertDialog>
       <DropdownMenu dir="rtl">
@@ -146,13 +107,12 @@ const CellActions: React.FC<CellActionsProps> = ({ couponId }) => {
         <AlertDialogFooter className="flex items-center">
           <AlertDialogCancel className="mb-2">صرف‌نظر</AlertDialogCancel>
           <AlertDialogAction
-            disabled={pending}
             className="bg-destructive hover:bg-destructive mb-2 text-white"
             onClick={() => {
               setClose()
             }}
           >
-            <form action={deleteAction}>
+            {/* <form action={deleteAction}>
               <input className="hidden" />
               <Button
                 disabled={pending}
@@ -162,7 +122,7 @@ const CellActions: React.FC<CellActionsProps> = ({ couponId }) => {
               >
                 حذف
               </Button>
-            </form>
+            </form> */}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

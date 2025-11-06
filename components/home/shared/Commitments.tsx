@@ -41,7 +41,7 @@ export default function Commitments() {
   const isRtl = locale === 'fa'
 
   return (
-    <section className="flex flex-col items-center gap-6">
+    <section className="flex flex-col items-center gap-6 w-full overflow-x-hidden">
       {/* <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
         {t('title')}
       </h2> */}
@@ -54,7 +54,7 @@ export default function Commitments() {
       />
       <Carousel
         opts={{
-          align: 'start',
+          align: isRtl ? 'start' : 'end',
           // 7. SET DIRECTION DYNAMICALLY
           direction: isRtl ? 'rtl' : 'ltr',
         }}

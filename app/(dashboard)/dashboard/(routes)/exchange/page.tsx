@@ -11,10 +11,11 @@ import { Suspense } from 'react'
 import { DataTable } from '../../components/shared/DataTable'
 import { DataTableSkeleton } from '../../components/shared/DataTableSkeleton'
 import { Heading } from '../../components/shared/Heading'
-import { getAllExchanges } from '../../lib/queries'
 import { currentUser } from '@/lib/auth'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
+import { getExchangeRates } from '../../lib/actions/exchanges'
+import ExchangeDetails from './components/exchange-details'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,14 +34,18 @@ function ExchangesDataTable({
   isNext: boolean
 }) {
   return (
-    <DataTable
-      searchKey="code"
-      columns={columns}
-      data={formattedExchanges}
-      pageNumber={page}
-      pageSize={pageSize}
-      isNext={isNext}
-    />
+    <div className="flex flex-col w-full h-full">
+      <DataTable
+        searchKey="code"
+        columns={columns}
+        data={formattedExchanges}
+        pageNumber={page}
+        pageSize={pageSize}
+        isNext={isNext}
+      />
+      <Separator />
+      <ExchangeDetails {...formattedExchanges[0]} />
+    </div>
   )
 }
 
@@ -52,49 +57,39 @@ export default async function AdminExchangesPage({
   const user = await currentUser()
 
   if (!user || user?.role !== 'admin') return notFound()
-  const params = await searchParams
-  const page = params.page ? +params.page : 1
-  const pageSize = params.pageSize ? +params.pageSize : 50
-  const exchanges = await getAllExchanges({ page, pageSize })
+
+  const exchanges = await getExchangeRates()
   // if (!exchanges)
   //   return (
   //     <section className="w-full h-full min-h-screen">موردی یافت نشد!</section>
   //   )
 
-  const formattedExchanges: ExchangeColumn[] = exchanges.exchange?.map(
-    (item) => ({
-      id: item.id,
-      code: item.code,
-      startDate: item.startDate,
-      endDate: item.endDate,
-      discount: item.discount,
+  const formattedExchanges: ExchangeColumn[] = [
+    {
+      id: exchanges.rates.id,
+      tomanToDollar: 1 / exchanges.rates.tomanToDollar,
+      tomanToEuro: 1 / exchanges.rates.tomanToEuro,
 
-      createdAt: format(item.createdAt, 'dd MMMM yyyy'),
-    })
-  )
+      createdAt: format(new Date(), 'dd MMMM yyyy'),
+    },
+  ]
   return (
     <div className="flex-col">
       <div className="flex-1 flex items-center justify-between space-y-4 p-8 pt-6">
         <Heading
-          title={`تخفیفات (${formattedExchanges?.length})`}
-          description="تخفیفات را مدیریت کنید."
+          title={`نرخ ارز (${formattedExchanges?.length})`}
+          description="نرخ ارز را مدیریت کنید."
         />
-        <Link
-          href={`/dashboard/exchanges/new`}
-          className={cn(buttonVariants())}
-        >
-          <Plus className="ml-2 h-4 w-4" /> اضافه کردن
-        </Link>
       </div>
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Separator />
         <Suspense fallback={<DataTableSkeleton />}>
-          {!!exchanges?.exchange.length && !!formattedExchanges && (
+          {!!exchanges?.rates && !!formattedExchanges && (
             <ExchangesDataTable
               formattedExchanges={formattedExchanges}
-              page={page}
-              pageSize={pageSize}
-              isNext={exchanges.isNext}
+              page={1}
+              pageSize={1}
+              isNext={false}
             />
           )}
         </Suspense>
