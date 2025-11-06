@@ -48,12 +48,12 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
           toast.success(result.message)
 
           // Sync with client-side store
-          // if (typeof window !== 'undefined') {
-          //   const { syncExchangeRatesFromDB } = await import(
-          //     '@/hooks/useCurrencyStore'
-          //   )
-          //   await syncExchangeRatesFromDB()
-          // }
+          if (typeof window !== 'undefined') {
+            const { syncExchangeRatesFromDB } = await import(
+              '@/hooks/useCurrencyStore'
+            )
+            await syncExchangeRatesFromDB()
+          }
         } else if (result?.errors)
           handleServerErrors(result.errors, form.setError)
       } catch (error) {
@@ -143,13 +143,14 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
                   'ذخیره نرخ‌های جدید'
                 )}
               </Button>
+              <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded p-3">
+                <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                  ⚠️ توجه: بعد از بروزرسانی نرخ‌ها، تمام محصولات با نرخ جدید
+                  نمایش داده می‌شوند. سفارشات قبلی با نرخ زمان خرید محاسبه
+                  شده‌اند.
+                </p>
+              </div>
             </form>
-            <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded p-3">
-              <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                ⚠️ توجه: بعد از بروزرسانی نرخ‌ها، تمام محصولات با نرخ جدید نمایش
-                داده می‌شوند. سفارشات قبلی با نرخ زمان خرید محاسبه شده‌اند.
-              </p>
-            </div>
           </Form>
         </CardContent>
       </Card>

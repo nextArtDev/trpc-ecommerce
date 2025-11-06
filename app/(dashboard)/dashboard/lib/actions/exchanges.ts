@@ -201,35 +201,48 @@ export async function createOrUpdateExchangeRates(
 
 export async function getExchangeRates() {
   try {
-    const rates = await prisma.exchangeRate.findMany({
+    // Get the latest exchange rates from your database
+    const dollarToTomanRate = await prisma.exchangeRate.findFirst({
       where: {
-        OR: [
-          { from: 'dollar' as Currency, to: 'تومان' as Currency },
-          { from: 'euro' as Currency, to: 'تومان' as Currency },
-        ],
+        from: 'dollar',
+        to: 'تومان',
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     })
 
-    const rateMap: Record<string, number> = {}
-    rates.forEach((rate) => {
-      rateMap[`${rate.from}_${rate.to}`] = rate.rate
+    const euroToTomanRate = await prisma.exchangeRate.findFirst({
+      where: {
+        from: 'euro',
+        to: 'تومان',
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     })
+
+    if (!dollarToTomanRate || !euroToTomanRate) {
+      return {
+        success: false,
+        message: 'Exchange rates not found',
+        rates: null,
+      }
+    }
 
     return {
       success: true,
       rates: {
-        dollarToToman: rateMap['dollar_تومان'] || 110000,
-        euroToToman: rateMap['euro_تومان'] || 150000,
+        dollarToToman: dollarToTomanRate.rate,
+        euroToToman: euroToTomanRate.rate,
       },
     }
   } catch (error) {
-    console.error('Get exchange rates error:', error)
+    console.error('Failed to get exchange rates:', error)
     return {
       success: false,
-      rates: {
-        dollarToToman: 110000,
-        euroToToman: 150000,
-      },
+      message: 'Failed to fetch exchange rates',
+      rates: null,
     }
   }
 }

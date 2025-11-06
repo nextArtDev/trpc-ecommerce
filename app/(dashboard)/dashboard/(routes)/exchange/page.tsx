@@ -59,8 +59,8 @@ export default async function AdminExchangesPage() {
   const formattedExchanges: ExchangeColumn[] = [
     {
       // id: String(exchanges.rates.id),
-      dollarToToman: exchanges.rates.dollarToToman ?? 120000,
-      euroToToman: exchanges.rates.euroToToman ?? 150000,
+      dollarToToman: exchanges.rates?.dollarToToman ?? 120000,
+      euroToToman: exchanges.rates?.euroToToman ?? 150000,
 
       // createdAt: format(new Date(), 'dd MMMM yyyy'),
     },
