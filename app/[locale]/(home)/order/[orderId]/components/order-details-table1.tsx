@@ -472,7 +472,7 @@ const OrderSummaryCard = ({
           value={
             <PriceDisplay
               amount={totalPrice}
-              originalCurrency="تومان"
+              // originalCurrency="تومان"
               currency={currency}
             />
           }
