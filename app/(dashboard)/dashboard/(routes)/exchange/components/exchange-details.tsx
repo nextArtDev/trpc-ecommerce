@@ -48,12 +48,12 @@ const ExchangeDetails = (initialData: ExchangeColumn) => {
           toast.success(result.message)
 
           // Sync with client-side store
-          if (typeof window !== 'undefined') {
-            const { syncExchangeRatesFromDB } = await import(
-              '@/hooks/useCurrencyStore'
-            )
-            await syncExchangeRatesFromDB()
-          }
+          // if (typeof window !== 'undefined') {
+          //   const { syncExchangeRatesFromDB } = await import(
+          //     '@/hooks/useCurrencyStore'
+          //   )
+          //   await syncExchangeRatesFromDB()
+          // }
         } else if (result?.errors)
           handleServerErrors(result.errors, form.setError)
       } catch (error) {

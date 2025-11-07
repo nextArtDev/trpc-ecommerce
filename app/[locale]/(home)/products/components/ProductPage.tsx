@@ -291,7 +291,7 @@ const ProductPage: FC<ProductPageProp> = ({
             buttonVariants({ variant: 'outline' }),
             'max-w-sm mx-auto'
           )}
-          href={`/${locale}/cart`}
+          href={`/cart`}
         >
           {t('cart.viewCart')}
         </Link>

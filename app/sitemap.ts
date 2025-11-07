@@ -1,4 +1,3 @@
-// app/sitemap.ts
 import {
   getCategoriesWithStats,
   getHomepageProducts,
@@ -7,6 +6,7 @@ import {
 import { MetadataRoute } from 'next'
 import { routing } from '@/i18n/routing'
 
+export const dynamic = 'force-dynamic'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://'
 

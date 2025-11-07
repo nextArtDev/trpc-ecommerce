@@ -81,7 +81,7 @@ export default function CurrencySwitcher({
   if (variant === 'icon') {
     return (
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger className="relative" asChild>
           <Button
             variant="outline"
             size="sm"
@@ -138,7 +138,7 @@ export default function CurrencySwitcher({
   if (variant === 'compact') {
     return (
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger className="relative" asChild>
           <Button
             variant="outline"
             size="sm"
@@ -195,7 +195,7 @@ export default function CurrencySwitcher({
   // === DEFAULT VARIANT ===
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger className="relative" asChild>
         <Button
           variant="default"
           size="sm"
