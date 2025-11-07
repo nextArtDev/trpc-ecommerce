@@ -7,7 +7,7 @@ import { OrderTypeColumn } from './columns'
 import PaymentStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/components/payment-status'
 import OrderStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/components/order-status'
 import { useTranslations } from 'next-intl'
-import { PriceDisplay } from '@/components/shared/price-display'
+import { StaticPriceWithRate } from '@/components/shared/static-price-display'
 
 interface Props {
   order: OrderTypeColumn
@@ -113,7 +113,12 @@ const StoreOrderSummary: FC<Props> = ({ order }) => {
                 <p className="font-normal text-muted-foreground">
                   {t('price')}:&nbsp;
                   <span className="ms-1">
-                    <PriceDisplay amount={product.price} />
+                    <StaticPriceWithRate
+                      originalAmount={product.price}
+                      displayCurrency={order.currency}
+                      exchangeRate={1 / order.exchangeRate}
+                      originalCurrency="تومان"
+                    />
                   </span>
                 </p>
               </div>
@@ -121,7 +126,12 @@ const StoreOrderSummary: FC<Props> = ({ order }) => {
                 <p className="font-normal text-muted-foreground">
                   {t('shippingFee')}:{' '}
                   <span className="ms-1">
-                    <PriceDisplay amount={order.shippingFees || 0} />
+                    <StaticPriceWithRate
+                      originalAmount={order.shippingFees || 0}
+                      displayCurrency={order.currency}
+                      exchangeRate={1 / order.exchangeRate}
+                      originalCurrency="تومان"
+                    />
                   </span>
                 </p>
               </div>
@@ -130,7 +140,12 @@ const StoreOrderSummary: FC<Props> = ({ order }) => {
             <div className="flex flex-col items-center justify-center">
               <div className="grid place-items-center">
                 <h5 className="font-semibold text-3xl leading-10 mt-3">
-                  <PriceDisplay amount={product.totalPrice} />
+                  <StaticPriceWithRate
+                    originalAmount={product.totalPrice}
+                    displayCurrency={order.currency}
+                    exchangeRate={1 / order.exchangeRate}
+                    originalCurrency="تومان"
+                  />
                 </h5>
               </div>
             </div>

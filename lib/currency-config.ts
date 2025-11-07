@@ -6,10 +6,10 @@
 
 // Get rates from environment variables with fallbacks
 const DOLLAR_TO_TOMAN = parseFloat(
-  process.env.NEXT_PUBLIC_DOLLAR_TO_TOMAN || '43000'
+  process.env.NEXT_PUBLIC_DOLLAR_TO_TOMAN || '100000'
 )
 const EURO_TO_TOMAN = parseFloat(
-  process.env.NEXT_PUBLIC_EURO_TO_TOMAN || '47000'
+  process.env.NEXT_PUBLIC_EURO_TO_TOMAN || '110000'
 )
 const DOLLAR_TO_EURO = parseFloat(
   process.env.NEXT_PUBLIC_DOLLAR_TO_EURO || '0.92'
@@ -82,13 +82,21 @@ export function formatPrice(amount: number, currency: Currency): string {
   return `${formatted} ${symbol}`
 }
 
-// Log rates at startup (helpful for debugging)
-// if (typeof window === 'undefined') {
-//   console.log('💱 Exchange Rates Loaded:')
-//   console.log(`   1 Dollar = ${DOLLAR_TO_TOMAN.toLocaleString()} Toman`)
-//   console.log(`   1 Euro = ${EURO_TO_TOMAN.toLocaleString()} Toman`)
-//   console.log(`   1 Dollar = ${DOLLAR_TO_EURO} Euro`)
-// }
+export function convertCurrencyWithRate(amount: number, rate: number): number {
+  return amount * rate
+}
+export function formatPriceStatic(amount: number, currency: Currency): string {
+  const locale = currency === 'تومان' ? 'fa-IR' : 'en-US'
+  const symbol =
+    currency === 'تومان' ? 'تومان' : currency === 'dollar' ? '$' : '€'
+
+  const formatted = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(amount)
+
+  return `${formatted} ${symbol}`
+}
 export const CURRENCY_INFO: Record<
   Currency,
   { symbol: string; locale: string }

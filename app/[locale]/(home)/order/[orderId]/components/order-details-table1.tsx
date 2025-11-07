@@ -28,9 +28,10 @@ import { toast } from 'sonner'
 import { zarinpalPayment } from '@/lib/home/actions/payment1'
 import { formatDateTime, formatId } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { PriceDisplay } from '@/components/shared/price-display'
+
 import { Currency } from '@/lib/types/home'
 import OrderPayment from './OrderPayment'
+import { StaticPriceWithRate } from '@/components/shared/static-price-display'
 // import OrderPayment from './OrderPayment'
 
 // Types
@@ -108,6 +109,7 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
     paidAt: rawPaidAt,
     paymentDetails,
     currency: orderCurrency,
+    exchangeRate,
   } = order
 
   const isDelivered = orderStatus === 'Delivered'
@@ -188,7 +190,11 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
           />
 
           {/* Order Items Card */}
-          <OrderItemsCard orderItems={orderitems} currency={order.currency} />
+          <OrderItemsCard
+            orderItems={orderitems}
+            currency={order.currency}
+            exchangeRate={exchangeRate ? 1 / exchangeRate : 1}
+          />
         </div>
 
         {/* Order Summary Sidebar */}
@@ -205,6 +211,7 @@ const OrderDetailsTable = ({ order, isAdmin }: OrderDetailsTableProps) => {
             orderId={id}
             paidAt={paidAt}
             currency={orderCurrency}
+            exchangeRate={exchangeRate ? 1 / exchangeRate : 1}
             isIranianAddress={isIranianAddress}
           />
         </div>
@@ -287,9 +294,11 @@ const ShippingAddressCard = ({
 const OrderItemsCard = ({
   orderItems,
   currency,
+  exchangeRate,
 }: {
   orderItems: OrderItem[]
   currency: Currency
+  exchangeRate: number
 }) => {
   const t = useTranslations('order')
 
@@ -329,10 +338,11 @@ const OrderItemsCard = ({
                     <span className="px-2">{item.quantity}</span>
                   </TableCell>
                   <TableCell className="text-right font-medium">
-                    <PriceDisplay
-                      amount={item.price}
+                    <StaticPriceWithRate
+                      displayCurrency={currency}
+                      exchangeRate={exchangeRate}
+                      originalAmount={item.price}
                       originalCurrency="تومان"
-                      currency={currency}
                     />
                   </TableCell>
                 </TableRow>
@@ -358,6 +368,7 @@ const OrderSummaryCard = ({
   paidAt,
   isIranianAddress,
   currency,
+  exchangeRate,
 }: {
   itemsPrice: number
   shippingPrice: number
@@ -371,6 +382,7 @@ const OrderSummaryCard = ({
   paidAt: Date | null
   isIranianAddress: boolean
   currency: Currency
+  exchangeRate: number
 }) => {
   const MarkAsPaidButton = () => {
     const [isPending, startTransition] = useTransition()
@@ -447,20 +459,22 @@ const OrderSummaryCard = ({
         <SummaryRow
           label={t('summary.items')}
           value={
-            <PriceDisplay
-              amount={itemsPrice}
+            <StaticPriceWithRate
+              displayCurrency={currency}
+              exchangeRate={exchangeRate}
+              originalAmount={itemsPrice}
               originalCurrency="تومان"
-              currency={currency}
             />
           }
         />
         <SummaryRow
           label={t('summary.shipping')}
           value={
-            <PriceDisplay
-              amount={shippingPrice}
+            <StaticPriceWithRate
+              displayCurrency={currency}
+              exchangeRate={exchangeRate}
+              originalAmount={shippingPrice}
               originalCurrency="تومان"
-              currency={currency}
             />
           }
         />
@@ -470,10 +484,11 @@ const OrderSummaryCard = ({
         <SummaryRow
           label={t('summary.total')}
           value={
-            <PriceDisplay
-              amount={totalPrice}
-              // originalCurrency="تومان"
-              currency={currency}
+            <StaticPriceWithRate
+              displayCurrency={currency}
+              exchangeRate={exchangeRate}
+              originalAmount={totalPrice}
+              originalCurrency="تومان"
             />
           }
           isTotal

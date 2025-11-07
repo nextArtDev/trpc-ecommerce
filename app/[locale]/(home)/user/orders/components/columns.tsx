@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Expand } from 'lucide-react'
 import { useModal } from '@/providers/modal-provider'
-import { OrderStatus, PaymentStatus } from '@/lib/types/home'
+import { Currency, OrderStatus, PaymentStatus } from '@/lib/types/home'
 import {
   City,
   OrderItem,
@@ -16,10 +16,13 @@ import PaymentStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/compon
 import StoreOrderSummary from './store-order-summary'
 import OrderStatusTag from '@/app/(dashboard)/dashboard/(routes)/orders/components/order-status'
 import { useTranslations } from 'next-intl'
+import { StaticPriceWithRate } from '@/components/shared/static-price-display'
 
 export type OrderTypeColumn = {
   transactionId: string
   name: string
+  currency: Currency
+  exchangeRate: number
   paymentStatus: PaymentStatus
   shippingAddress: ShippingAddress & { province: Province | null } & {
     city: City | null
@@ -70,7 +73,14 @@ export const columns: ColumnDef<OrderTypeColumn>[] = [
     accessorKey: 'total',
     header: () => <ColumnHeader id="total" />,
     cell: ({ row }) => {
-      return <span>{row.original.total}</span>
+      return (
+        <StaticPriceWithRate
+          originalAmount={row.original.total || 0}
+          displayCurrency={row.original.currency}
+          exchangeRate={1 / row.original.exchangeRate}
+          originalCurrency="تومان"
+        />
+      )
     },
   },
   {

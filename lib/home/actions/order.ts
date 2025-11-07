@@ -73,11 +73,18 @@ export async function createOrder(currency?: Currency) {
         orderStatus: 'Pending',
         paymentStatus: 'Pending',
         currency: cartCurrency,
+        exchangeRate:
+          cartCurrency === 'تومان'
+            ? 1
+            : cartCurrency === 'dollar'
+            ? Number(process.env.NEXT_PUBLIC_DOLLAR_TO_TOMAN)
+            : Number(process.env.NEXT_PUBLIC_EURO_TO_TOMAN),
         subTotal: cart.cart.subTotal, // Will calculate below
         shippingFees: cart.cart.shippingFees, // Will calculate below
         total: cart.cart.total, // Will calculate below
       },
     })
+    console.log('orderseerver', { order })
     const insertedOrderId = await prisma.$transaction(async (tx) => {
       for (const item of cart?.cart?.items ?? []) {
         await tx.orderItem.create({
@@ -97,6 +104,7 @@ export async function createOrder(currency?: Currency) {
             shippingFee: item.shippingFee,
             totalPrice: item.totalPrice,
             orderId: order.id,
+            currency: item.currency,
           },
         })
         // console.log({ orders })

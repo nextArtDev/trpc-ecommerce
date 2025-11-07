@@ -70,7 +70,8 @@ const OrderDetailsPage = async ({
     getOrderById(orderId),
     getCurrentUser(),
   ])
-  // console.log(order?.items)
+  // console.log(order)
+  // console.log('Order', typeof Number(process.env.NEXT_PUBLIC_DOLLAR_TO_TOMAN))
   if (!order) notFound()
   const isAdmin = currentUser?.role === 'admin' || false
 

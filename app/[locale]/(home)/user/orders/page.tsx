@@ -70,6 +70,8 @@ async function AdminOrdersPage({
   const formattedOrders: OrderTypeColumn[] = orders.order?.map((item) => ({
     transactionId: item?.paymentDetails?.transactionId || '',
     name: item.user.name ?? '',
+    currency: item.currency,
+    exchangeRate: item.exchangeRate || 1,
     paymentStatus: item.paymentStatus as PaymentStatus,
     orderStatus: item.orderStatus as OrderStatus,
     shippingAddress: item.shippingAddress as ShippingAddress & {
