@@ -348,7 +348,7 @@ MultiStepFormAuthProps) {
           <Button
             onClick={() => setAuthMethod('phone')}
             variant="outline"
-            className="w-full h-auto py-4 flex items-center justify-center gap-3"
+            className="w-full h-auto py-4 flex items-center justify-center gap-3 rounded-none text-primary"
           >
             <Phone className="h-5 w-5" />
             <div className="text-left">
@@ -369,7 +369,7 @@ MultiStepFormAuthProps) {
               onClick={handleGoogleSignIn}
               variant="outline"
               disabled={isPending}
-              className="w-full h-auto py-4 flex items-center justify-center gap-3"
+              className="w-full h-auto py-4 flex items-center justify-center gap-3 rounded-none text-primary"
             >
               <Globe className="h-5 w-5" />
               <div className="text-left">

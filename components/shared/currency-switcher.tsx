@@ -159,7 +159,7 @@ export default function CurrencySwitcher({
         <DropdownMenuContent align="end">
           {isLocked && (
             <>
-              <div className="px-2 py-1.5 text-xs font-semibold text-amber-600 bg-amber-50 rounded-md flex items-center gap-2">
+              <div className="px-2 py-1.5 text-xs font-semibold text-amber-600  rounded-md flex items-center gap-2">
                 <AlertTriangle className="h-3.5 w-3.5" />
                 {t('locked', { currency: lockedCurrency })}
               </div>
@@ -201,7 +201,7 @@ export default function CurrencySwitcher({
           size="sm"
           disabled={isPending}
           className={cn(
-            'bg-background  text-foreground rounded-none flex items-center justify-center ',
+            '  cursor-pointer  text-foreground rounded-none flex items-center justify-center ',
             isLocked && 'border-amber-300 text-amber-600',
             className
           )}
@@ -227,11 +227,13 @@ export default function CurrencySwitcher({
             </g>
           </motion.svg>
 
-          <span className="ml-1 text-base font-bold">{current.symbol}</span>
+          <span className="ml-1 text-base font-bold text-secondary">
+            {current.symbol}
+          </span>
           {isLocked && (
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-amber-500 rounded-full" />
           )}
-          <EllipsisVertical className="text-foreground" />
+          <EllipsisVertical className="text-secondary" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="rounded-none">

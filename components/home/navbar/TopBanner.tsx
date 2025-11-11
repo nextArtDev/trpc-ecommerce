@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import LanguageSwitcherAdvanced from '@/components/shared/language-switcher'
 import CurrencySwitcher from '@/components/shared/currency-switcher'
 import UserSession from './UserSession'
+import { Separator } from '@/components/ui/separator'
 
 const TopBanner = () => {
   const [mounted, setMounted] = useState(false)
@@ -37,8 +38,9 @@ const TopBanner = () => {
   return (
     <div className="bg-primary text-primary-foreground">
       <div className="flex items-center justify-between gap-4 px-6 text-sm md:px-8 lg:px-12">
-        <div className=" flex items-center justify-center gap-2">
+        <div className=" flex items-start justify-between gap-2">
           <CurrencySwitcher />
+
           <LanguageSwitcherAdvanced />
         </div>
         <UserSession />

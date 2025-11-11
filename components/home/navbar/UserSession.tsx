@@ -39,7 +39,7 @@ export default function UserSession() {
       <TransitionLink
         aria-label={t('signIn')}
         href={'/sign-in'}
-        className="flex items-center gap-2 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-none    hover:bg-accent hover:text-accent-foreground transition-colors"
       >
         <User className="h-5 w-5 text-[#f7a944]" />
         <span className="hidden sm:inline">{t('signIn')}</span>
@@ -65,9 +65,13 @@ export default function UserSession() {
           className="py-0.5 flex items-center gap-2 h-fit px-1.5 data-[state=open]:bg-accent"
           aria-label={t('account')}
         >
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={session.image || ''} alt={session.name || ''} />
-            <AvatarFallback className="text-xs text-[#f7a944]">
+          <Avatar className="h-8 w-8 ">
+            <AvatarImage
+              src={session.image || ''}
+              alt={session.name || ''}
+              // className="rounded-none!"
+            />
+            <AvatarFallback className="text-xs text-[#f7a944] ">
               {getInitials(session.name)}
             </AvatarFallback>
           </Avatar>
@@ -84,13 +88,13 @@ export default function UserSession() {
           <ChevronDown
             className={cn(
               'h-4 w-4 transition-transform duration-200',
-              isOpen && 'rotate-180'
+              isOpen && 'rotate-180 text-primary'
             )}
           />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-56 rounded-lg bg-background/95 backdrop-blur-md border shadow-lg"
+        className="w-56 rounded-none bg-background/95 backdrop-blur-md border shadow-lg"
         align="end"
         forceMount
       >
