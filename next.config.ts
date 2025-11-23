@@ -10,7 +10,7 @@ const getAllowedDomains = () => {
   const envDomains = process.env.ALLOWED_DOMAINS?.split(',') || []
 
   const baseDomains = [
-    'https://kharak.storage.c2.liara.space',
+    'https://mye-commerce.storage.iran.liara.space',
     'https://*.zarinpal.com',
     'https://*.better-auth.com',
     'https://api.github.com',
@@ -55,7 +55,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'kharak.storage.c2.liara.space',
+        hostname: 'mye-commerce.storage.iran.liara.space',
         pathname: '/**',
       },
       {
@@ -144,8 +144,8 @@ const nextConfig: NextConfig = {
               `connect-src 'self' ${getAllowedDomains().join(' ')};`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
-              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
-              "media-src 'self' blob: https://kharak.storage.c2.liara.space;",
+              "img-src 'self' data: blob: https://mye-commerce.storage.iran.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
+              "media-src 'self' blob: https://mye-commerce.storage.iran.liara.space;",
               "frame-src 'self' https://*.zarinpal.com https://accounts.google.com;",
               "frame-ancestors 'none';",
               "worker-src 'self' blob:;",
@@ -192,13 +192,13 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self';",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline';",
-              `connect-src 'self' https://kharak.storage.c2.liara.space data: ${getAllowedDomains().join(
+              `connect-src 'self' https://mye-commerce.storage.iran.liara.space data: ${getAllowedDomains().join(
                 ' '
               )};`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' https://fonts.gstatic.com data:;",
-              "img-src 'self' data: blob: https://kharak.storage.c2.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
-              "media-src 'self' blob: https://kharak.storage.c2.liara.space;",
+              "img-src 'self' data: blob: https://mye-commerce.storage.iran.liara.space https://*.zarinpal.com https://lh3.googleusercontent.com;",
+              "media-src 'self' blob: https://mye-commerce.storage.iran.liara.space;",
               "frame-src 'self' https://*.zarinpal.com;",
               "frame-ancestors 'none';",
               "worker-src 'self' blob:;",
